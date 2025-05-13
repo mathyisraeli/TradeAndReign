@@ -1,0 +1,26 @@
+#include "shared_var.h"
+SDL_Texture **ground_texture;
+int *ground_altitude;
+int max_x;
+int max_y;
+struct img *img;
+struct s_gui *s_gui;
+SDL_Renderer *renderer;
+SDL_Window *window;
+struct lettres *lettres;
+struct linked_list *list;
+struct building *list_building;
+struct to_disp *list_disp;
+TTF_Font *littleFont;
+TTF_Font *bigFont;
+TTF_Font *font;
+struct speak *speakBubble;
+struct menu *main_menu;
+struct cond_menu *menu_cond;
+struct main_char_stats *my_stats_display;
+struct textInput  *text;
+char should_i_call_my_computer_work;
+struct personnages *moi;
+uint8_t **building_altitude;
+int *building_id;
+int counter_use_item;
