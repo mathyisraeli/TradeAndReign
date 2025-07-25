@@ -51,6 +51,9 @@ static void init_trade_menu(struct menu_trade *menuTrad)
 static void init_craft_menu(struct menu_craft *menuCraft) 
 {
     menuCraft->on = 0;
+    const char *inventory_options[] = {"", "", "", "", "", "", "", "", "", ""};
+
+    menuCraft->selector = initializeSelector(100, 50, 400, 50, (SDL_Color){75, 0, 130, 255}, (SDL_Color){221, 160, 221, 255}, (SDL_Color){255, 255, 255, 255}, littleFont, allocate_and_initialize_options(inventory_options, 10), 10);
 }
 
 static void init_condition_menu(struct cond_menu *menu_cond) 

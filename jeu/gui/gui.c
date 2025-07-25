@@ -115,7 +115,7 @@ void menu()
     }
     else if (main_menu->menuCraft->on == 1)
     {
-        craft_menu(renderer, littleFont);
+        craft_menu();
     }
     else if (main_menu->menuTech->on == 1)
     {

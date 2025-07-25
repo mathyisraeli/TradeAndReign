@@ -11,26 +11,13 @@ char how_display(char *skin)
 
 SDL_Texture *select_good_img(int skin, char angle, int animation, int animation2)
 {
-	int indexMap[12] = 
-	{
-        0,  // a bas gauche
-        1,  // b haut droite
-        8,  // c 
-        7,  // d droite
-        9,  // e bas droite
-        10,  // f
-        11,  // g bas
-        3,  // h haut
-        5,  // i
-        4,  // j gauche
-        6, // k haut gauche
-        2  // l
-    };
-
 	switch(skin)
 	{
-		case 2:
-			return img->s->arbre1;
+		case 21:
+			return img->s->tree1Standing;
+			break;
+		case 22:
+			return img->s->tree1Felled;
 			break;
 		case 3:
             return img->s->drapeauBlanc[angle - 'a'];
@@ -39,7 +26,7 @@ SDL_Texture *select_good_img(int skin, char angle, int animation, int animation2
 			if (animation2 == 0)
 			{
 				animation = animation % 6;
-				return img->s->littleManEmptyStuff_walking[animation][indexMap[angle - 'a']];
+				return img->s->littleManEmptyStuff_walking[animation][angle - 'a'];
 			}
 			else if (animation2 == 1)
 			{

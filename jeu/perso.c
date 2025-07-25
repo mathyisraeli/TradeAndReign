@@ -46,18 +46,6 @@ void free_linked(struct linked_list *list, char free_content)
 		}
 		free(list);
 	}
-	
-	//while (list != NULL)
-    //{
-    //    struct linked_list *temp = list;  
-	//	if (free_content == 1)
-	//    {	
-	//    	free(temp->p);
-	//    	free_linked_item(temp->p->i_list);
-	//    }    
-    //    free(temp);
-	//	list = list->next;                   
-    //}
 }
 
 char exist_in_linked(struct linked_list *list, struct personnages *to_test)
@@ -151,7 +139,6 @@ struct linked_list *death(void)
 	struct linked_list *prev;
 	while (tmp != NULL && tmp->p->pv <= 0)
 	{
-		printf ("death\n");
 		list = list->next;
 		free_linked_enemie(tmp->p->e_list);
 		free_linked_item(tmp->p->i_list);
@@ -171,7 +158,6 @@ struct linked_list *death(void)
 		}
 		if (tmp == NULL)
 			return list;
-		printf ("death\n");
 		prev->next = tmp->next;
 		free_linked_enemie(tmp->p->e_list);
         free_linked_item(tmp->p->i_list);

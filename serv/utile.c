@@ -63,5 +63,11 @@ int find_smalest_valid_id(int from)
 		if (l->id == from)
 		    return find_smalest_valid_id(from + 1);
 	}
+    for (struct building *l = list_building; l != NULL; l = l->next)
+	{
+		if (l->id == from)
+		    return find_smalest_valid_id(from + 1);
+	}
     return from;
 }
+

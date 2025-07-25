@@ -81,6 +81,8 @@ struct menu_diplo {
 
 struct menu_craft {
     char on;
+    Selector *selector;
+    TextInfo result_craft;
 };
 
 struct textInput

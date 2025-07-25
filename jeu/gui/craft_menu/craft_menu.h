@@ -1,18 +1,15 @@
-#ifndef CRAFT_MENU_H
-#define CRAFT_MENU_H
+#pragma once
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 #include "../menu.h"
+#include "../../graphic_widget/textBox.h"
+#include "../../graphic_widget/textInfo.h"
+#include "../../graphic_widget/menuSelector.h"
+#include "../../graphic_widget/gauge.h"
+#include "../../graphic_widget/dropDown.h"
+#include "../../graphic_widget/pictureButton.h"
 #include "../../perso.h"
 #include "../../clavier.h"
 
-#define GRID_SIZE 3
-#define INVENTORY_SLOTS 9
-#define CELL_SIZE 50
-#define PADDING 10
+void craft_menu(void);
 
-void craft_menu(SDL_Renderer *renderer, TTF_Font *font);
-void drawRect(SDL_Renderer *renderer, SDL_Rect *rect, SDL_Color color);
-
-#endif /* CRFAT_MENU_H */

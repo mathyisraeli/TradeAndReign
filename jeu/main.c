@@ -175,6 +175,7 @@ void boucle_jeu(int socket, char *name)
             clean_selected(selected[i]);
         }
 	    list = death();
+        list_building = destruction();
 		
 	    SDL_RenderPresent(renderer);
         //*text->key = NULL; 

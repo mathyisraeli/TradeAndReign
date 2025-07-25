@@ -6,10 +6,10 @@ int parse_new(struct personnages *p, char *line)
     int j;
     char tmpI[10];
     char tmpN[50];
-    sscanf(line, "%s %d %d %s %f %f %f %f %f %c %d %d %d %s %s %s %s %d %s %s %d %s %d %d %d %c %s %s %s %s %s %s %n", 
+    sscanf(line, "%s %d %d %s %f %f %f %f %f %c %d %d %d %s %s %s %s %d %s %s %d %s %d %d %d %c %s %s %s %s %s %s %d %n", 
     p->skin, &p->id, &p->pv, p->nom_de_compte, &p->x, &p->y, &p->altitude, &p->ordrex, &p->ordrey, &p->angle, &p->timer_dom, &p->faim, &p->inside, p->nom, 
     p->nom_superieur, p->titre, p->religion, &p->nb_vassaux, p->echange_player, p->item1, &p->count_item1, p->item2, &p->count_item2, &p->animation, &p->animation_2, 
-    &p->chemin_is_set, p->left_hand, p->right_hand, p->headgear, p->tunic, p->pant, p->shoes, &i);
+    &p->chemin_is_set, p->left_hand, p->right_hand, p->headgear, p->tunic, p->pant, p->shoes, &p->house_id, &i);
     while (line[i] != ']')
     {
         i += 1;
@@ -162,10 +162,33 @@ void remove_perso(void)
 			tmp = tmp->next;
 		}
 		if (tmp == NULL)
-			return;
+			break;
 		prev->next = tmp->next;
 		kill(tmp);
 		tmp = prev->next;
+	}
+    struct building *tmpb = list_building;
+    struct building *prevb;
+    while (tmpb != NULL && tmpb->pv <= 0)
+    {
+		list_building = tmpb->next;
+		free(tmpb);
+        printf ("QMDLKFJQDSMLKFJQDSMF\n");
+		tmpb = list_building;
+    }
+	while (tmpb != NULL)
+	{
+		while (tmpb != NULL && tmpb->pv > 0)
+		{
+			prevb = tmpb;
+			tmpb = tmpb->next;
+		}
+		if (tmpb == NULL)
+			return;
+		prevb->next = tmpb->next;
+		free(tmpb);
+        printf ("QMDLKFJQDSMLKFJQDSMF\n");
+		tmpb = prevb->next;
 	}
 }
 

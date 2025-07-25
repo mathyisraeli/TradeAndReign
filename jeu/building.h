@@ -25,3 +25,5 @@ int parse_building(struct building *b, char *line);
 struct building *find_building_by_id(int id);
 void actualise_building_altitude(struct building *parcour);
 void remove_building_altitude(struct building *parcour);
+struct building *destruction(void);
+void add_wood_pillar_or_wood_house(int moix, int moiy);

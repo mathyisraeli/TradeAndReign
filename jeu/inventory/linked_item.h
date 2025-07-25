@@ -20,3 +20,4 @@ struct linked_item *exist_in_linked_item(struct linked_item *e, char *cmp);
 void echange_item(struct personnages *perso1, struct personnages *perso2);
 void print(struct linked_item *e);
 int n_item(struct linked_item *l);
+char can_add(char *name, int cnt, struct linked_item *l);

@@ -27,6 +27,7 @@ void collision(void)
             }
             else
             {
+                p->chemin_is_set = 0;
                 p->moved_x = 0;
                 p->moved_y = 0;
             }

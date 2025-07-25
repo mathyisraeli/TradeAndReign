@@ -79,10 +79,12 @@ struct skin
 
     SDL_Texture *fruit;
     SDL_Texture *legume;
-    SDL_Texture *arbre1;
+    SDL_Texture *tree1Standing;
+    SDL_Texture *tree1Felled;
 
     SDL_Texture *terracotta_house_3x3[9];
     SDL_Texture *terracotta_house_3x3_inside[6];
+    SDL_Texture *wood_pillar;
 
     SDL_Texture *bridgeSlab;
     SDL_Texture *bridgePillar;

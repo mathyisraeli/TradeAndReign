@@ -19,6 +19,7 @@ typedef struct {
     SDL_Color defaultColor; 
     SDL_Color textColor;  
     TTF_Font* font;      
+    char *selectedOptionArray;
 } Selector;
 
 Selector *initializeSelector(int x, int y, int width, int height, SDL_Color selectedColor, SDL_Color defaultColor, SDL_Color textColor, TTF_Font* font, char* options[], int numOptions);

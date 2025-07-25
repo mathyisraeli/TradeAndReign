@@ -30,6 +30,8 @@ void createArray(struct personnages *p)
         p->chemin[i].value = 0;
         p->chemin[i].prev = -1;
         p->chemin[i].walkable = (p->eau == '2') || (p->eau == '0' && ground_texture[i] != img->t->ea1 && ground_texture[i] != img->t->ea2 && ground_texture[i] != img->t->ea3) || (p->eau != '0' && ground_texture[i] == img->t->ea1 && ground_texture[i] == img->t->ea2 && ground_texture[i] == img->t->ea3);
+        if (building_id[i] != -1)
+            p->chemin[i].walkable = 0;
     }
     for(struct linked_list *parcour = list; parcour != NULL; parcour = parcour->next)
     {

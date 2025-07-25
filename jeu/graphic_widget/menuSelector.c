@@ -9,6 +9,9 @@ Selector  *initializeSelector(int x, int y, int width, int height, SDL_Color sel
 
     // Set default selected option to the first option
     selector->selectedOption = 0;
+    selector->selectedOptionArray = malloc(numOptions*sizeof(char));
+    for (int i = 0; numOptions > i; i++)
+        selector->selectedOptionArray[i] = -1;
 
     // Set position, size, selectedColor, defaultColor, textColor, and font
     selector->x = x;
@@ -34,7 +37,11 @@ void drawSelector(SDL_Renderer* renderer, Selector* selector) {
     for (int i = 0; i < selector->numOptions; i++) {
         if (i == selector->selectedOption) {
             SDL_SetRenderDrawColor(renderer, selector->selectedColor.r, selector->selectedColor.g, selector->selectedColor.b, selector->selectedColor.a);
-        } else {
+        } else if (selector->selectedOptionArray[i] > 0){
+            SDL_SetRenderDrawColor(renderer, 125, 200, 200, 200);
+        }
+        else
+        {
             SDL_SetRenderDrawColor(renderer, selector->defaultColor.r, selector->defaultColor.g, selector->defaultColor.b, selector->defaultColor.a);
         }
 

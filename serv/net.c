@@ -11,8 +11,8 @@ int generate_order(void)
     {
         if (pa->a_bouger == 1)
         {
-            sprintf(order + strlen(order), "%s %d %d %s %f %f %f %f %f %c %d %d %d %s %s %s %s %d %s %s %d %s %d %d %d %d %c %s %s %s %s %s %s [", pa->skin, pa->id, pa->pv, pa->nom_de_compte, pa->x, pa->y, pa->altitude
-            , pa->ordrex, pa->ordrey, pa->angle, pa->timer_dom, pa->faim, pa->inside, pa->nom, pa->nom_superieur, pa->titre, pa->religion, pa->nb_vassaux, pa->echange_player, pa->item1, pa->count_item1, pa->item2, pa->count_item2, pa->animation, pa->animation_2, pa->chemin_is_set, pa->online, pa->left_hand,pa->right_hand, pa->headgear, pa->tunic, pa->pant, pa->shoes);
+            sprintf(order + strlen(order), "%s %d %d %s %f %f %f %f %f %c %d %d %d %s %s %s %s %d %s %s %d %s %d %d %d %d %c %s %s %s %s %s %s %d [", pa->skin, pa->id, pa->pv, pa->nom_de_compte, pa->x, pa->y, pa->altitude
+            , pa->ordrex, pa->ordrey, pa->angle, pa->timer_dom, pa->faim, pa->inside, pa->nom, pa->nom_superieur, pa->titre, pa->religion, pa->nb_vassaux, pa->echange_player, pa->item1, pa->count_item1, pa->item2, pa->count_item2, pa->animation, pa->animation_2, pa->chemin_is_set, pa->online, pa->left_hand,pa->right_hand, pa->headgear, pa->tunic, pa->pant, pa->shoes, pa->house_id);
 			for (struct linked_enemie *p = pa->e_list; p != NULL; p = p->next)
 			{
 				if (p->next != NULL)
@@ -80,14 +80,18 @@ void parse_order(char *line)
     char tmpC[50];
     while (line[i] != 0)
     {
-        int id = get_id(line, &i);
-        if (id == -1)
+        if (line[i] == '-')
         {
-            i -= 2;
-            i += append_perso(line+i) + 1;
+            if (line[i+1] == '0')
+                i += append_perso(line + i +1) + 1;
+            else
+            {
+                i += append_building(line + i+1 );
+            }
         }
         else
         {
+            int id = get_id(line, &i);
             struct personnages *p = get_ptr_from_id(id);
             if (p == NULL)
             {
@@ -116,9 +120,9 @@ void parse_order(char *line)
                         }
                         else
                         {
-                            i++;
                             b->pv = atoi(&line[i]);
                         }
+                        printf ("%d %d\n", b->id,b->pv);
                         while(line[i] != ' ')
                             i++;
                         i++;
@@ -560,7 +564,6 @@ void parse_order(char *line)
                         i++;
                         break;
                     case 31:
-                        printf ("test\n");
                         if (line[i] == '+')
                         {
                             i++;
@@ -576,6 +579,12 @@ void parse_order(char *line)
                             i++;
                             p->altitude = atoi(&line[i]);
                         }
+                        while(line[i] != ' ')
+                            i++;
+                        i++;
+                        break;
+                    case 32:
+                        p->house_id = atoi(&line[i]);
                         while(line[i] != ' ')
                             i++;
                         i++;

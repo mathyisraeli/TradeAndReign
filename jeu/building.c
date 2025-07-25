@@ -45,6 +45,83 @@ struct building *find_building_by_id(int id)
 	return NULL;
 }
 
+struct building *destruction(void)
+{
+	struct building *tmp = list_building;
+	struct building *prev;
+	while (tmp != NULL && tmp->pv <= 0)
+	{
+        list_disp = deleteKey(tmp->id);
+		list_building = list_building->next;
+		remove_building_altitude(tmp);
+		free(tmp);
+		tmp = list_building;
+        should_i_call_my_computer_work = '1';
+
+	}
+	while (tmp != NULL)
+	{
+		while (tmp != NULL && tmp->pv > 0)
+		{
+			prev = tmp;
+			tmp = tmp->next;
+		}
+		if (tmp == NULL)
+			return list_building;
+        list_disp = deleteKey(tmp->id);
+		prev->next = tmp->next;
+		remove_building_altitude(tmp);
+        free(tmp);
+		tmp = prev->next;
+		should_i_call_my_computer_work = '1';
+	}
+	return list_building;
+}
+
+void add_wood_pillar_or_wood_house(int moix, int moiy)
+{
+    for (int i = moix - 2; i < moix + 1; i++)
+    {
+        for (int j = moiy - 2; j < moiy + 1; j++)
+        {
+            if (0 <= i && i + 2 < max_x && 0 <= j && j + 2 < max_y)
+            {
+                char all = 1;
+                for (int r = j; r < j +3; r++)
+                {
+                    for (int c = i; c < i +3; c++)
+                    {
+                        if ((r != moiy || c != moix) && (building_id[r * max_x + c] == -1 || strcmp(find_building_by_id(building_id[r * max_x + c])->skin,"141") != 0))
+                        {
+                            all = 0;
+                        }
+                    }
+                }
+                if (all == 1)
+                {
+                    sprintf (ordre + strlen(ordre), "-112 -1 500 %d %d a a\n", i+2 , j+2);
+                    for (int r = j; r < j +3; r++)
+                    {
+                        for (int c = i; c < i +3; c++)
+                        {
+                            if (r != moiy || c != moix)
+                            {
+                                sprintf (ordre + strlen(ordre), "%d 00 0 ", building_id[r * max_x + c]);
+                            }
+                        }
+                    }
+                    return;
+                }
+                else
+                {
+                    sprintf (ordre + strlen(ordre), "-141 -1 5 %d %d a a\n", moix , moiy);
+                    return;
+                }
+            }
+        }
+    }
+}
+
 void remove_building_altitude(struct building *parcour)
 {
     if (strcmp(parcour->skin, "111") == 0)
@@ -472,4 +549,7 @@ void actualise_building_altitude(struct building *parcour)
             building_id[(int)(parcour->y+2) * max_x + (int)(parcour->x-3)] = parcour->id;
         }
     }
+    else if (strcmp(parcour->skin, "141") == 0)
+        building_id[(int)(parcour->y) * max_x + (int)(parcour->x)] = parcour->id;
+
 }

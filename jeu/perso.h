@@ -49,6 +49,7 @@ struct personnages
     char pant[50];
     char shoes[50];
     char skill[62];
+    int house_id;
     ///////////////////////////////////////
     float screenx;
     float screeny;

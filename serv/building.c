@@ -4,6 +4,8 @@ int parse_new_building(struct building *b, char *line)
 {
     int i;
     sscanf(line, "%s %d %d %d %d %c %c %n", b->skin, &b->id, &b->pv, &b->x, &b->y, &b->angle,&b->state,&i);
+    if(b->id == -1)
+        b->id = find_smalest_valid_id(0);
     return i + 1;
 }
 
@@ -34,6 +36,7 @@ int append_building(char *line)
 			parcour = parcour->next;
         parcour->next = new;
     }
+    printf ("%d\n", ret);
     return ret;
 }
 
@@ -46,6 +49,16 @@ void actualise_building_altitude(void)
     {     
         if (parcour->a_bouger != 0)
         {
+            if (strcmp(parcour->skin, "141") == 0)
+            {
+                building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x)][0] = 101;
+                building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x)][1] = 101;
+                building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x)][2] = 101;
+                building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x)][3] = 101;
+                building_id[(int)(parcour->y) * max_x + (int)(parcour->x)] = parcour->id;
+
+
+            }
             if (strcmp(parcour->skin, "111") == 0)
             {
                 building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x)][0] = 101;

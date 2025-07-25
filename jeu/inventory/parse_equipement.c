@@ -53,12 +53,21 @@ void actualise_stat(struct personnages *p)
 		p->plancher = 0;
 		p->animation = 0;
 		struct to_disp *new = malloc(sizeof(struct to_disp));
-		new->img = select_good_img(2, p->angle, 1, 1);
+		new->offset_y = 454;
+		if (p->pv > 49	)
+		{
+			new->offset_x = 896;	
+			new->img = select_good_img(21, p->angle, 1, 1);
+		}
+		else
+		{
+			new->offset_x = 990;
+			new->img = select_good_img(22, p->angle, 1, 1);
+		}
 		new->x = p->x;
 		new->y = p->y;
 		new->id = p->id;
-		new->offset_x = 896;
-		new->offset_y = 454;
+		
 		new->p = p;
 		new->floor = 1;
 		new->altitude = p->altitude;
@@ -553,6 +562,13 @@ void actualise_stat_building(struct building *b)
 					insert(b->x-2, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 882, 409, NULL, b, img->s->ship1_bigSailFolded);
 				}
 			}
+		}
+	}
+	else if (b->skin[1] == '4') // fondation
+	{
+		if (b->skin[2] == '1') // bois
+		{	
+			insert(b->x, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 483, NULL, b,img->s->wood_pillar);
 		}
 	}
 }

@@ -2,7 +2,6 @@
 
 struct linked_item *use(struct linked_item *item, struct personnages *p)
 {
-	printf ("test use\n");
 	if (item != NULL)
 	{
 		if (strcmp(item->nom, "fruit") == 0 || strcmp(item->nom, "legume") == 0)
@@ -26,6 +25,29 @@ int n_item(struct linked_item *l)
 	for (struct linked_item *p = l; p != NULL; p = p->next)
 		ret += 1;
 	return ret;
+}
+
+char can_add(char *name, int cnt, struct linked_item *l)
+{
+	int max = count(name);
+	int cnt_slot = 0;
+	while (l != NULL)
+	{
+		if (strcmp(name, l->nom) == 0)
+			cnt -= max - l->count;
+		cnt_slot += 1;
+		if (0 >= cnt)
+			return 1;
+		l = l->next;
+	}
+	while (10 > cnt_slot)
+	{
+		cnt -= max;
+		cnt_slot += 1;
+		if (0 >= cnt)
+			return 1;
+	}
+	return 0;
 }
 
 struct linked_item *append_in_inventory(char *name, struct linked_item *p, int n)

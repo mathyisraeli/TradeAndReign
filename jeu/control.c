@@ -126,26 +126,36 @@ void deplacement(struct personnages *moi)
 
 		}
 		if (closestt)
-			sprintf(ordre + strlen(ordre), "%d 00 -%d ", closestt->id, moi->dom);
+		{
+			if (closestt->skin[1] == '1')
+			{
+				if (closestt->pv -  moi->dom >= 4)
+					sprintf(ordre + strlen(ordre), "%d 00 -%d ", closestt->id, moi->dom);
+				else if (can_add("wooden-board", 1, moi->i_list) == 1)
+					sprintf(ordre + strlen(ordre), "%d 00 -1 %d 16 +1 wooden-board ", closestt->id, moi->id);
+			}
+			else
+				sprintf(ordre + strlen(ordre), "%d 00 -%d ", closestt->id, moi->dom);
+		}
 	}
 	else
 	{
 		if(lettres->keystates[SDL_SCANCODE_D])//droite
-			sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 -%f %d 05 d %d 21 %d ", moi->id, moi->vitesse_dep * 0.707, moi->id, moi->vitesse_dep * 0.707, moi->id, moi->id, moi->animation+1);
+			sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 -%f %d 05 c %d 21 %d ", moi->id, moi->vitesse_dep * 0.707, moi->id, moi->vitesse_dep * 0.707, moi->id, moi->id, moi->animation+1);
 		if(lettres->keystates[SDL_SCANCODE_A])
-			sprintf (ordre + strlen(ordre), "%d 01 -%f %d 02 +%f %d 05 k %d 21 %d ", moi->id, moi->vitesse_dep * 0.707, moi->id, moi->vitesse_dep * 0.707, moi->id, moi->id, moi->animation+1);
+			sprintf (ordre + strlen(ordre), "%d 01 -%f %d 02 +%f %d 05 g %d 21 %d ", moi->id, moi->vitesse_dep * 0.707, moi->id, moi->vitesse_dep * 0.707, moi->id, moi->id, moi->animation+1);
 		if(lettres->keystates[SDL_SCANCODE_W])
 			sprintf (ordre + strlen(ordre), "%d 01 -%f %d 02 -%f %d 05 a %d 21 %d ", moi->id, moi->vitesse_dep * 0.707, moi->id, moi->vitesse_dep * 0.707, moi->id, moi->id, moi->animation+1);
 		if(lettres->keystates[SDL_SCANCODE_X])
-			sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 05 g %d 21 %d ", moi->id, moi->vitesse_dep * 0.707, moi->id, moi->vitesse_dep * 0.707, moi->id, moi->id, moi->animation+1);
+			sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 05 e %d 21 %d ", moi->id, moi->vitesse_dep * 0.707, moi->id, moi->vitesse_dep * 0.707, moi->id, moi->id, moi->animation+1);
 		if(lettres->keystates[SDL_SCANCODE_Q])
-			sprintf (ordre + strlen(ordre), "%d 01 -%f %d 05 j %d 21 %d ", moi->id, moi->vitesse_dep, moi->id, moi->id, moi->animation+1); 
+			sprintf (ordre + strlen(ordre), "%d 01 -%f %d 05 h %d 21 %d ", moi->id, moi->vitesse_dep, moi->id, moi->id, moi->animation+1); 
 		if(lettres->keystates[SDL_SCANCODE_E])
 			sprintf (ordre + strlen(ordre), "%d 02 -%f %d 05 b %d 21 %d ", moi->id, moi->vitesse_dep, moi->id, moi->id, moi->animation+1);
 		if(lettres->keystates[SDL_SCANCODE_C])
-			sprintf (ordre + strlen(ordre), "%d 01 +%f %d 05 e %d 21 %d ", moi->id, moi->vitesse_dep, moi->id, moi->id, moi->animation+1);
+			sprintf (ordre + strlen(ordre), "%d 01 +%f %d 05 d %d 21 %d ", moi->id, moi->vitesse_dep, moi->id, moi->id, moi->animation+1);
 		if(lettres->keystates[SDL_SCANCODE_Z])
-			sprintf (ordre + strlen(ordre), "%d 02 +%f %d 05 h %d 21 %d ", moi->id, moi->vitesse_dep, moi->id, moi->id, moi->animation+1);
+			sprintf (ordre + strlen(ordre), "%d 02 +%f %d 05 f %d 21 %d ", moi->id, moi->vitesse_dep, moi->id, moi->id, moi->animation+1);
 		if(lettres->keystates[SDL_SCANCODE_SPACE])
 			sprintf (ordre + strlen(ordre), "%d 31 +3 %d 21 %d ", moi->id, moi->id, moi->animation+1);
 		if(lettres->keystates[SDL_SCANCODE_V])
@@ -176,14 +186,28 @@ void deplacement(struct personnages *moi)
 			//if (counter_use_item > 3)
 			//{
 				if (10 > n_item(moi->i_list) && ground_altitude[(int)moi->x + (int)moi->y*max_x] > 0 && find_building_by_id(building_id[(int)moi->x + ((int)moi->y)*max_x]) == NULL)
-				{	
+				{
 					SDL_Texture *t = ground_texture[(int)moi->x + ((int)moi->y)*max_x];
 					if (t == img->t->he1 || t == img->t->he2 || t == img->t->he3 || t == img->t->he4 || t == img->t->he5)
 						sprintf (ordre + strlen(ordre), "%d 16 +1 herbe %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
-					if (t == img->t->sa1 || t == img->t->sa2 || t == img->t->sa3)
+					else if (t == img->t->sa1 || t == img->t->sa2 || t == img->t->sa3)
 						sprintf (ordre + strlen(ordre), "%d 16 +1 sable %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
-					if (t == img->t->ne1 || t == img->t->ne2 || t == img->t->ne3)
+					else if (t == img->t->ne1 || t == img->t->ne2 || t == img->t->ne3)
 						sprintf (ordre + strlen(ordre), "%d 08 %d %d 13 %d ea1 ", moi->id, (int)moi->x + ((int)moi->y)*max_x, moi->id, (int)moi->x + ((int)moi->y)*max_x);
+					else if (t == img->t->granit && (strcmp(moi->left_hand, "wood pickaxe") == 0 || strcmp(moi->left_hand, "stone pickaxe") == 0 || strcmp(moi->left_hand, "bronze pickaxe") == 0 || strcmp(moi->left_hand, "iron pickaxe") == 0 || strcmp(moi->left_hand, "steel pickaxe") == 0))
+						sprintf (ordre + strlen(ordre), "%d 16 +1 granit %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
+					else if (t == img->t->basalt && (strcmp(moi->left_hand, "wood pickaxe") == 0 || strcmp(moi->left_hand, "stone pickaxe") == 0 || strcmp(moi->left_hand, "bronze pickaxe") == 0 || strcmp(moi->left_hand, "iron pickaxe") == 0 || strcmp(moi->left_hand, "steel pickaxe") == 0))
+						sprintf (ordre + strlen(ordre), "%d 16 +1 basalt %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
+					else if (t == img->t->calcaire && (strcmp(moi->left_hand, "wood pickaxe") == 0 || strcmp(moi->left_hand, "stone pickaxe") == 0 || strcmp(moi->left_hand, "bronze pickaxe") == 0 || strcmp(moi->left_hand, "iron pickaxe") == 0 || strcmp(moi->left_hand, "steel pickaxe") == 0))
+						sprintf (ordre + strlen(ordre), "%d 16 +1 calcaire %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
+					else if (t == img->t->gres && (strcmp(moi->left_hand, "wood pickaxe") == 0 || strcmp(moi->left_hand, "stone pickaxe") == 0 || strcmp(moi->left_hand, "bronze pickaxe") == 0 || strcmp(moi->left_hand, "iron pickaxe") == 0 || strcmp(moi->left_hand, "steel pickaxe") == 0))
+						sprintf (ordre + strlen(ordre), "%d 16 +1 gres %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
+					else if (t == img->t->marbre && (strcmp(moi->left_hand, "wood pickaxe") == 0 || strcmp(moi->left_hand, "stone pickaxe") == 0 || strcmp(moi->left_hand, "bronze pickaxe") == 0 || strcmp(moi->left_hand, "iron pickaxe") == 0 || strcmp(moi->left_hand, "steel pickaxe") == 0))
+						sprintf (ordre + strlen(ordre), "%d 16 +1 marbre %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
+					else if (t == img->t->schiste && (strcmp(moi->left_hand, "wood pickaxe") == 0 || strcmp(moi->left_hand, "stone pickaxe") == 0 || strcmp(moi->left_hand, "bronze pickaxe") == 0 || strcmp(moi->left_hand, "iron pickaxe") == 0 || strcmp(moi->left_hand, "steel pickaxe") == 0))
+						sprintf (ordre + strlen(ordre), "%d 16 +1 schiste %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
+
+
 				}
 				//counter_use_item = 0;
 			//}

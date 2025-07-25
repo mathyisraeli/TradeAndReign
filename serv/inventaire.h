@@ -1,6 +1,8 @@
 #pragma once
 #include "perso.h"
 
+struct personnages;
+
 struct linked_item
 {
     char nom[50];
