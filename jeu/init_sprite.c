@@ -279,6 +279,17 @@ struct skin *init_skin()
     initTextureObject(&(to_return->wooden_house_3x3_faceline[1]), "img/batiments/3x3_wooden_house/faceline2.bmp");
     initTextureObject(&(to_return->wooden_house_3x3_faceline[2]), "img/batiments/3x3_wooden_house/faceline3.bmp");
 
+    initTextureObject(&(to_return->wooden_house_6x6[0]), "img/batiments/6x6_wooden_house/0.bmp");
+    initTextureObject(&(to_return->wooden_house_6x6[1]), "img/batiments/6x6_wooden_house/1.bmp");
+    initTextureObject(&(to_return->wooden_house_6x6[2]), "img/batiments/6x6_wooden_house/2.bmp");
+    initTextureObject(&(to_return->wooden_house_6x6[3]), "img/batiments/6x6_wooden_house/3.bmp");
+    initTextureObject(&(to_return->wooden_house_6x6[4]), "img/batiments/6x6_wooden_house/4.bmp");
+    initTextureObject(&(to_return->wooden_house_6x6[5]), "img/batiments/6x6_wooden_house/5.bmp");
+    initTextureObject(&(to_return->wooden_house_6x6[6]), "img/batiments/6x6_wooden_house/6.bmp");
+    initTextureObject(&(to_return->wooden_house_6x6[7]), "img/batiments/6x6_wooden_house/7.bmp");
+    initTextureObject(&(to_return->wooden_house_6x6[8]), "img/batiments/6x6_wooden_house/8.bmp");
+    initTextureObject(&(to_return->wooden_house_6x6[9]), "img/batiments/6x6_wooden_house/9.bmp");
+    
 
     initTextureObject(&(to_return->terracotta_house_3x3[0]), "img/batiments/3x3_terracotta_house/1.bmp");
     initTextureObject(&(to_return->terracotta_house_3x3[1]), "img/batiments/3x3_terracotta_house/2.bmp");

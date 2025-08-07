@@ -89,7 +89,7 @@ float allowed_to_move(struct personnages *perso, float x, float y, float mvx, fl
 {
     int src = (int)(y) * max_x + (int)(x);
     int dst = (int)(y + mvy) * max_x + (int)(x + mvx);
-    int ga = (altitude(dst)/38)*2;
+    int ga = altitude(dst)/19;
 
     float r = coo_circle(perso);
     if (x + mvx - r < 0 || x + mvx + r > max_x || y + mvy - r < 0 || y + mvy + r > max_y)
@@ -111,9 +111,13 @@ float allowed_to_move(struct personnages *perso, float x, float y, float mvx, fl
         if (building_altitude[dst][(int)(perso->altitude*2)+1-ga]/100 == 1 || building_altitude[dst][(int)(perso->altitude*2)+2-ga]/100 == 1 || building_altitude[dst][(int)(perso->altitude*2)+3-ga]/100 == 1 || 
         (building_altitude[dst][(int)(perso->altitude*2)-ga]/100 == 1 && (building_altitude[dst][(int)(perso->altitude*2)+4-ga]/100 == 1 || (building_altitude[src] != NULL && building_altitude[src][(int)(perso->altitude*2)+4-ga]/100 == 1))))
             return -1;
-        for (int i = (int)(perso->altitude*2); i>=0; i -= 1)
+        for (int i = (int)(perso->altitude*2); i-ga>=0; i -= 1)
+        {
             if (building_altitude[dst][i-ga]/100  != 0)
+            {
                 return (float)i/2 + 0.5;
+            }
+        }
         return (float)altitude(dst)/38;
     }
     else {
@@ -128,7 +132,7 @@ float allowed_to_move(struct personnages *perso, float x, float y, float mvx, fl
         if (building_altitude[dst][(int)(perso->altitude*2)+1-ga]%10 == 1 || building_altitude[dst][(int)(perso->altitude*2)+2-ga]%10 == 1 || building_altitude[dst][(int)(perso->altitude*2)+3-ga]%10 == 1 || 
         (building_altitude[dst][(int)(perso->altitude*2)-ga]%10 == 1 && (building_altitude[dst][(int)(perso->altitude*2)+4-ga]%10 == 1 || (building_altitude[src] != NULL && building_altitude[src][(int)(perso->altitude*2)+4-ga]%10 == 1))))
             return -1;
-        for (int i = (int)(perso->altitude*2); i>=0; i -= 1)
+        for (int i = (int)(perso->altitude*2); i-ga>=0; i -= 1)
             if (building_altitude[dst][i-ga]%10  != 0)
                 return (float)i/2 + 0.5;
         return (float)altitude(dst)/38;

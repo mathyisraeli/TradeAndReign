@@ -122,7 +122,6 @@ void boucle_jeu(int socket, char *name)
    // struct timeval start;struct timeval end;
 	while(!done)
 	{
-        
 	    event = gestion_touche();
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	    SDL_RenderClear(renderer);

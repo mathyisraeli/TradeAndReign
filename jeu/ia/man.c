@@ -31,7 +31,6 @@ void ia_man(struct personnages *p)
 	}
     if (p->ordrex > 0)
     {
-        printf ("%f %f\n", p->ordrex, p->ordrey);
         if (pow(p->ordrex - p->x,2) +  pow(p->ordrey - p->y,2) < p->vitesse_dep )
         {
             sprintf (ordre + strlen(ordre), "%d 03 -1 %d 01 %f %d 02 %f ", p->id, p->id, p->ordrex, p->id, p->ordrey);
@@ -135,6 +134,17 @@ void ia_man(struct personnages *p)
             }
             else // i should build a house
             {
+                if (p->house_id == -1)
+                {
+                    for (struct building *parcour = list_building; parcour != NULL; parcour = parcour->next)
+                    {
+                        if (strcmp(parcour->skin, "141") == 0 && (parcour->x - p->x)*(parcour->x - p->x) + (parcour->y - p->y) * (parcour->y - p->y) < 400)
+                        {
+                            sprintf (ordre + strlen(ordre), "%d 32 -%d ",p->id, parcour->x + parcour->y * max_x);
+                            break;
+                        }
+                    }
+                }
                 if (count_item(p->i_list, "wooden-board") >= 9) //si j'ai dans mon inventaire de quoi placer des fondations 
                 {
                     int moix = (int)p->x;
@@ -232,7 +242,6 @@ void ia_man(struct personnages *p)
                     }
                     if (cond == 0 && p->house_id < -1)
                     {
-
                         int bx = -p->house_id%max_x;
                         int by = -p->house_id/max_x;
                         int a = rand() % 4;
@@ -324,6 +333,12 @@ void ia_man(struct personnages *p)
                     }
                 }
             }
+        }
+        else 
+        {
+            if (find_building_by_id(p->house_id) == NULL)
+                sprintf (ordre + strlen(ordre), "%d 32 -1 ",p->id);
+
         }
     }
     if (strcmp(p->echange_player, "none") != 0)

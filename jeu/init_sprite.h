@@ -84,6 +84,9 @@ struct skin
 
     SDL_Texture *terracotta_house_3x3[9];
     SDL_Texture *terracotta_house_3x3_inside[6];
+    SDL_Texture *wooden_house_6x6[10];
+    SDL_Texture *wooden_house_3x3_faceline[3];
+
     SDL_Texture *wood_pillar;
 
     SDL_Texture *bridgeSlab;
@@ -101,7 +104,6 @@ struct skin
     // Walking textures for littleManEmptyStuff
     SDL_Texture *littleManEmptyStuff_walking[6][12]; // 8 directions, 6 frames each
 
-    SDL_Texture *wooden_house_3x3_faceline[3];
 };
 
 struct gui_sprite
