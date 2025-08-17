@@ -42,31 +42,31 @@ void ia_man(struct personnages *p)
             int dst = p->chemin[src].prev;
 
             if (src + 1 == dst)
-                sprintf (ordre + strlen(ordre), "%d 01 +%f %d 05 d %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
+                sprintf (ordre + strlen(ordre), "%d 01 +%f %d 05 f %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
             else if (src - 1 == dst)
-                sprintf (ordre + strlen(ordre), "%d 01 -%f %d 05 h %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5); 
+                sprintf (ordre + strlen(ordre), "%d 01 -%f %d 05 b %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5); 
             else if (src - max_x == dst)
-                sprintf (ordre + strlen(ordre), "%d 02 -%f %d 05 b %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
+                sprintf (ordre + strlen(ordre), "%d 02 -%f %d 05 d %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
             else if (src + max_x == dst)
-                sprintf (ordre + strlen(ordre), "%d 02 +%f %d 05 f %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
+                sprintf (ordre + strlen(ordre), "%d 02 +%f %d 05 h %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
             else if (src + 1 + max_x == dst)
-                sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 05 e %d 21 %d ", p->id, p->vitesse_dep*0.707, p->id,p->vitesse_dep*0.707, p->id, p->id, (p->animation+1)%5);
+                sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 05 g %d 21 %d ", p->id, p->vitesse_dep*0.707, p->id,p->vitesse_dep*0.707, p->id, p->id, (p->animation+1)%5);
             else if (src + 1 - max_x == dst)
-                sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 -%f %d 05 c %d 21 %d ", p->id, p->vitesse_dep*0.707, p->id,p->vitesse_dep*0.707, p->id, p->id, (p->animation+1)%5);
+                sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 -%f %d 05 e %d 21 %d ", p->id, p->vitesse_dep*0.707, p->id,p->vitesse_dep*0.707, p->id, p->id, (p->animation+1)%5);
             else if (src - 1 + max_x == dst)
-                sprintf (ordre + strlen(ordre), "%d 01 -%f %d 02 +%f %d 05 g %d 21 %d ", p->id, p->vitesse_dep*0.707, p->id,p->vitesse_dep*0.707, p->id, p->id, (p->animation+1)%5);
+                sprintf (ordre + strlen(ordre), "%d 01 -%f %d 02 +%f %d 05 a %d 21 %d ", p->id, p->vitesse_dep*0.707, p->id,p->vitesse_dep*0.707, p->id, p->id, (p->animation+1)%5);
             else if (src -1 - max_x == dst)
-                sprintf (ordre + strlen(ordre), "%d 01 -%f %d 02 -%f %d 05 a %d 21 %d ", p->id, p->vitesse_dep*0.707, p->id,p->vitesse_dep*0.707, p->id, p->id, (p->animation+1)%5);
+                sprintf (ordre + strlen(ordre), "%d 01 -%f %d 02 -%f %d 05 c %d 21 %d ", p->id, p->vitesse_dep*0.707, p->id,p->vitesse_dep*0.707, p->id, p->id, (p->animation+1)%5);
             else
             {
                 if (p->ordrex > p->x)
-                    sprintf (ordre + strlen(ordre), "%d 01 +%f %d 05 b %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
+                    sprintf (ordre + strlen(ordre), "%d 01 +%f %d 05 f %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
                 else if (p->ordrex < p->x)
                     sprintf (ordre + strlen(ordre), "%d 01 -%f %d 05 b %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
                 if (p->ordrey > p->y)
-                    sprintf (ordre + strlen(ordre), "%d 02 +%f %d 05 d %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
+                    sprintf (ordre + strlen(ordre), "%d 02 +%f %d 05 h %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
                 else if (p->ordrey < p->y)
-                    sprintf (ordre + strlen(ordre), "%d 02 -%f %d 05 e %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
+                    sprintf (ordre + strlen(ordre), "%d 02 -%f %d 05 d %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
             }
 
         }

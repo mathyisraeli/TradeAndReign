@@ -57,12 +57,12 @@ void actualise_stat(struct personnages *p)
 		if (p->pv > 49	)
 		{
 			new->offset_x = 896;	
-			new->img = select_good_img(21, p->angle, 1, 1);
+			new->img = img->s->tree1Standing;
 		}
 		else
 		{
 			new->offset_x = 990;
-			new->img = select_good_img(22, p->angle, 1, 1);
+			new->img = img->s->tree1Felled;
 		}
 		new->x = p->x;
 		new->y = p->y;
@@ -76,7 +76,7 @@ void actualise_stat(struct personnages *p)
 	}
 	else if (p->skin[1] == '2')
 	{
-		insert(p->x, p->y, p->altitude,p->id, 0, 0, 0, p, NULL, select_good_img(3, p->angle, p->animation,1));
+		insert(p->x, p->y, p->altitude,p->id, 0, 0, 0, p, NULL, img->s->drapeauBlanc[p->angle - 'a']);
 		p->max_pv = 99999;
 		p->dom = 0;
 		p->poid = 10000;
@@ -91,6 +91,7 @@ void actualise_stat(struct personnages *p)
 		p->vitesse_dep = 0.2;
 		p->poid = 65;
 		p->eau = '0';
+		p->dom = 1;
 		p->plancher = 'n';
 		struct to_disp *new = malloc(sizeof(struct to_disp));
 		new->x = p->x;
@@ -101,31 +102,31 @@ void actualise_stat(struct personnages *p)
 		new->next = NULL;
 		new->p = p;
 		new->floor = 1;
-		if (strcmp(p->right_hand, "bow") == 0)
-		{
-			new->img = select_good_img(11, p->angle, p->animation, p->animation_2);
-		}
-		else if (strcmp(p->right_hand, "sword") == 0)
-		{
-			p->porte_dom = 2;
-			p->porte_dom = 5;
-			new->img = select_good_img(13, p->angle, p->animation, p->animation_2);
-		}
-		else // default 
-		{
-			p->porte_dom = 1.3;
-			p->dom = 1;
-			new->img = select_good_img(12, p->angle, p->animation, p->animation_2);
-		} 
+		new->img = img->s->Man[p->physique[0]-'0'][p->physique[2]-'0'][p->animation_2][p->animation][p->angle - 'a'];
 		new->offset_x = 900	;
 		new->offset_y = 450;
-		sortedInsert(new);	
-
+		sortedInsert(new);
+		if (scmp(p->pant, "empty") == 0)
+		{
+			struct to_disp *nnew = malloc(sizeof(struct to_disp));
+			nnew->x = p->x;
+			nnew->altitude = p->altitude;
+			nnew->y = p->y;
+			nnew->b = NULL;
+			nnew->id = p->id;
+			nnew->next = new->next;
+			nnew->p = p;
+			nnew->floor = 1;
+			nnew->img = img->s->breechesLin[p->animation_2][p->animation][p->angle - 'a'];
+			nnew->offset_x = 900;
+			nnew->offset_y = 450;
+			new->next = nnew;
+		}
 	}
 }
 
 void actualise_stat_building(struct building *b)
-{
+{a
 	list_disp = deleteKey(b->id);
 	if (b->skin[1] == '1')
 	{
@@ -161,42 +162,47 @@ void actualise_stat_building(struct building *b)
 		}
 		else if (b->skin[2] == '3')
 		{
-			insert(b->x, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 409, NULL, b,img->s->wooden_house_6x6[1]);
-			insert(b->x-1, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[4]);
-			insert(b->x-2, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[3]);
-			insert(b->x-3, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[3]);
-			insert(b->x-4, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[3]);
-			insert(b->x-5, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[5]);
-			insert(b->x, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[8]);
-			insert(b->x-1, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
-			insert(b->x-2, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
-			insert(b->x-3, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
-			insert(b->x-4, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
-			insert(b->x-5, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
-			insert(b->x, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[9]);
-			insert(b->x-1, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
-			insert(b->x-2, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
-			insert(b->x-3, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
-			insert(b->x-4, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
-			insert(b->x-5, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
-			insert(b->x, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[6]);
-			insert(b->x-1, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
-			insert(b->x-2, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
-			insert(b->x-3, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
-			insert(b->x-4, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
-			insert(b->x-5, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
-			insert(b->x, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[7]);
-			insert(b->x-1, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
-			insert(b->x-2, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
-			insert(b->x-3, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
-			insert(b->x-4, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
-			insert(b->x-5, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
-			insert(b->x, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[2]);
-			insert(b->x-1, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
-			insert(b->x-2, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
-			insert(b->x-3, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
-			insert(b->x-4, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
-			insert(b->x-5, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
+			if (moi != NULL && b->id == moi->inside)
+				insert(b->x-5, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 650, NULL, b,img->s->wooden_house_6x6[10]);
+			else
+			{
+				insert(b->x, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 409, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-1, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[4]);
+				insert(b->x-2, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[3]);
+				insert(b->x-3, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[3]);
+				insert(b->x-4, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[3]);
+				insert(b->x-5, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[5]);
+				insert(b->x, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[8]);
+				insert(b->x-1, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-2, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-3, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-4, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-5, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[9]);
+				insert(b->x-1, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-2, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-3, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-4, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-5, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[6]);
+				insert(b->x-1, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-2, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-3, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-4, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-5, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[7]);
+				insert(b->x-1, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-2, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-3, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-4, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-5, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[2]);
+				insert(b->x-1, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-2, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-3, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-4, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-5, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
+			}
 	
 		}
 

@@ -47,21 +47,10 @@ struct textures
 struct skin
 {
     // Homme qui marche
-    SDL_Texture *hoFa[6][12];
+    SDL_Texture *Man[2][10][30][6][8]; //sexe /  couleur de peau / animation2 / animation / angle
 
-    // Homme Archer
-    SDL_Texture *hoAr[6][12];
+    SDL_Texture *breechesLin[30][6][8];
 
-
-    // Standing
-    SDL_Texture *littleManEmptyStuff_standing_down;
-    SDL_Texture *littleManEmptyStuff_standing_downLeft;
-    SDL_Texture *littleManEmptyStuff_standing_downRight;
-    SDL_Texture *littleManEmptyStuff_standing_left;
-    SDL_Texture *littleManEmptyStuff_standing_right;
-    SDL_Texture *littleManEmptyStuff_standing_upLeft;
-    SDL_Texture *littleManEmptyStuff_standing_upRight;
-    SDL_Texture *littleManEmptyStuff_standing_up;
 
     SDL_Texture *ship1_50cm_wood;
     SDL_Texture *ship1_100cm_wood;
@@ -84,7 +73,7 @@ struct skin
 
     SDL_Texture *terracotta_house_3x3[9];
     SDL_Texture *terracotta_house_3x3_inside[6];
-    SDL_Texture *wooden_house_6x6[10];
+    SDL_Texture *wooden_house_6x6[11];
     SDL_Texture *wooden_house_3x3_faceline[3];
 
     SDL_Texture *wood_pillar;

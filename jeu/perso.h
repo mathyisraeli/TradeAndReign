@@ -50,6 +50,7 @@ struct personnages
     char shoes[50];
     char skill[62];
     int house_id;
+    char physique[6]; // sexe/taille/couleur_de_peau/couleur_de_cheuveu/coifure
     ///////////////////////////////////////
     float screenx;
     float screeny;

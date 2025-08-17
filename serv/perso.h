@@ -51,6 +51,7 @@ struct personnages
     char shoes[50];
     char skill[62*3];
     int house_id;
+    char physique[6];
     /////////////
 	struct personnages *next;
     float moved_x;

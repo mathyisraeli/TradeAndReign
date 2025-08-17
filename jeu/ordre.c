@@ -7,8 +7,9 @@ void select_char(struct linked_list *selected[11])
 		for (struct linked_list *a = list; a != NULL; a = a->next)
 		{
 			if (lettres->Mouse_pos_x > a->p->screenx && lettres->Mouse_pos_x < a->p->screenx + a->p->sizescreenx &&
-				lettres->Mouse_pos_y > a->p->screeny && lettres->Mouse_pos_y < a->p->screeny + a->p->sizescreeny)
+				lettres->Mouse_pos_y > a->p->screeny && lettres->Mouse_pos_y < a->p->screeny + a->p->sizescreeny && 450 > (a->p->x - moi->x) * (a->p->x - moi->x) + (a->p->y - moi->y) * (a->p->y - moi->y))
 			{
+				printf ("%d %s\n", a->p->id, a->p->nom);
 				if (exist_in_linked(selected[0], a->p) == 0)
 					selected[0] = append_in_linked(selected[0], a->p);
 				else

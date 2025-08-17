@@ -26,10 +26,10 @@ void send_background_and_map(int socket)
 	background_send[0] = 0;
     for (struct personnages *pa = list; pa != NULL; pa = pa->next)
     {
-		sprintf(background_send + strlen(background_send), "%s %d %d %s %f %f %f %f %f %c %d %d %d %s %s %s %s %d %s %s %d %s %d %d %d %d %c %s %s %s %s %s %s %d [", 
+		sprintf(background_send + strlen(background_send), "%s %d %d %s %f %f %f %f %f %c %d %d %d %s %s %s %s %d %s %s %d %s %d %d %d %d %c %s %s %s %s %s %s %d %s [", 
         pa->skin, pa->id, pa->pv, pa->nom_de_compte, pa->x, pa->y, pa->altitude, pa->ordrex, pa->ordrey, pa->angle, pa->timer_dom, pa->faim, pa->inside, pa->nom, 
         pa->nom_superieur, pa->titre, pa->religion, pa->nb_vassaux, pa->echange_player, pa->item1, pa->count_item1, pa->item2, pa->count_item2, 
-        pa->animation, pa->animation_2, pa->chemin_is_set, pa->online, pa->left_hand,pa->right_hand, pa->headgear, pa->tunic, pa->pant, pa->shoes, pa->house_id);
+        pa->animation, pa->animation_2, pa->chemin_is_set, pa->online, pa->left_hand,pa->right_hand, pa->headgear, pa->tunic, pa->pant, pa->shoes, pa->house_id, pa->physique);
         for (struct linked_enemie *p = pa->e_list; p != NULL; p = p->next)
         {
             if (p->next != NULL) 
