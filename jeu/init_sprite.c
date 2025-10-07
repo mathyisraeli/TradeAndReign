@@ -90,329 +90,52 @@ struct skin *init_skin()
     initTextureObject(&(to_return->bridgePillar), "img/batiments/bridges/pillar.bmp");
     initTextureObject(&(to_return->bridgeSlab), "img/batiments/bridges/slab.bmp");
 
-    initTextureObject(&(to_return->Man[0][6][0][0][0]), "img/man/Bronze/walk-0-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][0][1]), "img/man/Bronze/walk-45-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][0][2]), "img/man/Bronze/walk-90-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][0][3]), "img/man/Bronze/walk-135-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][0][4]), "img/man/Bronze/walk-180-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][0][5]), "img/man/Bronze/walk-225-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][0][6]), "img/man/Bronze/walk-270-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][0][7]), "img/man/Bronze/walk-315-1.bmp");
+    char filepath[100];
+    char sexe[2][6] = {"man", "woman"};
+    char couleur[10][10] = {"ivory", "marble", "sand", "gold", "leather", "oak", "bronze", "coffee", "chocolate", "ebony"};
+    char animation2[3][10] = {"walk", "punch", "gather"};
 
-    initTextureObject(&(to_return->Man[0][6][0][1][0]), "img/man/Bronze/walk-0-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][1][1]), "img/man/Bronze/walk-45-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][1][2]), "img/man/Bronze/walk-90-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][1][3]), "img/man/Bronze/walk-135-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][1][4]), "img/man/Bronze/walk-180-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][1][5]), "img/man/Bronze/walk-225-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][1][6]), "img/man/Bronze/walk-270-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][1][7]), "img/man/Bronze/walk-315-2.bmp");
+    for (int i = 0; i < 2   ; i++) // sexe
+    {
+        for (int j = 0; j < 10; j++) // couleur de peau
+        {
+            for (int k = 0; k < 3; k++) // animation2
+            {
+                for (int l = 0; l < 6; l++) // animation
+                {
+                    for (int m = 0; m < 8; m++) // angle
+                    {
+                        sprintf (filepath, "img/%s/%s/%s-%d-%d.bmp", sexe[i], couleur[j], animation2[k],m, l+1);
+                        initTextureObject(&(to_return->Man[i][j][k][l][m]), filepath);
+                    }
+                }
+            }
+        }
+    }
 
-    initTextureObject(&(to_return->Man[0][6][0][2][0]), "img/man/Bronze/walk-0-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][2][1]), "img/man/Bronze/walk-45-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][2][2]), "img/man/Bronze/walk-90-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][2][3]), "img/man/Bronze/walk-135-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][2][4]), "img/man/Bronze/walk-180-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][2][5]), "img/man/Bronze/walk-225-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][2][6]), "img/man/Bronze/walk-270-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][2][7]), "img/man/Bronze/walk-315-3.bmp");
-
-    initTextureObject(&(to_return->Man[0][6][0][3][0]), "img/man/Bronze/walk-0-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][3][1]), "img/man/Bronze/walk-45-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][3][2]), "img/man/Bronze/walk-90-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][3][3]), "img/man/Bronze/walk-135-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][3][4]), "img/man/Bronze/walk-180-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][3][5]), "img/man/Bronze/walk-225-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][3][6]), "img/man/Bronze/walk-270-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][3][7]), "img/man/Bronze/walk-315-4.bmp");
-
-    initTextureObject(&(to_return->Man[0][6][0][4][0]), "img/man/Bronze/walk-0-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][4][1]), "img/man/Bronze/walk-45-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][4][2]), "img/man/Bronze/walk-90-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][4][3]), "img/man/Bronze/walk-135-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][4][4]), "img/man/Bronze/walk-180-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][4][5]), "img/man/Bronze/walk-225-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][4][6]), "img/man/Bronze/walk-270-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][4][7]), "img/man/Bronze/walk-315-5.bmp");
-
-    initTextureObject(&(to_return->Man[0][6][0][5][0]), "img/man/Bronze/walk-0-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][5][1]), "img/man/Bronze/walk-45-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][5][2]), "img/man/Bronze/walk-90-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][5][3]), "img/man/Bronze/walk-135-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][5][4]), "img/man/Bronze/walk-180-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][5][5]), "img/man/Bronze/walk-225-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][5][6]), "img/man/Bronze/walk-270-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][0][5][7]), "img/man/Bronze/walk-315-6.bmp");
-
-    initTextureObject(&(to_return->Man[0][6][1][0][0]), "img/man/Bronze/punch-0-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][0][1]), "img/man/Bronze/punch-45-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][0][2]), "img/man/Bronze/punch-90-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][0][3]), "img/man/Bronze/punch-135-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][0][4]), "img/man/Bronze/punch-180-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][0][5]), "img/man/Bronze/punch-225-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][0][6]), "img/man/Bronze/punch-270-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][0][7]), "img/man/Bronze/punch-315-1.bmp");
-
-    initTextureObject(&(to_return->Man[0][6][1][1][0]), "img/man/Bronze/punch-0-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][1][1]), "img/man/Bronze/punch-45-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][1][2]), "img/man/Bronze/punch-90-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][1][3]), "img/man/Bronze/punch-135-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][1][4]), "img/man/Bronze/punch-180-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][1][5]), "img/man/Bronze/punch-225-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][1][6]), "img/man/Bronze/punch-270-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][1][7]), "img/man/Bronze/punch-315-2.bmp");
-
-    initTextureObject(&(to_return->Man[0][6][1][2][0]), "img/man/Bronze/punch-0-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][2][1]), "img/man/Bronze/punch-45-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][2][2]), "img/man/Bronze/punch-90-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][2][3]), "img/man/Bronze/punch-135-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][2][4]), "img/man/Bronze/punch-180-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][2][5]), "img/man/Bronze/punch-225-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][2][6]), "img/man/Bronze/punch-270-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][2][7]), "img/man/Bronze/punch-315-3.bmp");
-
-    initTextureObject(&(to_return->Man[0][6][1][3][0]), "img/man/Bronze/punch-0-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][3][1]), "img/man/Bronze/punch-45-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][3][2]), "img/man/Bronze/punch-90-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][3][3]), "img/man/Bronze/punch-135-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][3][4]), "img/man/Bronze/punch-180-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][3][5]), "img/man/Bronze/punch-225-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][3][6]), "img/man/Bronze/punch-270-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][3][7]), "img/man/Bronze/punch-315-4.bmp");
-
-    initTextureObject(&(to_return->Man[0][6][1][4][0]), "img/man/Bronze/punch-0-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][4][1]), "img/man/Bronze/punch-45-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][4][2]), "img/man/Bronze/punch-90-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][4][3]), "img/man/Bronze/punch-135-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][4][4]), "img/man/Bronze/punch-180-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][4][5]), "img/man/Bronze/punch-225-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][4][6]), "img/man/Bronze/punch-270-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][4][7]), "img/man/Bronze/punch-315-5.bmp");
-
-    initTextureObject(&(to_return->Man[0][6][1][5][0]), "img/man/Bronze/punch-0-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][5][1]), "img/man/Bronze/punch-45-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][5][2]), "img/man/Bronze/punch-90-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][5][3]), "img/man/Bronze/punch-135-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][5][4]), "img/man/Bronze/punch-180-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][5][5]), "img/man/Bronze/punch-225-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][5][6]), "img/man/Bronze/punch-270-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][1][5][7]), "img/man/Bronze/punch-315-6.bmp");
-
-    initTextureObject(&(to_return->Man[0][6][2][0][0]), "img/man/Bronze/gather-0-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][0][1]), "img/man/Bronze/gather-45-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][0][2]), "img/man/Bronze/gather-90-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][0][3]), "img/man/Bronze/gather-135-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][0][4]), "img/man/Bronze/gather-180-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][0][5]), "img/man/Bronze/gather-225-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][0][6]), "img/man/Bronze/gather-270-1.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][0][7]), "img/man/Bronze/gather-315-1.bmp");
-
-    initTextureObject(&(to_return->Man[0][6][2][1][0]), "img/man/Bronze/gather-0-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][1][1]), "img/man/Bronze/gather-45-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][1][2]), "img/man/Bronze/gather-90-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][1][3]), "img/man/Bronze/gather-135-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][1][4]), "img/man/Bronze/gather-180-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][1][5]), "img/man/Bronze/gather-225-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][1][6]), "img/man/Bronze/gather-270-2.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][1][7]), "img/man/Bronze/gather-315-2.bmp");
-
-    initTextureObject(&(to_return->Man[0][6][2][2][0]), "img/man/Bronze/gather-0-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][2][1]), "img/man/Bronze/gather-45-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][2][2]), "img/man/Bronze/gather-90-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][2][3]), "img/man/Bronze/gather-135-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][2][4]), "img/man/Bronze/gather-180-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][2][5]), "img/man/Bronze/gather-225-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][2][6]), "img/man/Bronze/gather-270-3.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][2][7]), "img/man/Bronze/gather-315-3.bmp");
-
-    initTextureObject(&(to_return->Man[0][6][2][3][0]), "img/man/Bronze/gather-0-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][3][1]), "img/man/Bronze/gather-45-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][3][2]), "img/man/Bronze/gather-90-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][3][3]), "img/man/Bronze/gather-135-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][3][4]), "img/man/Bronze/gather-180-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][3][5]), "img/man/Bronze/gather-225-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][3][6]), "img/man/Bronze/gather-270-4.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][3][7]), "img/man/Bronze/gather-315-4.bmp");
-
-    initTextureObject(&(to_return->Man[0][6][2][4][0]), "img/man/Bronze/gather-0-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][4][1]), "img/man/Bronze/gather-45-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][4][2]), "img/man/Bronze/gather-90-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][4][3]), "img/man/Bronze/gather-135-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][4][4]), "img/man/Bronze/gather-180-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][4][5]), "img/man/Bronze/gather-225-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][4][6]), "img/man/Bronze/gather-270-5.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][4][7]), "img/man/Bronze/gather-315-5.bmp");
-
-    initTextureObject(&(to_return->Man[0][6][2][5][0]), "img/man/Bronze/gather-0-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][5][1]), "img/man/Bronze/gather-45-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][5][2]), "img/man/Bronze/gather-90-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][5][3]), "img/man/Bronze/gather-135-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][5][4]), "img/man/Bronze/gather-180-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][5][5]), "img/man/Bronze/gather-225-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][5][6]), "img/man/Bronze/gather-270-6.bmp");
-    initTextureObject(&(to_return->Man[0][6][2][5][7]), "img/man/Bronze/gather-315-6.bmp");
-
-    initTextureObject(&(to_return->breechesLin[0][0][0]), "img/man/breeches-lin/walk-0-1.bmp");
-    initTextureObject(&(to_return->breechesLin[0][0][1]), "img/man/breeches-lin/walk-45-1.bmp");
-    initTextureObject(&(to_return->breechesLin[0][0][2]), "img/man/breeches-lin/walk-90-1.bmp");
-    initTextureObject(&(to_return->breechesLin[0][0][3]), "img/man/breeches-lin/walk-135-1.bmp");
-    initTextureObject(&(to_return->breechesLin[0][0][4]), "img/man/breeches-lin/walk-180-1.bmp");
-    initTextureObject(&(to_return->breechesLin[0][0][5]), "img/man/breeches-lin/walk-225-1.bmp");
-    initTextureObject(&(to_return->breechesLin[0][0][6]), "img/man/breeches-lin/walk-270-1.bmp");
-    initTextureObject(&(to_return->breechesLin[0][0][7]), "img/man/breeches-lin/walk-315-1.bmp");
-
-    initTextureObject(&(to_return->breechesLin[0][1][0]), "img/man/breeches-lin/walk-0-2.bmp");
-    initTextureObject(&(to_return->breechesLin[0][1][1]), "img/man/breeches-lin/walk-45-2.bmp");
-    initTextureObject(&(to_return->breechesLin[0][1][2]), "img/man/breeches-lin/walk-90-2.bmp");
-    initTextureObject(&(to_return->breechesLin[0][1][3]), "img/man/breeches-lin/walk-135-2.bmp");
-    initTextureObject(&(to_return->breechesLin[0][1][4]), "img/man/breeches-lin/walk-180-2.bmp");
-    initTextureObject(&(to_return->breechesLin[0][1][5]), "img/man/breeches-lin/walk-225-2.bmp");
-    initTextureObject(&(to_return->breechesLin[0][1][6]), "img/man/breeches-lin/walk-270-2.bmp");
-    initTextureObject(&(to_return->breechesLin[0][1][7]), "img/man/breeches-lin/walk-315-2.bmp");
-
-    initTextureObject(&(to_return->breechesLin[0][2][0]), "img/man/breeches-lin/walk-0-3.bmp");
-    initTextureObject(&(to_return->breechesLin[0][2][1]), "img/man/breeches-lin/walk-45-3.bmp");
-    initTextureObject(&(to_return->breechesLin[0][2][2]), "img/man/breeches-lin/walk-90-3.bmp");
-    initTextureObject(&(to_return->breechesLin[0][2][3]), "img/man/breeches-lin/walk-135-3.bmp");
-    initTextureObject(&(to_return->breechesLin[0][2][4]), "img/man/breeches-lin/walk-180-3.bmp");
-    initTextureObject(&(to_return->breechesLin[0][2][5]), "img/man/breeches-lin/walk-225-3.bmp");
-    initTextureObject(&(to_return->breechesLin[0][2][6]), "img/man/breeches-lin/walk-270-3.bmp");
-    initTextureObject(&(to_return->breechesLin[0][2][7]), "img/man/breeches-lin/walk-315-3.bmp");
-
-    initTextureObject(&(to_return->breechesLin[0][3][0]), "img/man/breeches-lin/walk-0-4.bmp");
-    initTextureObject(&(to_return->breechesLin[0][3][1]), "img/man/breeches-lin/walk-45-4.bmp");
-    initTextureObject(&(to_return->breechesLin[0][3][2]), "img/man/breeches-lin/walk-90-4.bmp");
-    initTextureObject(&(to_return->breechesLin[0][3][3]), "img/man/breeches-lin/walk-135-4.bmp");
-    initTextureObject(&(to_return->breechesLin[0][3][4]), "img/man/breeches-lin/walk-180-4.bmp");
-    initTextureObject(&(to_return->breechesLin[0][3][5]), "img/man/breeches-lin/walk-225-4.bmp");
-    initTextureObject(&(to_return->breechesLin[0][3][6]), "img/man/breeches-lin/walk-270-4.bmp");
-    initTextureObject(&(to_return->breechesLin[0][3][7]), "img/man/breeches-lin/walk-315-4.bmp");
-
-    initTextureObject(&(to_return->breechesLin[0][4][0]), "img/man/breeches-lin/walk-0-5.bmp");
-    initTextureObject(&(to_return->breechesLin[0][4][1]), "img/man/breeches-lin/walk-45-5.bmp");
-    initTextureObject(&(to_return->breechesLin[0][4][2]), "img/man/breeches-lin/walk-90-5.bmp");
-    initTextureObject(&(to_return->breechesLin[0][4][3]), "img/man/breeches-lin/walk-135-5.bmp");
-    initTextureObject(&(to_return->breechesLin[0][4][4]), "img/man/breeches-lin/walk-180-5.bmp");
-    initTextureObject(&(to_return->breechesLin[0][4][5]), "img/man/breeches-lin/walk-225-5.bmp");
-    initTextureObject(&(to_return->breechesLin[0][4][6]), "img/man/breeches-lin/walk-270-5.bmp");
-    initTextureObject(&(to_return->breechesLin[0][4][7]), "img/man/breeches-lin/walk-315-5.bmp");
-
-    initTextureObject(&(to_return->breechesLin[0][5][0]), "img/man/breeches-lin/walk-0-6.bmp");
-    initTextureObject(&(to_return->breechesLin[0][5][1]), "img/man/breeches-lin/walk-45-6.bmp");
-    initTextureObject(&(to_return->breechesLin[0][5][2]), "img/man/breeches-lin/walk-90-6.bmp");
-    initTextureObject(&(to_return->breechesLin[0][5][3]), "img/man/breeches-lin/walk-135-6.bmp");
-    initTextureObject(&(to_return->breechesLin[0][5][4]), "img/man/breeches-lin/walk-180-6.bmp");
-    initTextureObject(&(to_return->breechesLin[0][5][5]), "img/man/breeches-lin/walk-225-6.bmp");
-    initTextureObject(&(to_return->breechesLin[0][5][6]), "img/man/breeches-lin/walk-270-6.bmp");
-    initTextureObject(&(to_return->breechesLin[0][5][7]), "img/man/breeches-lin/walk-315-6.bmp");
-
-    initTextureObject(&(to_return->breechesLin[1][0][0]), "img/man/breeches-lin/punch-0-1.bmp");
-    initTextureObject(&(to_return->breechesLin[1][0][1]), "img/man/breeches-lin/punch-45-1.bmp");
-    initTextureObject(&(to_return->breechesLin[1][0][2]), "img/man/breeches-lin/punch-90-1.bmp");
-    initTextureObject(&(to_return->breechesLin[1][0][3]), "img/man/breeches-lin/punch-135-1.bmp");
-    initTextureObject(&(to_return->breechesLin[1][0][4]), "img/man/breeches-lin/punch-180-1.bmp");
-    initTextureObject(&(to_return->breechesLin[1][0][5]), "img/man/breeches-lin/punch-225-1.bmp");
-    initTextureObject(&(to_return->breechesLin[1][0][6]), "img/man/breeches-lin/punch-270-1.bmp");
-    initTextureObject(&(to_return->breechesLin[1][0][7]), "img/man/breeches-lin/punch-315-1.bmp");
-
-    initTextureObject(&(to_return->breechesLin[1][1][0]), "img/man/breeches-lin/punch-0-2.bmp");
-    initTextureObject(&(to_return->breechesLin[1][1][1]), "img/man/breeches-lin/punch-45-2.bmp");
-    initTextureObject(&(to_return->breechesLin[1][1][2]), "img/man/breeches-lin/punch-90-2.bmp");
-    initTextureObject(&(to_return->breechesLin[1][1][3]), "img/man/breeches-lin/punch-135-2.bmp");
-    initTextureObject(&(to_return->breechesLin[1][1][4]), "img/man/breeches-lin/punch-180-2.bmp");
-    initTextureObject(&(to_return->breechesLin[1][1][5]), "img/man/breeches-lin/punch-225-2.bmp");
-    initTextureObject(&(to_return->breechesLin[1][1][6]), "img/man/breeches-lin/punch-270-2.bmp");
-    initTextureObject(&(to_return->breechesLin[1][1][7]), "img/man/breeches-lin/punch-315-2.bmp");
-
-    initTextureObject(&(to_return->breechesLin[1][2][0]), "img/man/breeches-lin/punch-0-3.bmp");
-    initTextureObject(&(to_return->breechesLin[1][2][1]), "img/man/breeches-lin/punch-45-3.bmp");
-    initTextureObject(&(to_return->breechesLin[1][2][2]), "img/man/breeches-lin/punch-90-3.bmp");
-    initTextureObject(&(to_return->breechesLin[1][2][3]), "img/man/breeches-lin/punch-135-3.bmp");
-    initTextureObject(&(to_return->breechesLin[1][2][4]), "img/man/breeches-lin/punch-180-3.bmp");
-    initTextureObject(&(to_return->breechesLin[1][2][5]), "img/man/breeches-lin/punch-225-3.bmp");
-    initTextureObject(&(to_return->breechesLin[1][2][6]), "img/man/breeches-lin/punch-270-3.bmp");
-    initTextureObject(&(to_return->breechesLin[1][2][7]), "img/man/breeches-lin/punch-315-3.bmp");
-
-    initTextureObject(&(to_return->breechesLin[1][3][0]), "img/man/breeches-lin/punch-0-4.bmp");
-    initTextureObject(&(to_return->breechesLin[1][3][1]), "img/man/breeches-lin/punch-45-4.bmp");
-    initTextureObject(&(to_return->breechesLin[1][3][2]), "img/man/breeches-lin/punch-90-4.bmp");
-    initTextureObject(&(to_return->breechesLin[1][3][3]), "img/man/breeches-lin/punch-135-4.bmp");
-    initTextureObject(&(to_return->breechesLin[1][3][4]), "img/man/breeches-lin/punch-180-4.bmp");
-    initTextureObject(&(to_return->breechesLin[1][3][5]), "img/man/breeches-lin/punch-225-4.bmp");
-    initTextureObject(&(to_return->breechesLin[1][3][6]), "img/man/breeches-lin/punch-270-4.bmp");
-    initTextureObject(&(to_return->breechesLin[1][3][7]), "img/man/breeches-lin/punch-315-4.bmp");
-
-    initTextureObject(&(to_return->breechesLin[1][4][0]), "img/man/breeches-lin/punch-0-5.bmp");
-    initTextureObject(&(to_return->breechesLin[1][4][1]), "img/man/breeches-lin/punch-45-5.bmp");
-    initTextureObject(&(to_return->breechesLin[1][4][2]), "img/man/breeches-lin/punch-90-5.bmp");
-    initTextureObject(&(to_return->breechesLin[1][4][3]), "img/man/breeches-lin/punch-135-5.bmp");
-    initTextureObject(&(to_return->breechesLin[1][4][4]), "img/man/breeches-lin/punch-180-5.bmp");
-    initTextureObject(&(to_return->breechesLin[1][4][5]), "img/man/breeches-lin/punch-225-5.bmp");
-    initTextureObject(&(to_return->breechesLin[1][4][6]), "img/man/breeches-lin/punch-270-5.bmp");
-    initTextureObject(&(to_return->breechesLin[1][4][7]), "img/man/breeches-lin/punch-315-5.bmp");
-
-    initTextureObject(&(to_return->breechesLin[1][5][0]), "img/man/breeches-lin/punch-0-6.bmp");
-    initTextureObject(&(to_return->breechesLin[1][5][1]), "img/man/breeches-lin/punch-45-6.bmp");
-    initTextureObject(&(to_return->breechesLin[1][5][2]), "img/man/breeches-lin/punch-90-6.bmp");
-    initTextureObject(&(to_return->breechesLin[1][5][3]), "img/man/breeches-lin/punch-135-6.bmp");
-    initTextureObject(&(to_return->breechesLin[1][5][4]), "img/man/breeches-lin/punch-180-6.bmp");
-    initTextureObject(&(to_return->breechesLin[1][5][5]), "img/man/breeches-lin/punch-225-6.bmp");
-    initTextureObject(&(to_return->breechesLin[1][5][6]), "img/man/breeches-lin/punch-270-6.bmp");
-    initTextureObject(&(to_return->breechesLin[1][5][7]), "img/man/breeches-lin/punch-315-6.bmp");
-
-    initTextureObject(&(to_return->breechesLin[2][0][0]), "img/man/breeches-lin/gather-0-1.bmp");
-    initTextureObject(&(to_return->breechesLin[2][0][1]), "img/man/breeches-lin/gather-45-1.bmp");
-    initTextureObject(&(to_return->breechesLin[2][0][2]), "img/man/breeches-lin/gather-90-1.bmp");
-    initTextureObject(&(to_return->breechesLin[2][0][3]), "img/man/breeches-lin/gather-135-1.bmp");
-    initTextureObject(&(to_return->breechesLin[2][0][4]), "img/man/breeches-lin/gather-180-1.bmp");
-    initTextureObject(&(to_return->breechesLin[2][0][5]), "img/man/breeches-lin/gather-225-1.bmp");
-    initTextureObject(&(to_return->breechesLin[2][0][6]), "img/man/breeches-lin/gather-270-1.bmp");
-    initTextureObject(&(to_return->breechesLin[2][0][7]), "img/man/breeches-lin/gather-315-1.bmp");
-
-    initTextureObject(&(to_return->breechesLin[2][1][0]), "img/man/breeches-lin/gather-0-2.bmp");
-    initTextureObject(&(to_return->breechesLin[2][1][1]), "img/man/breeches-lin/gather-45-2.bmp");
-    initTextureObject(&(to_return->breechesLin[2][1][2]), "img/man/breeches-lin/gather-90-2.bmp");
-    initTextureObject(&(to_return->breechesLin[2][1][3]), "img/man/breeches-lin/gather-135-2.bmp");
-    initTextureObject(&(to_return->breechesLin[2][1][4]), "img/man/breeches-lin/gather-180-2.bmp");
-    initTextureObject(&(to_return->breechesLin[2][1][5]), "img/man/breeches-lin/gather-225-2.bmp");
-    initTextureObject(&(to_return->breechesLin[2][1][6]), "img/man/breeches-lin/gather-270-2.bmp");
-    initTextureObject(&(to_return->breechesLin[2][1][7]), "img/man/breeches-lin/gather-315-2.bmp");
-
-    initTextureObject(&(to_return->breechesLin[2][2][0]), "img/man/breeches-lin/gather-0-3.bmp");
-    initTextureObject(&(to_return->breechesLin[2][2][1]), "img/man/breeches-lin/gather-45-3.bmp");
-    initTextureObject(&(to_return->breechesLin[2][2][2]), "img/man/breeches-lin/gather-90-3.bmp");
-    initTextureObject(&(to_return->breechesLin[2][2][3]), "img/man/breeches-lin/gather-135-3.bmp");
-    initTextureObject(&(to_return->breechesLin[2][2][4]), "img/man/breeches-lin/gather-180-3.bmp");
-    initTextureObject(&(to_return->breechesLin[2][2][5]), "img/man/breeches-lin/gather-225-3.bmp");
-    initTextureObject(&(to_return->breechesLin[2][2][6]), "img/man/breeches-lin/gather-270-3.bmp");
-    initTextureObject(&(to_return->breechesLin[2][2][7]), "img/man/breeches-lin/gather-315-3.bmp");
-
-    initTextureObject(&(to_return->breechesLin[2][3][0]), "img/man/breeches-lin/gather-0-4.bmp");
-    initTextureObject(&(to_return->breechesLin[2][3][1]), "img/man/breeches-lin/gather-45-4.bmp");
-    initTextureObject(&(to_return->breechesLin[2][3][2]), "img/man/breeches-lin/gather-90-4.bmp");
-    initTextureObject(&(to_return->breechesLin[2][3][3]), "img/man/breeches-lin/gather-135-4.bmp");
-    initTextureObject(&(to_return->breechesLin[2][3][4]), "img/man/breeches-lin/gather-180-4.bmp");
-    initTextureObject(&(to_return->breechesLin[2][3][5]), "img/man/breeches-lin/gather-225-4.bmp");
-    initTextureObject(&(to_return->breechesLin[2][3][6]), "img/man/breeches-lin/gather-270-4.bmp");
-    initTextureObject(&(to_return->breechesLin[2][3][7]), "img/man/breeches-lin/gather-315-4.bmp");
-
-    initTextureObject(&(to_return->breechesLin[2][4][0]), "img/man/breeches-lin/gather-0-5.bmp");
-    initTextureObject(&(to_return->breechesLin[2][4][1]), "img/man/breeches-lin/gather-45-5.bmp");
-    initTextureObject(&(to_return->breechesLin[2][4][2]), "img/man/breeches-lin/gather-90-5.bmp");
-    initTextureObject(&(to_return->breechesLin[2][4][3]), "img/man/breeches-lin/gather-135-5.bmp");
-    initTextureObject(&(to_return->breechesLin[2][4][4]), "img/man/breeches-lin/gather-180-5.bmp");
-    initTextureObject(&(to_return->breechesLin[2][4][5]), "img/man/breeches-lin/gather-225-5.bmp");
-    initTextureObject(&(to_return->breechesLin[2][4][6]), "img/man/breeches-lin/gather-270-5.bmp");
-    initTextureObject(&(to_return->breechesLin[2][4][7]), "img/man/breeches-lin/gather-315-5.bmp");
-
-    initTextureObject(&(to_return->breechesLin[2][5][0]), "img/man/breeches-lin/gather-0-6.bmp");
-    initTextureObject(&(to_return->breechesLin[2][5][1]), "img/man/breeches-lin/gather-45-6.bmp");
-    initTextureObject(&(to_return->breechesLin[2][5][2]), "img/man/breeches-lin/gather-90-6.bmp");
-    initTextureObject(&(to_return->breechesLin[2][5][3]), "img/man/breeches-lin/gather-135-6.bmp");
-    initTextureObject(&(to_return->breechesLin[2][5][4]), "img/man/breeches-lin/gather-180-6.bmp");
-    initTextureObject(&(to_return->breechesLin[2][5][5]), "img/man/breeches-lin/gather-225-6.bmp");
-    initTextureObject(&(to_return->breechesLin[2][5][6]), "img/man/breeches-lin/gather-270-6.bmp");
-    initTextureObject(&(to_return->breechesLin[2][5][7]), "img/man/breeches-lin/gather-315-6.bmp");
+    for (int k = 0; k < 3; k++) // animation2
+    {
+        for (int l = 0; l < 6; l++) // animation
+        {
+            for (int m = 0; m < 8; m++) // angle
+            {
+                sprintf (filepath, "img/man/breeches-lin/%s-%d-%d.bmp", animation2[k],m, l+1);
+                //printf ("%s\n", filepath); //debug
+                initTextureObject(&(to_return->breechesLin[k][l][m]), filepath);
+            }
+        }
+    }
+    for (int k = 0; k < 3; k++) // animation2
+    {
+        for (int l = 0; l < 6; l++) // animation
+        {
+            for (int m = 0; m < 8; m++) // angle
+            {
+                sprintf (filepath, "img/woman/shift-lin/%s-%d-%d.bmp", animation2[k],m, l+1);
+                initTextureObject(&(to_return->shiftLin[k][l][m]), filepath);
+            }
+        }
+    }
     return to_return;
 }
 

@@ -106,7 +106,7 @@ void actualise_stat(struct personnages *p)
 		new->offset_x = 900	;
 		new->offset_y = 450;
 		sortedInsert(new);
-		if (scmp(p->pant, "empty") == 0)
+		if (strcmp(p->pant, "empty") == 0)
 		{
 			struct to_disp *nnew = malloc(sizeof(struct to_disp));
 			nnew->x = p->x;
@@ -117,7 +117,10 @@ void actualise_stat(struct personnages *p)
 			nnew->next = new->next;
 			nnew->p = p;
 			nnew->floor = 1;
-			nnew->img = img->s->breechesLin[p->animation_2][p->animation][p->angle - 'a'];
+			if (p->physique[0] == '0')
+				nnew->img = img->s->breechesLin[p->animation_2][p->animation][p->angle - 'a'];
+			else
+				nnew->img = img->s->shiftLin[p->animation_2][p->animation][p->angle - 'a'];
 			nnew->offset_x = 900;
 			nnew->offset_y = 450;
 			new->next = nnew;
@@ -126,7 +129,7 @@ void actualise_stat(struct personnages *p)
 }
 
 void actualise_stat_building(struct building *b)
-{a
+{
 	list_disp = deleteKey(b->id);
 	if (b->skin[1] == '1')
 	{

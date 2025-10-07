@@ -7,7 +7,13 @@ void recursive_print_ground(struct linked_ground *p)
     if (p->next != NULL)
         recursive_print_ground(p->next);
     printf ("%s%d", texture_string[p->texture],p->altitude);
+}
 
+void recursive_sprint_ground(char *line, struct linked_ground *p)
+{
+    if (p->next != NULL)
+        recursive_sprint_ground(line, p->next);
+    sprintf (line + strlen(line), "%s%d", texture_string[p->texture],p->altitude);
 }
 
 void ground_to_string(void)
@@ -411,6 +417,7 @@ void handle_altitude(void)
 
 void create_array(char *ground_string)
 {
+    printf ("a\n");
     int i = 0;
     sscanf (ground_string, "%d %d", &max_x, &max_y);
     while (ground_string[i] != '\n')
@@ -449,6 +456,7 @@ void create_array(char *ground_string)
     }
     background_send = malloc(max_x*max_y*10);
     size_background_send = max_x * max_y * 10;
+        printf ("b\n");
 }
 
 int index_of_snow(int start)
@@ -459,4 +467,33 @@ int index_of_snow(int start)
         if (ground[i]->texture == ne1 || ground[i]->texture == ne2 || ground[i]->texture == ne3)
             return i;
     return -1;
+}
+
+void save_ground(int n)
+{
+    printf ("save ground in\n");
+    char line[99999];
+    char filename[20];
+    sprintf (filename, "ground-%d.txt", n);
+    FILE *fichier = fopen(filename, "w"); // "w" pour écrire (écrase si existe déjà)
+    if (fichier == NULL) {
+        perror("Erreur lors de la sauvegarde du sol");
+        return;
+    }
+    sprintf (line, "%d %d\n", max_x, max_y);
+    fputs(line, fichier);
+
+    for (int i = 0; i < max_y; i++)
+    {
+        line[0] = 0;
+        for (int j = 0; j < max_x; j++)
+        {
+            recursive_sprint_ground(line, ground[i*max_x+j]);  
+            strcat(line, " ");
+        }
+        line[strlen(line)-1] = '\n';
+        fputs(line, fichier);
+    }
+    fclose(fichier);
+    printf ("save ground aout\n");
 }

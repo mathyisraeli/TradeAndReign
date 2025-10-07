@@ -10,7 +10,6 @@ static int create_and_bind (char *port)
     hints.ai_family = AF_UNSPEC;     /* Return IPv4 and IPv6 choices */
     hints.ai_socktype = SOCK_STREAM; /* We want a TCP socket */
     hints.ai_flags = AI_PASSIVE;     /* All interfaces */
-
     s = getaddrinfo (NULL, port, &hints, &result);
     if (s != 0)
     {   
@@ -64,6 +63,7 @@ int main(int argc, char **argv)
 		printf ("error 1 : serv need a port\n");
 		return 1;
 	}
+    unsigned int save_map_count = 0;
 	char *ground_str;
 	load_file_as_string("ground.txt", &ground_str);
 	create_array(ground_str);
@@ -119,7 +119,6 @@ int main(int argc, char **argv)
     gettimeofday(&start, NULL);
 	while (1)
     {
-        
         int n, i;
         n = epoll_wait (efd, events, MAXEVENTS, 0);
         for (i = 0; i < n; i++)
@@ -142,8 +141,8 @@ int main(int argc, char **argv)
 
 				
                 continue;
-            }
 
+            }
             else if (sfd == events[i].data.fd)
             {
                 /* We have a notification on the listening socket, which
@@ -216,7 +215,7 @@ int main(int argc, char **argv)
                          * data. So go back to the main loop. */
                         if (errno != EAGAIN)
                         {
-                            perror ("read");
+                            printf  ("error reading order\n");
                             done = 1;
                         }
                         break;
@@ -241,7 +240,7 @@ int main(int argc, char **argv)
 								strcpy(c_names[events[i].data.fd], buf);
                                 p->online = '1';
                                 p->a_bouger = 1;
-                                send_background_and_map(events[i].data.fd);;
+                                send_background_and_map(events[i].data.fd);
 							}
 							else
 								s = write (events[i].data.fd, "n", 1);
@@ -252,7 +251,6 @@ int main(int argc, char **argv)
 				}
                 if (done)
                 {
-                    
                     if (statut[events[i].data.fd] == 1)
                     {
                         struct personnages *p = have_char(c_names[events[i].data.fd]);
@@ -284,12 +282,18 @@ int main(int argc, char **argv)
                 add_1_pixel(idx_last_snow, ea1);
             }
             for (int i = 4; i < MAXEVENTS + 5;i++)
-            	if (statut[i] == 1)
-				{
-				//	printf("%d : [%s %s]\n", i, order, order + 20);
-                	send(i, order_send, size + 20, MSG_NOSIGNAL);
-				}
+            if (statut[i] == 1)
+			{
+			//	printf("%d : [%s %s]\n", i, order, order + 20);
+               	send(i, order_send, size + 20, MSG_NOSIGNAL);
+			}
             remove_perso();
+            save_map_count += 1;
+            if (save_map_count % 12000 == 0)
+            {
+                save_map(save_map_count/12000);
+                save_ground(save_map_count/12000);
+            }
             
             //printf ("elapsedTime = %5.3fms \n", elapsedTime);
 		}

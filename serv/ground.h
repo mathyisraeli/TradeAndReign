@@ -46,3 +46,4 @@ enum Texture texture_from_string(char *str);
 void handle_altitude(void);
 int index_of_snow(int start);
 void ground_to_string(void);
+void save_ground(int n);

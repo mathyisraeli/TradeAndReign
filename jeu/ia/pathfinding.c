@@ -36,7 +36,7 @@ void createArray(struct personnages *p)
     for(struct linked_list *parcour = list; parcour != NULL; parcour = parcour->next)
     {
         if ((parcour->p->skin[1] == '1'))
-            p->chemin[(int)parcour->p->x + max_x*(int)parcour->p->y].walkable = 0;
+            p->chemin[(int)parcour->p->x + max_x*(int)parcour->p->y].walkable = 5;
         else if (parcour->p != p && parcour->p->skin[1] == 0)
             p->chemin[(int)parcour->p->x + max_x*(int)parcour->p->y].walkable = 5;
     }

@@ -67,3 +67,4 @@ int get_id(char *line, int *i);
 void append_enemi(char *name);
 void remove_perso(void);
 struct personnages *find_perso_by_name(char *name);
+void save_map(int);

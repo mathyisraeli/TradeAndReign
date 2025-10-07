@@ -1,13 +1,5 @@
 #include "map_op.h"
 
-void save_map(void)
-{
-	FILE *file = fopen("map.txt","w");
-	char order[100000]; //TODO
-	fprintf(file, "%s", order);
-	fclose(file);
-}
-
 struct personnages *init_map(void)
 {
     FILE *acount = fopen("map.txt", "r+");

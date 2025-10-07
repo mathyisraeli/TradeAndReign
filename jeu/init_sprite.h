@@ -50,7 +50,7 @@ struct skin
     SDL_Texture *Man[2][10][30][6][8]; //sexe /  couleur de peau / animation2 / animation / angle
 
     SDL_Texture *breechesLin[30][6][8];
-
+    SDL_Texture *shiftLin[30][6][8];
 
     SDL_Texture *ship1_50cm_wood;
     SDL_Texture *ship1_100cm_wood;

@@ -139,6 +139,7 @@ struct linked_list *death(void)
 	struct linked_list *prev;
 	while (tmp != NULL && tmp->p->pv <= 0)
 	{
+		printf ("%s just died\n", tmp->p->nom);
 		list = list->next;
 		free_linked_enemie(tmp->p->e_list);
 		free_linked_item(tmp->p->i_list);
@@ -159,6 +160,7 @@ struct linked_list *death(void)
 		if (tmp == NULL)
 			return list;
 		prev->next = tmp->next;
+		printf ("%s just died\n", tmp->p->nom);
 		free_linked_enemie(tmp->p->e_list);
         free_linked_item(tmp->p->i_list);
 		list_disp = deleteKey(tmp->p->id);

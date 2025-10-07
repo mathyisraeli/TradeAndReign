@@ -101,7 +101,6 @@ void add_wood_pillar_or_wood_house(int moix, int moiy)
                     {
                         if ((r != moiy || c != moix) && (building_id[r * max_x + c] == -1 || strcmp(find_building_by_id(building_id[r * max_x + c])->skin,"141") != 0))
                         {
-                            printf ("%d %d\n", c,r);
                             all = 0;
                         }
                     }

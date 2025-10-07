@@ -120,7 +120,7 @@ for y in range(0, sizey):
             to_write+=(sto+str(int(altitude[y][x]*0.7))+tex+str(int(altitude[y][x]*0.3))+" ")
             if "he" in tex:
                 if random.randint(1,50) == 1:
-                    characters.append("01 " + str(len(characters)+1 )   + " 50 none " + str(x+0.5) + " " + str(y+0.5) + " " + str(altitude[y][x]/38) + " -1.000000 908.785156 a 0 0 -1 none none none none 0 none none 0 none 0 3 0 0 empty empty empty empty empty empty -1 [] [] []\n")
+                    characters.append("01 " + str(len(characters)+1 )   + " 20 none " + str(x+0.5) + " " + str(y+0.5) + " " + str(altitude[y][x]/38) + " -1.000000 908.785156 a 0 0 -1 none none none none 0 none none 0 none 0 3 0 0 empty empty empty empty empty empty -1 00000 [] [] []\n")
     to_write = to_write[:-1] + "\n"
 
 ground.write(to_write)
@@ -128,8 +128,8 @@ print("snow", cnt1, "not snow", cnt2)
 map = open(argv[2], "w")
 for i in characters:
     map.write(i)
-map.write("0 0 10 thyma 3.00000 3.000000 350 -1.000000 908.785156 a 0 9999 -1 thyma thyma none none 0 none none 0 none 0 3 0 0 empty empty empty empty empty empty -1 [] [] [001002]\n")
-map.write("0 " + str(len(characters)+2) + " 10 niko 4.00000 4.000000 350 -1.000000 908.785156 a 0 9999 -1 niko niko none none 0 none none 0 none 0 3 0 0 empty empty empty empty empty empty -1 [] [fruit 10] [001002]\n")
-map.write("0 " + str(len(characters)+3) + " 10 plomi 200.00000 200.000000 350 -1.000000 908.785156 a 0 9999 -1 plomi plomi none none 0 none none 0 none 0 3 0 0 empty empty empty empty empty empty -1 [] [fruit 10] [001002]\n")
+map.write("0 0 10 thyma 3.00000 3.000000 350 -1.000000 908.785156 a 0 9999 -1 thyma thyma none none 0 none none 0 none 0 3 0 0 empty empty empty empty empty empty -1 00000 [] [] [001002]\n")
+map.write("0 " + str(len(characters)+2) + " 10 niko 4.00000 4.000000 350 -1.000000 908.785156 a 0 9999 -1 niko niko none none 0 none none 0 none 0 3 0 0 empty empty empty empty empty empty -1 00000 [] [fruit 10] [001002]\n")
+map.write("0 " + str(len(characters)+3) + " 10 plomi 200.00000 200.000000 350 -1.000000 908.785156 a 0 9999 -1 plomi plomi none none 0 none none 0 none 0 3 0 0 empty empty empty empty empty empty -1 00000 [] [fruit 10] [001002]\n")
 
 
