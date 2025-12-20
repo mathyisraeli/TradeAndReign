@@ -4,8 +4,8 @@ from sys import argv
 import numpy as np
 
 maxalt = 3800
-biomsize = 25
-nb_bioms = 10
+biomsize = 60
+nb_bioms =  10
 bioms =     [[nan for i in range(nb_bioms)] for i in range(nb_bioms)]
 
 for y in range(nb_bioms):
@@ -36,8 +36,6 @@ for i in range(nb_bioms):
     for j in range(nb_bioms):
         if bioms[i][j] > 0.8*maxalt:
             to_add.append(p)
-        elif 0.1*maxalt > bioms[i][j]:
-            to_add.append(d)
         else:
             to_add.append(pd)
     texture.append(to_add)
@@ -100,7 +98,6 @@ for y in range(sizey):
         if 0 >  altitude[y][x]:
             altitude[y][x] = 0
 
-#create_river()
 
 ground = open(argv[1], "w")
 ground.write(str(sizex) + " " + str(sizey) + "\n")
@@ -108,6 +105,7 @@ ground.write(str(sizex) + " " + str(sizey) + "\n")
 to_write = ""
 cnt1 = 0
 cnt2 = 0
+cnt3 = 0
 for y in range(0, sizey):
     for x in range(0, sizex):
         tex = texture[y//biomsize][x//biomsize][random.randint(0,len(texture[y//biomsize][x//biomsize])-1)]
@@ -116,15 +114,18 @@ for y in range(0, sizey):
             cnt1 += 1
             to_write+=(sto+str(int(altitude[y][x]*0.7))+tex+str(int(altitude[y][x]*0.2))+"ne"+str(random.randint(1,3))+str(int(altitude[y][x]*0.1))+ " ")
         else:
-            cnt2 += 1
+            if altitude[y][x] > int(0.2*maxalt):
+                cnt2 += 1
+            else:
+                cnt3 += 1
             to_write+=(sto+str(int(altitude[y][x]*0.7))+tex+str(int(altitude[y][x]*0.3))+" ")
             if "he" in tex:
                 if random.randint(1,50) == 1:
-                    characters.append("01 " + str(len(characters)+1 )   + " 20 none " + str(x+0.5) + " " + str(y+0.5) + " " + str(altitude[y][x]/38) + " -1.000000 908.785156 a 0 0 -1 none none none none 0 none none 0 none 0 3 0 0 empty empty empty empty empty empty -1 00000 [] [] []\n")
+                    characters.append("01 " + str(len(characters)+1 )   + " 50 none " + str(x+0.5) + " " + str(y+0.5) + " " + str(altitude[y][x]/38) + " -1.000000 908.785156 a 0 0 -1 none none none none 0 none none 0 none 0 3 0 0 empty empty empty empty empty empty -1 00000 [] [] []\n")
     to_write = to_write[:-1] + "\n"
 
 ground.write(to_write)
-print("snow", cnt1, "not snow", cnt2)
+print("snow", cnt1, "not snow", cnt2, "low ground", cnt3)
 map = open(argv[2], "w")
 for i in characters:
     map.write(i)

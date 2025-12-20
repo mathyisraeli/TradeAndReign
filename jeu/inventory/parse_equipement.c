@@ -54,7 +54,7 @@ void actualise_stat(struct personnages *p)
 		p->animation = 0;
 		struct to_disp *new = malloc(sizeof(struct to_disp));
 		new->offset_y = 454;
-		if (p->pv > 49	)
+		if (p->pv > 25)
 		{
 			new->offset_x = 896;	
 			new->img = img->s->tree1Standing;

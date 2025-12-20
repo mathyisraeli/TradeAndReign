@@ -44,7 +44,9 @@ void my_computer_work(struct personnages *moi)
             i += 1;
         }
         else
+        {
             l->p->my_computer_work = 0;
+        }
     }
     i = 0;
     for (struct building *l = list_building; l != NULL; l = l->next)

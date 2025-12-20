@@ -38,28 +38,31 @@ void collision(void)
     {
         for (struct personnages *pp = p->next; pp != NULL; pp=pp->next)
         {
-            float d = (pp->x - p->x)*(pp->x - p->x) + (pp->y - p->y)*(pp->y - p->y);
-            float ld = (pp->x - pp->moved_x - p->x + p->moved_x)*(pp->x - pp->moved_x - p->x + p->moved_x) + (pp->y - pp->moved_y - p->y + p->moved_y)*(pp->y - pp->moved_y - p->y + p->moved_y);
-            if (d <= ld && d < coo_circle(pp)+coo_circle(p)*coo_circle(pp)+coo_circle(p))
+            if (pp->a_bouger || p->a_bouger)
             {
-                float alt = allowed_to_move(p, p->x, p->y, pp->moved_x, pp->moved_y);
-                if (alt != -1)
+                float d = (pp->x - p->x)*(pp->x - p->x) + (pp->y - p->y)*(pp->y - p->y);
+                float ld = (pp->x - pp->moved_x - p->x + p->moved_x)*(pp->x - pp->moved_x - p->x + p->moved_x) + (pp->y - pp->moved_y - p->y + p->moved_y)*(pp->y - pp->moved_y - p->y + p->moved_y);
+                if (d <= ld && d < (coo_circle(pp)+coo_circle(p))*(coo_circle(pp)+coo_circle(p)))
                 {
-                    p->x += pp->moved_x /* * pp->weight / p->weight*/;
-                    p->y += pp->moved_y /* * pp->weight / p->weight*/;
-                    p->altitude = alt;
-                    p->a_bouger = 1; 
-                }
-                alt = allowed_to_move(pp, pp->x, pp->y, p->moved_x, p->moved_y);
-                if (alt != -1)
-                {
-                    pp->x += p->moved_x /* * p->weight / pp->weight*/;
-                    pp->y += p->moved_y /* * p->weight / pp->weight*/;
-                    pp->altitude = alt;
-                    pp->a_bouger = 1;   
+                    float alt = allowed_to_move(p, p->x, p->y, pp->moved_x, pp->moved_y);
+                    if (alt != -1)
+                    {
+                        p->x += pp->moved_x /* * pp->weight / p->weight*/;
+                        p->y += pp->moved_y /* * pp->weight / p->weight*/;
+                        p->altitude = alt;
+                        p->a_bouger = 1; 
+                    }
+                    alt = allowed_to_move(pp, pp->x, pp->y, p->moved_x, p->moved_y);
+                    if (alt != -1)
+                    {
+                        pp->x += p->moved_x /* * p->weight / pp->weight*/;
+                        pp->y += p->moved_y /* * p->weight / pp->weight*/;
+                        pp->altitude = alt;
+                        pp->a_bouger = 1;   
+                    }
                 }
             }
-        } 
+        }
         p->moved_x = 0;
         p->moved_y = 0;
         
@@ -87,13 +90,15 @@ void collision(void)
 
 float allowed_to_move(struct personnages *perso, float x, float y, float mvx, float mvy) //>=0 altitude you should be -1 not allowed 
 {
+    float r = coo_circle(perso);
+    if (x + mvx - r < 0 || x + mvx + r > max_x || y + mvy - r < 0 || y + mvy + r > max_y)
+            return -1;
+
     int src = (int)(y) * max_x + (int)(x);
     int dst = (int)(y + mvy) * max_x + (int)(x + mvx);
     int ga = altitude(dst)/19;
 
-    float r = coo_circle(perso);
-    if (x + mvx - r < 0 || x + mvx + r > max_x || y + mvy - r < 0 || y + mvy + r > max_y)
-            return -1;
+    
     if (perso->inside == -1)
     {
         if (building_id[dst] == -1)

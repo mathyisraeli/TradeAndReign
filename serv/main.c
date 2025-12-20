@@ -68,7 +68,6 @@ int main(int argc, char **argv)
 	load_file_as_string("ground.txt", &ground_str);
 	create_array(ground_str);
     free(ground_str);
-    int idx_last_snow = 0;
 	list = init_map();
     n_ground_modif = 0;
 	//list = croissance_pop(list);
@@ -207,7 +206,7 @@ int main(int argc, char **argv)
                 while (1)
                 {
                     ssize_t count;
-                    char buf[10000];
+                    char buf[99999];
                     count = read (events[i].data.fd, buf, sizeof buf);
                     if (count == -1)
                     {
@@ -275,12 +274,7 @@ int main(int argc, char **argv)
             collision();
             int size = generate_order();
             handle_altitude();
-            idx_last_snow = index_of_snow(idx_last_snow+1);
-            if (idx_last_snow != -1 && (int)elapsedTime % 10 == 5)
-            {
-                remove_1_pixel(idx_last_snow);
-                add_1_pixel(idx_last_snow, ea1);
-            }
+
             for (int i = 4; i < MAXEVENTS + 5;i++)
             if (statut[i] == 1)
 			{
@@ -289,10 +283,14 @@ int main(int argc, char **argv)
 			}
             remove_perso();
             save_map_count += 1;
-            if (save_map_count % 12000 == 0)
+            if (save_map_count % 60 == 0)
             {
-                save_map(save_map_count/12000);
-                save_ground(save_map_count/12000);
+                melt_snow(save_map_count%max_x);
+                if (save_map_count % 12000 == 0)
+                {
+                    save_map(save_map_count/12000);
+                    save_ground(save_map_count/12000);
+                }
             }
             
             //printf ("elapsedTime = %5.3fms \n", elapsedTime);

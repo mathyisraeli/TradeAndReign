@@ -4,7 +4,7 @@
 #include <time.h>
 #include <sys/time.h>
 
-char ordre[99999];
+char ordre[999999];
 
 int try_connect(char *ip, char *port) // Connecter
 {
@@ -107,7 +107,7 @@ void send_orders(int socket)
 	{
 		strcat(tmp, "ordre");
 		sprintf (tmp + 5, "%d", size_ordre);
-		//send(socket, tmp, 20, MSG_NOSIGNAL);
+		//printf ("[[[%s]]]\n\n\n", ordre);
 		send(socket, ordre, size_ordre, MSG_NOSIGNAL);
 	}
 	ordre[0] = 0;

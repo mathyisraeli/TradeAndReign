@@ -102,6 +102,114 @@ int maximum_diff(int index)
     return 50;
 }
 
+static inline void will_handle_altitude(int index)
+{
+    for (int i = 0; i < n_ground_altitude; i++)
+        if (index_check_altitude[i] == index)
+            return;
+    index_check_altitude[n_ground_altitude] = index;
+    n_ground_altitude += 1;
+}
+
+static inline void will_send_client(int index)
+{
+    for (int i = 0; i < n_ground_modif; i++)
+        if (index_ground_modif[i] == index)
+           return;
+    index_ground_modif[n_ground_modif] = index;
+    n_ground_modif += 1;
+}
+
+void handle_altitude_right(int index)
+{
+    if (index % max_x != max_x - 1 && (building_id[index+1] == -1 || ground[index]->texture == ea1 || ground[index]->texture == ea2 || ground[index]->texture == ea3))
+    {
+        int diff1 = diff_alt(index, index+1);
+        if (diff1 < 0 && maximum_diff(index+1) < -diff1)
+        {
+            will_handle_altitude(index +1);
+        }        
+        else if (diff1 > 0 && maximum_diff(index) < diff1)
+        {
+            if (rand() % 100 < 90 - ((diff1 - 2) * 80) / 48)
+                will_handle_altitude(index);
+            else
+            {
+                add_1_pixel(index+1, ground[index]->texture);
+                remove_1_pixel(index);
+            }
+        }
+    }
+}
+
+void handle_altitude_left(int index)
+{
+    if (index % max_x != 0 && (building_id[index-1] == -1  || ground[index]->texture == ea1 || ground[index]->texture == ea2 || ground[index]->texture == ea3))
+    {
+        int diff2 = diff_alt(index, index-1);
+        if (diff2 < 0 && maximum_diff(index-1) < -diff2)
+        {
+            will_handle_altitude(index -1);
+        }
+        else if (diff2 > 0 && maximum_diff(index) < diff2)
+        {
+            if (rand() % 100 < 90 - ((diff2 - 2) * 80) / 48)
+                will_handle_altitude(index);
+            else
+            {
+                add_1_pixel(index-1, ground[index]->texture);
+                remove_1_pixel(index);
+            }
+        }
+    }
+}
+
+void handle_altitude_down(int index)
+{
+    if (index + max_x < max_x * max_y && (building_id[index+max_x] == -1 || ground[index]->texture == ea1 || ground[index]->texture == ea2 || ground[index]->texture == ea3))
+    {
+        int diff3 = diff_alt(index, index+max_x);
+        if (diff3 < 0 && maximum_diff(index+max_x) < -diff3)
+        {
+            will_handle_altitude(index +max_x);
+
+        }
+        else if (diff3 > 0 && maximum_diff(index) < diff3)
+        {
+            if (rand() % 100 < 90 - ((diff3 - 2) * 80) / 48)
+                will_handle_altitude(index);
+            else
+            {
+                add_1_pixel(index+max_x, ground[index]->texture);
+                remove_1_pixel(index);
+            }
+        }
+    }
+}
+
+void handle_altitude_up(int index)
+{
+    if (index - max_x > 0 && (building_id[index-max_x] == -1 || ground[index]->texture == ea1 || ground[index]->texture == ea2 || ground[index]->texture == ea3))
+    {
+        int diff4 = diff_alt(index, index-max_x);
+        if (diff4 < 0 && maximum_diff(index-max_x) < -diff4)
+        {
+            will_handle_altitude(index -max_x);
+        }
+        else if (diff4 > 0 && maximum_diff(index) < diff4)
+        {
+            if (rand() % 100 < 90 - ((diff4 - 2) * 80) / 48)
+                will_handle_altitude(index);
+            else
+            {
+                add_1_pixel(index-max_x, ground[index]->texture);
+                remove_1_pixel(index);
+            }
+        }
+    }
+}
+
+
 enum Texture texture_from_string(char *str)
 {
     if (str[0] == 'e')
@@ -231,34 +339,16 @@ void remove_1_pixel(int index)
     if (ground[index]->altitude > 1)
     {
         ground[index]->altitude -= 1;
-        char already_modified = 0;
-        for (int i = 0; i < n_ground_modif; i++)
-            if (index_ground_modif[i] == index)
-                already_modified = 1;
-        if (already_modified == 0)
-        {
-            index_ground_modif[n_ground_modif] = index;
-            n_ground_modif += 1;
-            index_check_altitude[n_ground_altitude] = index;
-            n_ground_altitude += 1;
-        }
+        will_handle_altitude(index);
+        will_send_client(index);
     }
     else if (ground[index]->next != NULL)
     {
         struct linked_ground *to_rem = ground[index];
         ground[index] = ground[index]->next;
         free(to_rem);
-        char already_modified = 0;
-        for (int i = 0; i < n_ground_modif; i++)
-            if (index_ground_modif[i] == index)
-                already_modified = 1;
-        if (already_modified == 0)
-        {
-            index_ground_modif[n_ground_modif] = index;
-            n_ground_modif += 1;
-            index_check_altitude[n_ground_altitude] = index;
-            n_ground_altitude += 1;
-        }
+        will_handle_altitude(index);
+        will_send_client(index);
     }
 }
 
@@ -290,140 +380,54 @@ void add_1_pixel(int index, enum Texture texture)
         to_add->texture = texture;
         ground[index] = to_add;
     }
-    char already_modified = 0;
-    for (int i = 0; i < n_ground_modif; i++)
-        if (index_ground_modif[i] == index)
-            already_modified = 1;
-    if (already_modified == 0)
-    {
-        index_ground_modif[n_ground_modif] = index;
-        n_ground_modif += 1;
-        index_check_altitude[n_ground_altitude] = index;
-        n_ground_altitude += 1;
-    }
+    will_handle_altitude(index);
+    will_send_client(index);
     //printf ("add 2\n");
 }
 
 void handle_altitude(void)
 {
-    int index_check_altitude_local[9999];
+    int index_check_altitude_local[99999];
     for (int i = 0; i < n_ground_altitude; i++)
         index_check_altitude_local[i]= index_check_altitude[i];
     int n_ground_altitudee_local = n_ground_altitude;
     n_ground_altitude = 0;
+
+    for (int i = 3; i > 0; i--) {
+        int j = rand() % (i + 1); // index aléatoire entre 0 et i
+        int temp = rdm_directions[i];
+        rdm_directions[i] = rdm_directions[j];
+        rdm_directions[j] = temp;
+    }
+
+
     for (int i = 0; i < n_ground_altitudee_local; i++)
     {
         int index = index_check_altitude_local[i];
-        int cond = 0;
-        int maxdiff = 0;
-        if (index % max_x != max_x - 1 && (building_id[index+1] == -1 || ground[index]->texture == ea1 || ground[index]->texture == ea2 || ground[index]->texture == ea3))
+        for (int i = 0; i <4 ;i++)
         {
-            int diff1 = diff_alt(index, index+1);
-            if (diff1 < 0 && maximum_diff(index+1) < -diff1 && -diff1 > maxdiff)
-            {
-                maxdiff = -diff1;
-                cond = 1;
-            }        
-            else if (diff1 > 0 && maximum_diff(index) < diff1 && diff1 > maxdiff)
-            {
-                cond = 2;
-                maxdiff = diff1;
-            }
+            if (rdm_directions[i] == 1)
+                handle_altitude_right(index);
+            else if(rdm_directions[i] == 2)
+                handle_altitude_left(index);
+            else if(rdm_directions[i] == 3)
+                handle_altitude_up(index);
+            else if(rdm_directions[i] == 4)
+                handle_altitude_down(index);
         }
-        if (index % max_x != 0 && (building_id[index-1] == -1  || ground[index]->texture == ea1 || ground[index]->texture == ea2 || ground[index]->texture == ea3))
-        {
-            int diff2 = diff_alt(index, index-1);
-            if (diff2 < 0 && maximum_diff(index-1) < -diff2 && -diff2 > maxdiff)
-            {
-                maxdiff = -diff2;
-                cond = 3;
-            }
-            else if (diff2 > 0 && maximum_diff(index) < diff2 && diff2 > maxdiff)
-            {
-                maxdiff = diff2;
-                cond = 4;
-            }
-        }
-        if (index + max_x < max_x * max_y && (building_id[index+max_x] == -1 || ground[index]->texture == ea1 || ground[index]->texture == ea2 || ground[index]->texture == ea3))
-        {
-            int diff3 = diff_alt(index, index+max_x);
-            if (diff3 < 0 && maximum_diff(index+max_x) < -diff3 && -diff3 > maxdiff)
-            {
-                maxdiff = -diff3;
-                cond = 5;
-            }
-            else if (diff3 > 0 && maximum_diff(index) < diff3 && diff3 > maxdiff)
-            {
-                maxdiff = diff3;
-                cond = 6;
-            }
-        }
-        if (index - max_x > 0 && (building_id[index-max_x] == -1 || ground[index]->texture == ea1 || ground[index]->texture == ea2 || ground[index]->texture == ea3))
-        {
-            int diff4 = diff_alt(index, index-max_x);
-            if (diff4 < 0 && maximum_diff(index-max_x) < -diff4 && -diff4 > maxdiff)
-            {
-                cond = 7;
-                maxdiff = -diff4;
-            }
-            else if (diff4 > 0 && maximum_diff(index) < diff4 && diff4 > maxdiff)
-            {
-                cond = 8;
-                maxdiff = diff4;
-            }
-        }
-        if (cond == 1)
-        {
-            add_1_pixel(index, ground[index + 1]->texture);
-            remove_1_pixel(index + 1);
-        }
-        else if (cond == 2)
-        {
-            add_1_pixel(index + 1, ground[index]->texture);
-            remove_1_pixel(index);
-        }
-        else if (cond == 3)
-        {
-            add_1_pixel(index, ground[index - 1]->texture);
-            remove_1_pixel(index - 1);
-        }
-        else if (cond == 4)
-        {
-            add_1_pixel(index - 1, ground[index]->texture);
-            remove_1_pixel(index);
-        }
-        else if (cond == 5)
-        {
-            add_1_pixel(index, ground[index + max_x]->texture);
-            remove_1_pixel(index + max_x);
-        }
-        else if (cond == 6)
-        {
-            add_1_pixel(index + max_x, ground[index]->texture);
-            remove_1_pixel(index);
-        }
-        else if (cond == 7)
-        {
-            add_1_pixel(index, ground[index - max_x]->texture);
-            remove_1_pixel(index - max_x);
-        }
-        else if (cond == 8)
-        {
-            add_1_pixel(index - max_x, ground[index]->texture);
-            remove_1_pixel(index);
-        }
+        
     }
 }
 
 void create_array(char *ground_string)
 {
-    printf ("a\n");
     int i = 0;
     sscanf (ground_string, "%d %d", &max_x, &max_y);
     while (ground_string[i] != '\n')
         i++;
     i++;
     ground = calloc(max_x*max_y,sizeof(struct linked_ground*));
+    bioms_char = calloc(max_x*max_y/3600, sizeof(struct personnages*));
     building_altitude = calloc(max_x*max_y, sizeof(uint8_t*));
     building_id = malloc(sizeof(int)*max_x*max_y);
     int j = 0;
@@ -456,17 +460,18 @@ void create_array(char *ground_string)
     }
     background_send = malloc(max_x*max_y*10);
     size_background_send = max_x * max_y * 10;
-        printf ("b\n");
 }
 
-int index_of_snow(int start)
+void melt_snow(int n)
 {
-    if (start == -1)
-        start = 0;
-    for (int i = start; i < max_x*max_y; i++)
-        if (ground[i]->texture == ne1 || ground[i]->texture == ne2 || ground[i]->texture == ne3)
-            return i;
-    return -1;
+    for (int i = 0; i < max_x*max_y; i++)
+    {
+        if (i % 100 == n && (ground[i]->texture == ne1 || ground[i]->texture == ne2 || ground[i]->texture == ne3))
+        {
+            remove_1_pixel(i);
+            add_1_pixel(i, ea1);
+        }
+    }
 }
 
 void save_ground(int n)

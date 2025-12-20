@@ -6,6 +6,8 @@ char watter_around(int coo)
     SDL_Texture *t2 = ground_texture[coo-1];
     SDL_Texture *t3 = ground_texture[coo+max_x];
     SDL_Texture *t4 = ground_texture[coo-max_x];
+    if (ground_texture[coo] == img->t->ea1 || ground_texture[coo] ==  img->t->ea2 || ground_texture[coo] == img->t->ea3)
+        return 2;
     if (t1 == img->t->ea1 || t1 ==  img->t->ea2 || t1 == img->t->ea3 || t2 == img->t->ea1 || t2 == img->t->ea2 || t2 == img->t->ea3 || t3 == img->t->ea1 || t3 ==  img->t->ea2 || t3 == img->t->ea3 || t4 == img->t->ea1 || t4 ==  img->t->ea2 || t4 == img->t->ea3)
         return 1;
     return 0;
@@ -18,10 +20,18 @@ void ia_arbre(struct personnages *p)
     {
         if (p->faim > 20)
         {
-            if (p->pv > 25 && (watter_around((int)p->x + ((int)p->y)*max_x)== 1))
-            {
-                sprintf(ordre+strlen(ordre), "%d 16 +1 fruit %d 07 -21 ", p->id, p->id);
-                p->animation = 0; 
+            char w = watter_around((int)p->x + ((int)p->y)*max_x);
+            if (w == 2)
+                sprintf(ordre+strlen(ordre), "%d 00 -1 ", p->id);
+            if (w== 1)
+            {   
+                if (p->pv > 25)
+                {
+                    sprintf(ordre+strlen(ordre), "%d 16 +1 fruit %d 07 -21 ", p->id, p->id);
+                    p->animation = 0; 
+                }
+                if (50 > p->pv)
+                    sprintf(ordre+strlen(ordre), "%d 00 +1 ", p->id);
             }
         }
         else

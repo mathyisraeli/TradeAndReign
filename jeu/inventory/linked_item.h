@@ -1,6 +1,11 @@
 #pragma once
 #include "../perso.h"
 
+#define FOOD_VALUE_FRUIT 1000
+#define FOOD_VALUE_VEGETABLE 1000
+#define FOOD_VALUE_MEAT 2000
+#define FOOD_VALUE_SPICE 1000
+
 struct linked_item
 {
     char nom[50];

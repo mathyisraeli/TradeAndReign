@@ -29,7 +29,7 @@ void createArray(struct personnages *p)
         p->chemin[i].already = 0;
         p->chemin[i].value = 0;
         p->chemin[i].prev = -1;
-        p->chemin[i].walkable = (p->eau == '2') || (p->eau == '0' && ground_texture[i] != img->t->ea1 && ground_texture[i] != img->t->ea2 && ground_texture[i] != img->t->ea3) || (p->eau != '0' && ground_texture[i] == img->t->ea1 && ground_texture[i] == img->t->ea2 && ground_texture[i] == img->t->ea3);
+        p->chemin[i].walkable = ground_texture[i] != img->t->ea2 && ground_texture[i] != img->t->ea3 && ground_texture[i] != img->t->ea1;
         if (building_id[i] != -1)
             p->chemin[i].walkable = 0;
     }
@@ -44,9 +44,12 @@ void createArray(struct personnages *p)
 
 char findpath(struct personnages *p)
 {
-    createArray(p);
     int src = (int)p->y * max_x + (int)p->x;
     int dst = (int)p->ordrey * max_x + (int)p->ordrex;
+    createArray(p);
+    if (p->chemin[src].walkable == 0)
+        return 0;
+
     if (p->ordrey > max_y || p->ordrey < 0 || p->ordrex > max_x || p->ordrex < 0 || p->chemin[dst].walkable == 0)
     {
         return 0;

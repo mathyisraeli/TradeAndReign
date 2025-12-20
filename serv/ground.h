@@ -44,6 +44,6 @@ void remove_1_pixel(int index);
 void add_1_pixel(int index, enum Texture texture);
 enum Texture texture_from_string(char *str);
 void handle_altitude(void);
-int index_of_snow(int start);
+void melt_snow(int n);
 void ground_to_string(void);
 void save_ground(int n);

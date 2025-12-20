@@ -37,7 +37,7 @@ void display_ground(int x, int y, int xto, int yto)
 	}
 	while (x < xto || y < yto)
 	{
-		if ((x  - moi->x)*(x  - moi->x) + (y  - moi->y)*(y  - moi->y) < 441)
+		if ((x  - moi->x)*(x  - moi->x) + (y  - moi->y)*(y  - moi->y) <= 441)
 		{
 	    	position.x = (x-moi->x - y+moi->y) * 34 + 866;
 			position.y = (x-moi->x + y-moi->y) * 17 + 450 - ground_altitude[x + y * max_x] + moi->altitude*38;
@@ -101,7 +101,7 @@ void display_all(void)
 		}
 		xfrom = (int)parcour->x;
 		yfrom = (int)parcour->y;
-		if ((parcour->x  - moi->x)*(parcour->x  - moi->x) + (parcour->y  - moi->y)*(parcour->y  - moi->y) < 500)
+		if ((parcour->x  - moi->x)*(parcour->x  - moi->x) + (parcour->y  - moi->y)*(parcour->y  - moi->y) <= 441)
 		{
 			SDL_QueryTexture(parcour->img, NULL, NULL, &position.w, &position.h);
 			position.x = (parcour->x - moi->x - parcour->y + moi->y) * 34 + parcour->offset_x - position.w/2;

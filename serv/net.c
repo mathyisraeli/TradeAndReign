@@ -122,7 +122,6 @@ void parse_order(char *line)
                         {
                             b->pv = atoi(&line[i]);
                         }
-                        printf ("%d %d\n", b->id,b->pv);
                         while(line[i] != ' ')
                             i++;
                         i++;

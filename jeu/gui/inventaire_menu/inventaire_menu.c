@@ -43,7 +43,13 @@ void menu_inventaire(void)
                 //if (counter_use_item > 3)
                 //{
                     if (strcmp(i->nom, "fruit") == 0)
-                        sprintf(ordre+strlen(ordre), "%d 16 1 %s %d 07 1000 ", moi->id, i->nom, moi->id);
+                        sprintf(ordre+strlen(ordre), "%d 16 1 fruit %d 07 %d ", moi->id, moi->id, FOOD_VALUE_FRUIT);
+                    else if (strcmp(i->nom, "vegetable") == 0)
+                        sprintf(ordre+strlen(ordre), "%d 16 1 vegetable %d 07 %d ", moi->id, moi->id, FOOD_VALUE_VEGETABLE);
+                    else if (strcmp(i->nom, "meat") == 0)
+                        sprintf(ordre+strlen(ordre), "%d 16 1 meat %d 07 %d ", moi->id, moi->id, FOOD_VALUE_MEAT);
+                    else if (strcmp(i->nom, "spice") == 0)
+                        sprintf(ordre+strlen(ordre), "%d 16 1 spice %d 07 %d ", moi->id, moi->id, FOOD_VALUE_SPICE);
                     else if (strcmp(i->nom, "herbe") == 0)
                     {
                         if (find_building_by_id(building_id[(int)moi->x + (int)moi->y*max_x]) == NULL)

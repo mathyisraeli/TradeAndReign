@@ -1,15 +1,5 @@
 #include "linked_item.h"
 
-struct linked_item *use(struct linked_item *item, struct personnages *p)
-{
-	if (item != NULL)
-	{
-		if (strcmp(item->nom, "fruit") == 0 || strcmp(item->nom, "legume") == 0)
-			sprintf (ordre + strlen(ordre), "%d 07 %d %d 16 -1 %s ", p->id, 1000, p->id, item->nom);
-	}
-	return p->i_list;
-}
-
 int count(char *name)
 {
 	if (strcmp(name, "fruit") == 0 || strcmp(name, "legume") == 0)

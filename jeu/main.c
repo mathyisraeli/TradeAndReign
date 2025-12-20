@@ -1,18 +1,7 @@
 #include "main.h"
-#include "gui/craft_menu/init_recipe.h"
 
 int main(int argc, char *argv[])
 {
-    int recipeCount;
-    CraftRecipe *recipes = loadRecipes("crafts.txt", &recipeCount);
-
-    if (recipes) {
-        for (int i = 0; i < recipeCount; i++) {
-            printRecipe(recipes[i]);
-        }
-        freeRecipes(recipes, recipeCount);
-    }
-    
     lettres = calloc(sizeof(struct lettres), 1);
     lettres->wheel = 0;
     lettres->keystates = SDL_GetKeyboardState(NULL);
@@ -123,7 +112,7 @@ void boucle_jeu(int socket, char *name)
 	while(!done)
 	{
 	    event = gestion_touche();
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	    SDL_RenderClear(renderer);
         //gettimeofday(&start, NULL);
         if (main_menu->menuTech->on == 0)
