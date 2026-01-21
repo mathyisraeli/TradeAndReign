@@ -1,59 +1,50 @@
-CFLAGS = -Wall -Wextra -std=c99 -g -pg -no-pie -Werror
+CC      = gcc
+CFLAGS  = -Wall -Wextra -std=c99 -g -pg -no-pie -Werror
 
-jfiles = $(filter-out jeu/main.c, $(shell find jeu -name "*.c"))
-sfiles = $(filter-out serv/main.c, $(shell find serv -name "*.c"))
+# ===== CLIENT (SDL) =====
+CLIENT_TARGET = tradeAndReign
+CLIENT_LDFLAGS = $(shell sdl2-config --libs) -lSDL2_ttf -lSDL2_mixer -lm
 
-jobjects = $(filter-out jeu/main.c, $(jfiles:.c=.o))
-sobjects = $(filter-out serv/main.c, $(sfiles:.c=.o))
+JEU_SRC     = $(shell find jeu -name "*.c")
+SHARED_SRC  = $(shell find shared -name "*.c")
 
-#efiles = \
-#    editmap/init_img.c \
-#    editmap/select_sprite.c
-#
-#Efiles = \
-#    editmap2/ground.c \
-#    editmap2/shared_var.c \
-#    editmap2/init_sprite.c \
-#    editmap2/clavier.c \
-#    editmap2/control.c
-#
-#EfilesinJfiles = \
-#    jeu/init_sprite.c \
-#    jeu/clavier.c \
-#    jeu/clavier.h \
-#    jeu/init_sprite.h
-# Add E for mapEditor
+CLIENT_MAIN = jeu/main.c
+CLIENT_SRC  = $(filter-out $(CLIENT_MAIN), $(JEU_SRC)) $(SHARED_SRC)
 
-all: j s 
+CLIENT_OBJ  = $(CLIENT_SRC:.c=.o)
+CLIENT_MAIN_OBJ = $(CLIENT_MAIN:.c=.o)
 
-serv/%.o: serv/%.c
-	gcc $(CFLAGS) -c $< -o $@
+# ===== SERVER (no SDL) =====
+SERVER_TARGET = serveur
 
-jeu/%.o: jeu/%.c
-	gcc $(CFLAGS) -c $< -o $@
+SERV_SRC = $(shell find serv -name "*.c")
+SERVER_SRC = $(SERV_SRC) $(SHARED_SRC)
+SERVER_LDFLAGS = -lm
+SERVER_OBJ = $(SERVER_SRC:.c=.o)
 
-j: $(jobjects)
-	gcc $(CFLAGS) jeu/main.c $(jobjects) -o empireExpense -lSDL2 -lm -lSDL2_mixer -lSDL2_ttf -lSDL2_image -lSDL2_gfx
+# ===== RULES =====
+all: $(CLIENT_TARGET)
 
-s: $(sobjects) serv/main.o
-	gcc $(CFLAGS) $(sobjects) serv/main.o -lpthread -o serveur
+s: $(SERVER_TARGET)
 
-#static:
-#	gcc $(CFLAGS) jeu/main.c $(jfiles) -o empireExpense `sdl2-config --cflags --static-libs` `sdl2_mixer-config --cflags --static-libs`
-#
-#e:
-#	gcc $(CFLAGS) editmap/main.c $(efiles) -o mapEditor -lSDL2 -lm
-#
-#E: copy_files
-#	gcc $(CFLAGS) editmap2/main.c $(Efiles) -o mapEditor -lSDL2 -lm
-#
-#copy_files:
-#	cp $(EfilesinJfiles) editmap2/
-#
-# Add editor map clean
+$(CLIENT_TARGET): $(CLIENT_OBJ) $(CLIENT_MAIN_OBJ)
+	$(CC) $(CLIENT_OBJ) $(CLIENT_MAIN_OBJ) -o $@ $(CLIENT_LDFLAGS)
 
+$(SERVER_TARGET): $(SERVER_OBJ)
+	$(CC) $(SERVER_OBJ) -o $@ $(SERVER_LDFLAGS)
+
+# ----- Compilation générique -----
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# ----- Clean -----
 clean:
-	rm -f $(jobjects) $(sobjects) empireExpense serveur 
+	rm -f $(CLIENT_OBJ) $(CLIENT_MAIN_OBJ) $(SERVER_OBJ)
 
-# Add editormap command and copy files one.
-.PHONY: all j s clean 
+fclean: clean
+	rm -f $(CLIENT_TARGET) $(SERVER_TARGET)
+
+re: fclean all
+
+.PHONY: all clean fclean re j s
+

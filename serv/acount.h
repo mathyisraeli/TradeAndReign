@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "deschiffrement.h"
 #include "utile.h"
+#include "shared_var.h"
 
 int open_acount(char *test);
 char *cut(char *str, char cutter);

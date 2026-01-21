@@ -1,13 +1,13 @@
 #include "perso.h"
 
-int parse_new(struct personnages *p, char *line)
+int parse_new(struct personnages *p, char *line, char *skin, int id)
 {
     int i;
     int j;
     char tmpI[10];
     char tmpN[50];
-    sscanf(line, "%s %d %d %s %f %f %f %f %f %c %d %d %d %s %s %s %s %d %s %s %d %s %d %d %d %c %s %s %s %s %s %s %d %s %n", 
-    p->skin, &p->id, &p->pv,    p->nom_de_compte, &p->x, &p->y, &p->altitude, &p->ordrex, &p->ordrey, &p->angle, &p->timer_dom, &p->faim, &p->inside, p->nom, 
+    sscanf(line, "%d %s %f %f %f %f %f %c %d %d %d %s %s %s %s %d %s %s %d %s %d %d %d %c %s %s %s %s %s %s %d %s %n", 
+    &p->pv,    p->nom_de_compte, &p->x, &p->y, &p->altitude, &p->ordrex, &p->ordrey, &p->angle, &p->timer_dom, &p->faim, &p->inside, p->nom, 
     p->nom_superieur, p->titre, p->religion, &p->nb_vassaux, p->echange_player, p->item1, &p->count_item1, p->item2, &p->count_item2, &p->animation, &p->animation_2, 
     &p->chemin_is_set, p->left_hand, p->right_hand, p->headgear, p->tunic, p->pant, p->shoes, &p->house_id, p->physique, &i);
     while (line[i] != ']')
@@ -58,7 +58,7 @@ int parse_new(struct personnages *p, char *line)
                 j++;
             }
             tmpI[j] = 0;
-            append_in_inventory(tmpN, p, atoi(tmpI));
+            append_in_inventory(tmpN, p->i_list, atoi(tmpI));
         }
     }
     i += 3;
@@ -78,57 +78,16 @@ int parse_new(struct personnages *p, char *line)
         i += 1;
         j += 1;
     }
-    if(p->id == -1)
-        p->id = find_smalest_valid_id(0); 
+    if(id == -1)
+        p->id = find_smalest_valid_id_perso(0);
+    else
+        p->id = id;
+    strcpy (p->skin, skin); 
     p->speak[j] = 0;
     p->moved_x = 0;
     p->moved_y = 0;
+    p->vitesse_dep = 0.5;
     return i;
-}
-
-int append_perso(char *line)
-{
-    struct personnages *new = malloc(sizeof(struct personnages));
-    new->online = '0';
-    new->e_list = NULL;
-    new->i_list = NULL;
-    int ret = parse_new(new, line);
-    new->next = NULL;
-    if (list == NULL)
-        list = new;
-    else
-    {
-		struct personnages *parcour = list;
-		while (parcour->next != NULL)
-			parcour = parcour->next;
-        parcour->next = new;
-    }
-    return ret;
-}
-
-int get_id(char *line, int *i)
-{
-    char tmp[10] = "\0";
-    int j = 0;
-    while ((line[*i] >= '0' && line[*i] <= '9') || line[*i] == '-')
-    {
-        tmp[j] = line[*i];
-        *i = *i + 1;
-        j++;
-    }
-    return atoi(tmp);
-}
-
-struct personnages *get_ptr_from_id(int id)
-{
-    struct personnages *parcour = list;
-    while (parcour != NULL)
-    {
-        if (parcour->id == id)
-            return parcour;
-        parcour = parcour->next;
-    }
-    return NULL;
 }
 
 void kill(struct personnages *p)
@@ -141,60 +100,13 @@ void kill(struct personnages *p)
     	s->nb_vassaux -= 1;
         s->a_bouger = 1;
     }
-	free(p);
-}
-
-void remove_perso(void)
-{
-	struct personnages *tmp = list;
-    struct personnages *prev;
-    while (tmp != NULL && tmp->pv <= 0)
-    {
-		list = tmp->next;
-		kill(tmp);
-		tmp = list;
-    }
-	while (tmp != NULL)
-	{
-		while (tmp != NULL && tmp->pv > 0)
-		{
-			prev = tmp;
-			tmp = tmp->next;
-		}
-		if (tmp == NULL)
-			break;
-		prev->next = tmp->next;
-		kill(tmp);
-		tmp = prev->next;
-	}
-    struct building *tmpb = list_building;
-    struct building *prevb;
-    while (tmpb != NULL && tmpb->pv <= 0)
-    {
-		list_building = tmpb->next;
-		free(tmpb);
-		tmpb = list_building;
-    }
-	while (tmpb != NULL)
-	{
-		while (tmpb != NULL && tmpb->pv > 0)
-		{
-			prevb = tmpb;
-			tmpb = tmpb->next;
-		}
-		if (tmpb == NULL)
-			return;
-		prevb->next = tmpb->next;
-		free(tmpb);
-		tmpb = prevb->next;
-	}
 }
 
 struct personnages *find_perso_by_name(char *name)
 {
-    for (struct personnages *parcour = list; parcour != NULL; parcour = parcour->next)
-        if (strcmp(parcour->nom, name) == 0)
-            return parcour;
+    for (int i = 0; i <= list.maxid; i++)
+        if (0 < list.data[i].pv && strcmp(list.data[i].nom, name) == 0)
+            return &list.data[i];
     return NULL;
 }
 
@@ -211,8 +123,11 @@ void save_map(int n)
     }
 
 
-    for (struct personnages *pa = list; pa != NULL; pa = pa->next)
+    for (int i = 0; i <= list.maxid; i++)
     {
+        if (list.data[i].pv <= 0)
+            continue;
+        struct personnages* pa = &list.data[i];
         sprintf(line, "%s %d %d %s %f %f %f %f %f %c %d %d %d %s %s %s %s %d %s %s %d %s %d %d %d %d %s %s %s %s %s %s %d %s [", pa->skin, pa->id, pa->pv, pa->nom_de_compte, pa->x, pa->y, pa->altitude
             , pa->ordrex, pa->ordrey, pa->angle, pa->timer_dom, pa->faim, pa->inside, pa->nom, pa->nom_superieur, pa->titre, pa->religion, pa->nb_vassaux, pa->echange_player, pa->item1, pa->count_item1, pa->item2, pa->count_item2, pa->animation, pa->animation_2, pa->chemin_is_set, pa->left_hand,pa->right_hand, pa->headgear, pa->tunic, pa->pant, pa->shoes, pa->house_id, pa->physique);
 		for (struct linked_enemie *p = pa->e_list; p != NULL; p = p->next)
@@ -242,4 +157,12 @@ void save_map(int n)
     }
 
     fclose(fichier); 
+}
+
+int find_smalest_valid_id_perso(int from)
+{
+    for (int j = from; j <= list.capacity;j++)
+        if (list.data[j].is_active == 0)
+            return j;
+    return -1;
 }

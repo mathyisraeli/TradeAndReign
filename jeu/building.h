@@ -1,6 +1,7 @@
 #pragma once
 #include "shared_var.h"
 #include "inventory/parse_equipement.h"
+#include "../shared/utile.h"
 
 struct building
 {

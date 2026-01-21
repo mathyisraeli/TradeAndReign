@@ -20,82 +20,90 @@ int try_connect(char *ip, char *port) // Connecter
 	return -1;
 }
 
+void rec_ground_size(int socket)
+{
+	char ground_string[20];
+	recv(socket, ground_string, 20, 0);
+	sscanf (ground_string, "%d %d", &max_x, &max_y);
+	building_id = calloc(max_x*max_y, sizeof(int));
+	for (int i = 0; i < max_x*max_y;i++)
+		building_id[i] = -1;
+}
+
+void rec_ground_string(int socket)
+{
+	recv(socket, ground_buffer, 2, 0);
+	uint16_t nb_to_res;
+	memcpy(&nb_to_res, ground_buffer, sizeof(nb_to_res));
+	nb_to_res = ntohs(nb_to_res);
+	int res = 0;
+	while (res < nb_to_res)
+		res += recv(socket, ground_buffer+res+2, nb_to_res - res, 0);
+}
+
 void recv_order(int socket)
 {
 	char skin[4]; int id;
-	char *buffer = calloc(20, sizeof(char));
-	recv(socket, buffer, 20, 0);
-	if (buffer[0] == '0')
-	{
-		free(buffer);
+	recv(socket, recv_order_string, 10, 0);
+	if (recv_order_string[0	] == '0')
 		return;
+	int nb_to_res  = atoi(recv_order_string);
+	if (recv_order_string_size<nb_to_res)
+	{
+		recv_order_string = realloc(recv_order_string, nb_to_res+3);
+		recv_order_string_size = nb_to_res;
 	}
-	size_t res  = 0;
-	size_t nb_to_res  = atoi(buffer);
-	free(buffer);
-	buffer = calloc(sizeof(char), nb_to_res + 3);
-	char *pos_buf = buffer;
+	int res = 0;
 	while (res < nb_to_res)
 	{
-		size_t tmp = recv(socket, buffer, nb_to_res - res, 0);
-		res += tmp;
-		buffer = buffer + tmp;
+		res += recv(socket, recv_order_string+res, nb_to_res - res, 0);
 	}
-	buffer = pos_buf;
-	while (*buffer != 0)
+	res = 0;
+	while (res < nb_to_res)
 	{
-		if (buffer[0] == 'g')
-			buffer += parse_single_cell(buffer);
-		else
+		//printf ("[[[%s]]]\n\n\n", recv_order_string);
+		sscanf(recv_order_string + res	, "%s %d", skin, &id);
+		if (skin[0] == '1')
 		{
-			sscanf(buffer, "%s %d", skin, &id);
-			if (skin[0] == '1')
+			struct building *yalist = get_building_from_id(id);
+			if (yalist != NULL)
 			{
-				struct building *yalist = get_building_from_id(id);
-				if (yalist != NULL)
-				{
-					remove_building_altitude(yalist);
-					buffer += parse_building(yalist, buffer);
-					actualise_stat_building(yalist);
-					actualise_building_altitude(yalist);
-				}
-				else
-					buffer += append_building(buffer);
+				remove_building_altitude(yalist);
+				res += parse_building(yalist, &recv_order_string[res]);
+				actualise_stat_building(yalist);
+				actualise_building_altitude(yalist);
 			}
 			else
+				res += append_building(&recv_order_string[res]);
+		}
+		else
+		{
+			struct personnages *yalist = get_ptr_from_id(id);
+			if (yalist != NULL)
 			{
-				struct personnages *yalist = get_ptr_from_id(id);
-				if (yalist != NULL)
+				free_linked_enemie(yalist->e_list);
+				free_linked_item(yalist->i_list);
+				if (yalist == moi)
 				{
-					free_linked_enemie(yalist->e_list);
-					free_linked_item(yalist->i_list);
-					char online = yalist->online;
-					if (yalist == moi)
-					{
-						struct building *oldinside = find_building_by_id(moi->inside);
-						buffer += parse_order(yalist, buffer);
-						struct building *newinside = find_building_by_id(moi->inside);
-						if (newinside != NULL)
-							actualise_stat_building(newinside);
-						if (oldinside != NULL)
-							actualise_stat_building(oldinside);
-					}
-					else
-					{
-						buffer += parse_order(yalist, buffer);
-					}
-					if (online != yalist->online)
-					{
-						should_i_call_my_computer_work = '1';
-					}
-					actualise_stat(yalist);	
+					struct building *oldinside = find_building_by_id(moi->inside);
+					res += parse_order(yalist, &recv_order_string[res]);
+					struct building *newinside = find_building_by_id(moi->inside);
+					if (newinside != NULL)
+						actualise_stat_building(newinside);
+					if (oldinside != NULL)
+						actualise_stat_building(oldinside);
 				}
 				else
-					list = append_perso(&buffer);
+				{
+					res += parse_order(yalist, &recv_order_string[res]);
+				}
+
+				actualise_stat(yalist);	
 			}
+			else
+				res += append_perso(&recv_order_string[res]);
 		}
 	}
-	free(pos_buf);
 }
 
 

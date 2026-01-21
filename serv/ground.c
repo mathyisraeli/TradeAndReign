@@ -111,15 +111,6 @@ static inline void will_handle_altitude(int index)
     n_ground_altitude += 1;
 }
 
-static inline void will_send_client(int index)
-{
-    for (int i = 0; i < n_ground_modif; i++)
-        if (index_ground_modif[i] == index)
-           return;
-    index_ground_modif[n_ground_modif] = index;
-    n_ground_modif += 1;
-}
-
 void handle_altitude_right(int index)
 {
     if (index % max_x != max_x - 1 && (building_id[index+1] == -1 || ground[index]->texture == ea1 || ground[index]->texture == ea2 || ground[index]->texture == ea3))
@@ -340,7 +331,6 @@ void remove_1_pixel(int index)
     {
         ground[index]->altitude -= 1;
         will_handle_altitude(index);
-        will_send_client(index);
     }
     else if (ground[index]->next != NULL)
     {
@@ -348,7 +338,6 @@ void remove_1_pixel(int index)
         ground[index] = ground[index]->next;
         free(to_rem);
         will_handle_altitude(index);
-        will_send_client(index);
     }
 }
 
@@ -381,7 +370,6 @@ void add_1_pixel(int index, enum Texture texture)
         ground[index] = to_add;
     }
     will_handle_altitude(index);
-    will_send_client(index);
     //printf ("add 2\n");
 }
 
@@ -423,11 +411,12 @@ void create_array(char *ground_string)
 {
     int i = 0;
     sscanf (ground_string, "%d %d", &max_x, &max_y);
+    max_x_biom = max_x/60;
+    max_y_biom = max_y/60;
     while (ground_string[i] != '\n')
         i++;
     i++;
     ground = calloc(max_x*max_y,sizeof(struct linked_ground*));
-    bioms_char = calloc(max_x*max_y/3600, sizeof(struct personnages*));
     building_altitude = calloc(max_x*max_y, sizeof(uint8_t*));
     building_id = malloc(sizeof(int)*max_x*max_y);
     int j = 0;
@@ -458,8 +447,7 @@ void create_array(char *ground_string)
         i++;
         j++;
     }
-    background_send = malloc(max_x*max_y*10);
-    size_background_send = max_x * max_y * 10;
+    sprintf (size_background, "%d %d", max_x, max_y);
 }
 
 void melt_snow(int n)

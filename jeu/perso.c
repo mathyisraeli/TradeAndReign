@@ -80,14 +80,13 @@ struct linked_list *append_in_linked(struct linked_list *list,struct personnages
 	}
 }
 
-struct linked_list *append_perso(char **line)
+int append_perso(char *line)
 {
-	if (**line == '\0')
-		return NULL;
+	if (line[0] == '\0')
+		return 0;
 	struct personnages *n = malloc(sizeof(struct personnages));
-	int a = parse_order(n, *line);
+	int a = parse_order(n, line);
 	init_stat(n);
-	*line = *line + a;
 	struct linked_list *to_append = malloc(sizeof(struct linked_list));
 	should_i_call_my_computer_work = '1';
 	to_append->p = n;
@@ -101,7 +100,7 @@ struct linked_list *append_perso(char **line)
 			parcour = parcour->next;
 		parcour->next = to_append;
 	}
-	return (list);
+	return a;
 }
 
 struct personnages *find_perso_by_id(int id)
@@ -143,7 +142,6 @@ struct linked_list *death(void)
 		list = list->next;
 		free_linked_enemie(tmp->p->e_list);
 		free_linked_item(tmp->p->i_list);
-		free(tmp->p->chemin);
 		list_disp = deleteKey(tmp->p->id);
 		free(tmp->p);
 		free(tmp);
@@ -164,7 +162,6 @@ struct linked_list *death(void)
 		free_linked_enemie(tmp->p->e_list);
         free_linked_item(tmp->p->i_list);
 		list_disp = deleteKey(tmp->p->id);
-        free(tmp->p->chemin);
         free(tmp->p);
         free(tmp);
 		tmp = prev->next;

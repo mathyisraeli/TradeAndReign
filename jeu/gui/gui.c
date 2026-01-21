@@ -12,7 +12,7 @@ void gui_event(struct personnages *moi)
         position.w = 25; position.h =  25;
 		if (powf(moi->x - moi->ordrex, 2) + powf(moi->y - moi->ordrey, 2) < 9)
         {
-			sprintf (ordre + strlen(ordre), "%d 03 -1 ", moi->id);
+			sprintf (ordre + strlen(ordre), "0 %d 03 -1 ", moi->id);
         }
 		SDL_RenderCopy(renderer, img->g->croix, NULL, &position);
 	}
@@ -87,7 +87,7 @@ void speakPerso(struct personnages *moi, char* ordre)
             speakBubble->on = 0;
         else if (*text->key == SDLK_RETURN)
         {
-            sprintf (ordre + strlen(ordre), "%d 20 %s\037 ", moi->id, speakBubble->textBox->text);
+            sprintf (ordre + strlen(ordre), "0 %d 20 %s\037 ", moi->id, speakBubble->textBox->text);
             moi->speak_timer = 9*strlen(speakBubble->textBox->text);
             speakBubble->textBox->text[0] = 0;
             speakBubble->on = 0;

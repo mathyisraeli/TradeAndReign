@@ -68,12 +68,11 @@ int main(int argc, char **argv)
 	load_file_as_string("ground.txt", &ground_str);
 	create_array(ground_str);
     free(ground_str);
-	list = init_map();
-    n_ground_modif = 0;
+	init_map();
 	//list = croissance_pop(list);
 
-	char statut[MAXEVENTS + 5] = {0};
-	char c_names[MAXEVENTS + 5][50];
+	char statut[MAXEVENTS] = {0};
+	struct personnages *chars_connected[MAXEVENTS];
 	//int afktiming[MAXEVENTS + 5] = {0};
 
     int sfd, s;
@@ -126,21 +125,11 @@ int main(int argc, char **argv)
                     (events[i].events & EPOLLHUP) ||
                     (!(events[i].events & EPOLLIN)))
             {
-                if (statut[events[i].data.fd] == 1)
-                {
-                    struct personnages *p = have_char(c_names[events[i].data.fd]);
-                    if (p != NULL)
-                    {
-                        p->online = '0';
-                        p->a_bouger = 1;
-                    }
-                }
                 close (events[i].data.fd);
-				statut[events[i].data.fd] = 0;
-
-				
+				statut[i] = 0;
+                chars_connected[i]->online = '0';
+                chars_connected[i] = NULL;
                 continue;
-
             }
             else if (sfd == events[i].data.fd)
             {
@@ -229,17 +218,18 @@ int main(int argc, char **argv)
                     else
                     {
                         buf[count] = 0;
-                        if (statut[events[i].data.fd] == 0)
+                        if (statut[i] == 0)
                         {
                             struct personnages *p = have_char(buf);
 							if (open_acount(buf) == 1 && p != NULL && p->online != '1') // good acount and password
 							{
-								statut[events[i].data.fd] = 1;
+								statut[i] = 1;
 								s = write (events[i].data.fd, "o", 1);
-								strcpy(c_names[events[i].data.fd], buf);
+								chars_connected[i] = p;
+                                s = write(events[i].data.fd, size_background, 20);
+                                send_ground(chars_connected[i], events[i].data.fd);
+                                send_all_chars(events[i].data.fd);
                                 p->online = '1';
-                                p->a_bouger = 1;
-                                send_background_and_map(events[i].data.fd);
 							}
 							else
 								s = write (events[i].data.fd, "n", 1);
@@ -250,17 +240,10 @@ int main(int argc, char **argv)
 				}
                 if (done)
                 {
-                    if (statut[events[i].data.fd] == 1)
-                    {
-                        struct personnages *p = have_char(c_names[events[i].data.fd]);
-                        if (p != NULL)
-                        {   
-                            p->online = '0';
-                            p->a_bouger = 1;
-                        }
-                    }
-					statut[events[i].data.fd] = 0;
+					statut[i] = 0;
                     close (events[i].data.fd);
+                    chars_connected[i]->online = '0';
+                    chars_connected[i] = NULL;
                 }
             }
         }
@@ -270,18 +253,20 @@ int main(int argc, char **argv)
         if (elapsedTime >= 75)
         {
         	start = end;
+            handle_altitude();
             actualise_building_altitude();
             collision();
-            int size = generate_order();
-            handle_altitude();
-
-            for (int i = 4; i < MAXEVENTS + 5;i++)
-            if (statut[i] == 1)
-			{
-			//	printf("%d : [%s %s]\n", i, order, order + 20);
-               	send(i, order_send, size + 20, MSG_NOSIGNAL);
-			}
-            remove_perso();
+            ia();
+            int size_order = generate_order();
+            for (int i = 0; i < MAXEVENTS ;i++)
+            {
+                if (statut[i] == 1)
+			    {
+               	    send(events[i].data.fd, order_send, size_order+10, MSG_NOSIGNAL);
+                    send_ground(chars_connected[i], events[i].data.fd);
+			    }
+            }
+            death();
             save_map_count += 1;
             if (save_map_count % 60 == 0)
             {

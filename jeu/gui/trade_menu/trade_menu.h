@@ -11,9 +11,11 @@
 #include "../../graphic_widget/pictureButton.h"
 #include "../../perso.h"
 #include "../../clavier.h"
+#include "../../../shared/utile.h"
 
 void menu_trade(void);
 void accept_trade(void);
 int min(int a, int b);
+void echange_item(struct personnages *perso1, struct personnages *perso2);
 
 #endif /* TRADE_MENU_H */

@@ -43,22 +43,22 @@ void menu_inventaire(void)
                 //if (counter_use_item > 3)
                 //{
                     if (strcmp(i->nom, "fruit") == 0)
-                        sprintf(ordre+strlen(ordre), "%d 16 1 fruit %d 07 %d ", moi->id, moi->id, FOOD_VALUE_FRUIT);
+                        sprintf(ordre+strlen(ordre), "0 %d 16 1 fruit 0 %d 07 %d ", moi->id, moi->id, FOOD_VALUE_FRUIT);
                     else if (strcmp(i->nom, "vegetable") == 0)
-                        sprintf(ordre+strlen(ordre), "%d 16 1 vegetable %d 07 %d ", moi->id, moi->id, FOOD_VALUE_VEGETABLE);
+                        sprintf(ordre+strlen(ordre), "0 %d 16 1 vegetable 0 %d 07 %d ", moi->id, moi->id, FOOD_VALUE_VEGETABLE);
                     else if (strcmp(i->nom, "meat") == 0)
-                        sprintf(ordre+strlen(ordre), "%d 16 1 meat %d 07 %d ", moi->id, moi->id, FOOD_VALUE_MEAT);
+                        sprintf(ordre+strlen(ordre), "0 %d 16 1 meat 0 %d 07 %d ", moi->id, moi->id, FOOD_VALUE_MEAT);
                     else if (strcmp(i->nom, "spice") == 0)
-                        sprintf(ordre+strlen(ordre), "%d 16 1 spice %d 07 %d ", moi->id, moi->id, FOOD_VALUE_SPICE);
+                        sprintf(ordre+strlen(ordre), "0 %d 16 1 spice 0 %d 07 %d ", moi->id, moi->id, FOOD_VALUE_SPICE);
                     else if (strcmp(i->nom, "herbe") == 0)
                     {
                         if (find_building_by_id(building_id[(int)moi->x + (int)moi->y*max_x]) == NULL)
-                            sprintf(ordre+strlen(ordre), "%d 16 1 herbe %d 13 %d he1 ", moi->id, moi->id, (int)moi->x + (int)moi->y*max_x);
+                            sprintf(ordre+strlen(ordre), "0 %d 16 1 herbe 0 %d 13 %d he1 ", moi->id, moi->id, (int)moi->x + (int)moi->y*max_x);
                     }
                     else if (strcmp(i->nom, "sable") == 0)
                     {
                         if (find_building_by_id(building_id[(int)moi->x + (int)moi->y*max_x]) == NULL)
-                            sprintf(ordre+strlen(ordre), "%d 16 1 sable %d 13 %d sa1 ", moi->id, moi->id, (int)moi->x + (int)moi->y*max_x);
+                            sprintf(ordre+strlen(ordre), "0 %d 16 1 sable 0 %d 13 %d sa1 ", moi->id, moi->id, (int)moi->x + (int)moi->y*max_x);
                     }
                   //  counter_use_item = 0;
                 //}
@@ -69,30 +69,30 @@ void menu_inventaire(void)
                 if (strcmp(i->nom, "leather_helmet") == 0)
                 {
                     if (strcmp(moi->headgear, "empty") != 0)
-                        sprintf(ordre+strlen(ordre), "%d 16 +1 %s ", moi->id, moi->headgear);
-                    sprintf(ordre+strlen(ordre), "%d 27 leather_helmet %d 16 1 leather_helmet ", moi->id, moi->id);
+                        sprintf(ordre+strlen(ordre), "0 %d 16 +1 %s ", moi->id, moi->headgear);
+                    sprintf(ordre+strlen(ordre), "0 %d 27 leather_helmet 0 %d 16 1 leather_helmet ", moi->id, moi->id);
                 }
                 else if (strcmp(i->nom, "leather_jacket")== 0)
                 {
                     if (strcmp(moi->tunic, "empty") != 0)
-                        sprintf(ordre+strlen(ordre), "%d 16 +1 %s ", moi->id, moi->tunic);
-                    sprintf(ordre+strlen(ordre), "%d 28 leather_jacket %d 16 1 leather_jacket ", moi->id, moi->id);
+                        sprintf(ordre+strlen(ordre), "0 %d 16 +1 %s ", moi->id, moi->tunic);
+                    sprintf(ordre+strlen(ordre), "0 %d 28 leather_jacket 0 %d 16 1 leather_jacket ", moi->id, moi->id);
                 }
                 else if (strcmp(i->nom, "leather_pants")==0)
                 {
                     if (strcmp(moi->pant, "empty") != 0)
-                        sprintf(ordre+strlen(ordre), "%d 16 +1 %s ", moi->id, moi->pant);
-                    sprintf(ordre+strlen(ordre), "%d 29 leather_pants %d 16 1 leather_pants ", moi->id, moi->id);
+                        sprintf(ordre+strlen(ordre), "0 %d 16 +1 %s ", moi->id, moi->pant);
+                    sprintf(ordre+strlen(ordre), "0 %d 29 leather_pants 0 %d 16 1 leather_pants ", moi->id, moi->id);
                 }
                 else if (strcmp(i->nom, "leather_boots") == 0)
                 {
                     if (strcmp(moi->shoes, "empty") != 0)
-                        sprintf(ordre+strlen(ordre), "%d 16 +1 %s ", moi->id, moi->shoes);
-                    sprintf(ordre+strlen(ordre), "%d 30 leather_boots %d 16 1 leather_boots ", moi->id, moi->id);
+                        sprintf(ordre+strlen(ordre), "0 %d 16 +1 %s ", moi->id, moi->shoes);
+                    sprintf(ordre+strlen(ordre), "0 %d 30 leather_boots 0 %d 16 1 leather_boots ", moi->id, moi->id);
                 }
             }   
             else if (main_menu->menuInv->actions->selectedOption== 2)//drop
-                sprintf(ordre+strlen(ordre), "%d 16 %d %s ", moi->id, i->count, i->nom);
+                sprintf(ordre+strlen(ordre), "0 %d 16 %d %s ", moi->id, i->count, i->nom);
             main_menu->menuInv->enter = 0;
         }
         if (lettres->keystates[SDL_SCANCODE_ESCAPE])

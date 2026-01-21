@@ -17,12 +17,12 @@
 #include "perso.h"
 #include "net.h"
 #include "map_op.h"
-#include "req.h"
 #include "utile.h"
 #include "time.h"
 #include "demographie.h"
 #include "acount.h"
 #include "file.h"
 #include "collision.h"
+#include "ia/ia.h"
 
 #undef _POSIX_C_SOURCE 

@@ -1,6 +1,10 @@
 #include "shared_var.h"
-SDL_Texture **ground_texture;
-int *ground_altitude;
+
+SDL_Texture *ground_texture[2500];
+int ground_altitude[2500];
+uint8_t ground_buffer[7500];
+char *recv_order_string;
+int recv_order_string_size = 10;
 int max_x;
 int max_y;
 struct img *img;
@@ -24,3 +28,5 @@ struct personnages *moi;
 uint8_t **building_altitude;
 int *building_id;
 int counter_use_item;
+uint8_t **building_altitude;
+int *building_id;

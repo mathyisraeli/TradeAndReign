@@ -40,8 +40,6 @@ struct personnages
     char speak[90];
     int animation; // gestion frame
     int animation_2; // ce qu'il est en train de faire
-    int chemin_is_set;
-    char online;
     char left_hand[50];
     char right_hand[50];
     char headgear[50];
@@ -66,9 +64,6 @@ struct personnages
     int dom;
     int poid;
     char eau; //O si terrestre 1 si aquatique 2 si les deux
-    char plancher;
-    struct path *chemin;
-    char my_computer_work;
 };
 
 struct linked_list
@@ -88,7 +83,7 @@ struct linked_list
 char exist_in_linked(struct linked_list *list, struct personnages *to_test);
 struct linked_list *copy_linked(struct linked_list *list);
 struct linked_list *append_in_linked(struct linked_list *list,struct personnages *p);
-struct linked_list *append_perso(char **line);
+int append_perso(char *line);
 void disp_perso_list(struct personnages *moi);
 //struct personnages *find_perso(struct linked_list *list ,char *name);
 //void buble_sort_perso(struct linked_list *list, struct personnages *moi);

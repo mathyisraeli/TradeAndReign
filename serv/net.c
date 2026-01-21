@@ -1,74 +1,140 @@
 #include "net.h"
 
-static const char *texture_string[]= { "ea1", "ea2", "ea3", "te1", "te2", "te3","he1","he2","he3","he4","he5","sa1","sa2", "sa3", "bl1", "bl2", "bl3", "ne1", "ne2", "ne3", "gr1", "gr2", "gra", "bas", "cal", "sch", "gre", "mar"};
+void send_all_chars(int socket)
+{
+    printf ("generate_order 1\n");
+    char *order = &order_send[10];
+	order[0] = 0;
+    struct personnages *pa;
+    for (int i = 0; i <= list.maxid; i++)
+    {
+        if (list.data[i].is_active == 1)
+            pa = &list.data[i];
+        else
+            continue;
+        sprintf(order + strlen(order), "%s %d %d %s %f %f %f %f %f %c %d %d %d %s %s %s %s %d %s %s %d %s %d %d %d %s %s %s %s %s %s %d %s [", pa->skin, pa->id, pa->pv, pa->nom_de_compte, pa->x, pa->y, pa->altitude
+        , pa->ordrex, pa->ordrey, pa->angle, pa->timer_dom, pa->faim, pa->inside, pa->nom, pa->nom_superieur, pa->titre, pa->religion, pa->nb_vassaux, pa->echange_player, pa->item1, pa->count_item1, pa->item2, pa->count_item2, pa->animation, pa->animation_2, pa->left_hand,pa->right_hand, pa->headgear, pa->tunic, pa->pant, pa->shoes, pa->house_id, pa->physique);
+        for (struct linked_enemie *p = pa->e_list; p != NULL; p = p->next)
+        {
+            if (p->next != NULL)
+                sprintf (order + strlen(order), "%s %d ", p->nom, p->rang);
+            else
+                sprintf (order + strlen(order), "%s %d", p->nom, p->rang);
+        }
+        strcat(order, "] [");
+        for (struct linked_item *p = pa->i_list; p != NULL; p =p->next)
+        {
+            if (p->next != NULL)
+                sprintf (order + strlen(order), "%s %d ", p->nom, p->count);
+            else
+                sprintf (order + strlen(order), "%s %d", p->nom, p->count);
+        }
+        sprintf(order + strlen(order),  "] [%s] %s\n", pa->skill, pa->speak);
+        pa->a_bouger = 0;
+        if (1.1 * strlen(order) > size_order_send)
+        {
+            size_order_send *= 2;
+            printf ("size_order_send %ld\n", size_order_send);
+            order_send = realloc(order_send, size_order_send);
+            order = &order_send[10];
+        }
+    }
+    for (struct building *pa = list_building; pa != NULL; pa = pa->next)
+    { 
+        sprintf(order + strlen(order), "%s %d %d %d %d %c %c\n", pa->skin, pa->id, pa->pv, pa->x, pa->y, pa->angle,pa->state);
+        pa->a_bouger = 0;
+        if (1.1 * strlen(order) > size_order_send)
+        {
+            size_order_send *= 2;
+            printf ("size_order_send %ld\n", size_order_send);
+            order_send = realloc(order_send, size_order_send);
+            order = &order_send[10];
+        }
+    }
+    int s = strlen(order);
+    sprintf (order_send, "%d", s);
+    send(socket, order_send, s + 10, MSG_NOSIGNAL);
+}
 
-int generate_order(void)
+int generate_order()
 {
     //printf ("generate_order 1\n");
-    char *order = &order_send[20];
+    char *order = &order_send[10];
 	order[0] = 0;
-	for (struct personnages *pa = list; pa != NULL; pa = pa->next)
+    struct personnages *pa;
+    for (int i = 0; i <= list.maxid; i++)
     {
+        if (list.data[i].is_active == 1)
+            pa = &list.data[i];
+        else
+            continue;
         if (pa->a_bouger == 1)
         {
-            sprintf(order + strlen(order), "%s %d %d %s %f %f %f %f %f %c %d %d %d %s %s %s %s %d %s %s %d %s %d %d %d %d %c %s %s %s %s %s %s %d %s [", pa->skin, pa->id, pa->pv, pa->nom_de_compte, pa->x, pa->y, pa->altitude
-            , pa->ordrex, pa->ordrey, pa->angle, pa->timer_dom, pa->faim, pa->inside, pa->nom, pa->nom_superieur, pa->titre, pa->religion, pa->nb_vassaux, pa->echange_player, pa->item1, pa->count_item1, pa->item2, pa->count_item2, pa->animation, pa->animation_2, pa->chemin_is_set, pa->online, pa->left_hand,pa->right_hand, pa->headgear, pa->tunic, pa->pant, pa->shoes, pa->house_id, pa->physique);
-			for (struct linked_enemie *p = pa->e_list; p != NULL; p = p->next)
-			{
-				if (p->next != NULL)
-					sprintf (order + strlen(order), "%s %d ", p->nom, p->rang);
-				else
-					sprintf (order + strlen(order), "%s %d", p->nom, p->rang);
-			}
-			strcat(order, "] [");
-			for (struct linked_item *p = pa->i_list; p != NULL; p =p->next)
-			{
-				if (p->next != NULL)
+            sprintf(order + strlen(order), "%s %d %d %s %f %f %f %f %f %c %d %d %d %s %s %s %s %d %s %s %d %s %d %d %d %s %s %s %s %s %s %d %s [", pa->skin, pa->id, pa->pv, pa->nom_de_compte, pa->x, pa->y, pa->altitude
+        , pa->ordrex, pa->ordrey, pa->angle, pa->timer_dom, pa->faim, pa->inside, pa->nom, pa->nom_superieur, pa->titre, pa->religion, pa->nb_vassaux, pa->echange_player, pa->item1, pa->count_item1, pa->item2, pa->count_item2, pa->animation, pa->animation_2, pa->left_hand,pa->right_hand, pa->headgear, pa->tunic, pa->pant, pa->shoes, pa->house_id, pa->physique);
+            for (struct linked_enemie *p = pa->e_list; p != NULL; p = p->next)
+            {
+                if (p->next != NULL)
+                    sprintf (order + strlen(order), "%s %d ", p->nom, p->rang);
+                else
+                    sprintf (order + strlen(order), "%s %d", p->nom, p->rang);
+            }
+            strcat(order, "] [");
+            for (struct linked_item *p = pa->i_list; p != NULL; p =p->next)
+            {
+                if (p->next != NULL)
                     sprintf (order + strlen(order), "%s %d ", p->nom, p->count);
                 else
                     sprintf (order + strlen(order), "%s %d", p->nom, p->count);
-			}
-			sprintf(order + strlen(order),  "] [%s] %s\n", pa->skill, pa->speak);
-			pa->a_bouger = 0;
-            int s = strlen(order);
-            if (1.1 * s > size_order_send)
-		    {
-			    size_order_send *= 2;
-                printf ("size_order_send %d %ld\n", s, size_order_send);
-			    order_send = realloc(order_send, size_order_send);
-                order = &order_send[20];
-		    }
+            }
+            sprintf(order + strlen(order),  "] [%s] %s\n", pa->skill, pa->speak);
+            pa->a_bouger = 0;
+            if (1.1 * strlen(order) > size_order_send)
+            {
+                size_order_send *= 2;
+                //printf ("size_order_send %ld\n", size_order_send);
+                order_send = realloc(order_send, size_order_send);
+                order = &order_send[10];
+            }
         }
     }
-    //printf ("generate_order 1.2\n");
     for (struct building *pa = list_building; pa != NULL; pa = pa->next)
-    {
+    { 
         if (pa->a_bouger != 0)
         {
             sprintf(order + strlen(order), "%s %d %d %d %d %c %c\n", pa->skin, pa->id, pa->pv, pa->x, pa->y, pa->angle,pa->state);
             pa->a_bouger = 0;
+            if (1.1 * strlen(order) > size_order_send)
+            {
+                size_order_send *= 2;
+                printf ("size_order_send %ld\n", size_order_send);
+                order_send = realloc(order_send, size_order_send);
+                order = &order_send[10];
+            }
         }
     }
-    //printf ("generate_order 1.3\n");
-    for (int i = 0; i < n_ground_modif; i++)
-    {
-        int s = strlen(order);
-        if (1.1 * s > size_order_send)
-		{
-			size_order_send *= 2;
-			order_send = realloc(order_send, size_order_send);
-            order = &order_send[20];
-		}
-        //printf ("index %d %d %d\n", i, index_ground_modif[i], ground[index_ground_modif[i]]->altitude);
-        //printf ("%d %d\n", i, index_ground_modif[i]);
-        sprintf(order + s, "g %d %d %s\n", index_ground_modif[i], altitude(index_ground_modif[i]), texture_string[ground[index_ground_modif[i]]->texture]);
-        //printf ("test\n");
-    }
-    n_ground_modif = 0;
     int s = strlen(order);
     sprintf (order_send, "%d", s);
-    //printf ("generate_order 2\n");
     return s;
+}
+
+void send_ground(struct personnages *p, int socket)
+{
+    uint16_t offset = 2;
+    for (int i = max(0, (int)p->y - 24); i < min(max_y, (int)p->y + 24); i++)
+    {
+        for (int j = max(0, (int)p->x - 24); j < min(max_x, (int)p->x + 24); j++)
+        {
+            send_ground_buffer[offset++] =  ground[i *max_x+j]->texture;
+            int16_t alt = htons(altitude(i * max_x + j));
+            memcpy(send_ground_buffer + offset, &alt, sizeof(alt));
+            offset += sizeof(alt);
+        }
+    }
+    uint16_t size = htons(offset-2);
+    memcpy(send_ground_buffer, &size, sizeof(size));
+    //printf ("%d\n", offset);
+    send(socket, send_ground_buffer, offset, MSG_NOSIGNAL);
 }
 
 
@@ -80,117 +146,40 @@ void parse_order(char *line)
     char tmpC[50];
     while (line[i] != 0)
     {
-        if (line[i] == '-')
+        j = 0;
+        while (line[i] != ' ')
         {
-            if (line[i+1] == '0')
-                i += append_perso(line + i +1) + 1;
-            else
-            {
-                i += append_building(line + i+1 );
-            }
+            tmpC[j] = line[i];
+            i+= 1;
+            j+= 1;
         }
-        else
+        i += 1; 
+        tmpC[j] =0;        
+        
+        if (tmpC[0] == '0') // living
         {
-            int id = get_id(line, &i);
-            struct personnages *p = get_ptr_from_id(id);
-            if (p == NULL)
+            if (line[i] == 'n') 
             {
-                struct building *b = get_ptr_from_id_building(id);
-                if (b == NULL)
-                    return;
-                if (b->a_bouger == 0)
-                    b->a_bouger = 1;
+                i += 2;
+                i += append_perso(line+i, tmpC, -1);
+            }
+            else if (line[i] == '-') 
+            {
+                int id =  atoi(line+i+1);
                 while (line[i] != ' ')
-                    i++;
-                i++;
-                int idaction = atoi(&line[i]);
-                i += 3;
-                switch(idaction)
-                {
-                    case 0:
-                        if (line[i] == '+')
-                        {
-                            i++;
-                            b->pv += atoi(&line[i]);
-                        }
-                        else if (line[i] == '-')
-                        {
-                            i++;
-                            b->pv -= atoi(&line[i]);
-                        }
-                        else
-                        {
-                            b->pv = atoi(&line[i]);
-                        }
-                        while(line[i] != ' ')
-                            i++;
-                        i++;
-                    break;
-                    case 1:
-                        if (line[i] == '+')
-                        {
-                            b->a_bouger = 2;
-                            i++;
-                            b->x += atof(&line[i]);
-                        }
-                        else if (line[i] == '-')
-                        {
-                            b->a_bouger = 3;
-                            i++;
-                            b->x -= atof(&line[i]);
-                        }
-                        else
-                            b->x = atof(&line[i]);
-                        while(line[i] != ' ')
-                            i++;
-                        i++;
-                        break;
-                    case 2:
-                        if (line[i] == '+')
-                        {
-                            b->a_bouger = 4;
-                            i++;
-                            b->y += atof(&line[i]);
-                        }
-                        else if (line[i] == '-')
-                        {
-                            b->a_bouger = 5;
-                            i++;
-                            b->y -= atof(&line[i]);
-                        }
-                        else
-                            b->y = atof(&line[i]);
-                        while(line[i] != ' ')
-                            i++;
-                        i++;
-                        break;
-                    case 3:
-                        if (b->angle == 'a')
-                            b->a_bouger = 6;
-                        else if (b->angle == 'b')
-                            b->a_bouger = 7;
-                        else if (b->angle == 'k')
-                            b->a_bouger = 8;
-                        else if (b->angle == 'e')
-                            b->a_bouger = 9;
-                        b->angle = line[i];
-                        i += 2;
-                        break;
-                    case 4:
-                        b->state = line[i];
-                        i += 2;
-                        break;
-                }
-                
+                    i+= 1;
+                i += 1;
+                i += append_perso(line+i, tmpC, id);
             }
             else
             {
-                p->a_bouger = 1;
+                int id =  atoi(line+i);
                 while (line[i] != ' ')
-                    i++;
-                i++;
+                    i+= 1;
+                i += 1;
+                struct personnages *p = &list.data[id];
                 int idaction = atoi(&line[i]);
-                i += 3;
+                i+= 3;
                 switch(idaction)
                 {
                     case 0:
@@ -401,7 +390,7 @@ void parse_order(char *line)
                             }
                             tmpC[j] = 0;
                             i++;
-                            append_in_inventory(tmpC, p, n);
+                            append_in_inventory(tmpC, p->i_list, n);
                         }
                         else
                         {
@@ -588,6 +577,107 @@ void parse_order(char *line)
                             i++;
                         i++;
                         break;
+                }
+                p->a_bouger = 1;
+            }
+        }
+        else if (tmpC[0] == '1') // building
+        {
+            if (line[i] == 'n') 
+            {
+                i += 2;
+                i += append_perso(line+i, tmpC, -1);
+            }
+            else
+            {
+                int id =  atoi(line + i);
+                while (line[i] != ' ')
+                    i+= 1;
+                i += 1;
+                if (id < 0) 
+                    i += append_building(line+i, tmpC, -id);
+                else
+                {
+                    struct building *b = get_ptr_from_id_building(id);
+                    int idaction = atoi(&line[i]);
+                    i+= 3;
+                    switch(idaction)
+                    {
+                        case 0:
+                            if (line[i] == '+')
+                            {
+                                i++;
+                                b->pv += atoi(&line[i]);
+                            }
+                            else if (line[i] == '-')
+                            {
+                                i++;
+                                b->pv -= atoi(&line[i]);
+                            }
+                            else
+                            {
+                                b->pv = atoi(&line[i]);
+                            }
+                            while(line[i] != ' ')
+                                i++;
+                            i++;
+                        break;
+                        case 1:
+                            if (line[i] == '+')
+                            {
+                                b->a_bouger = 2;
+                                i++;
+                                b->x += atof(&line[i]);
+                            }
+                            else if (line[i] == '-')
+                            {
+                                b->a_bouger = 3;
+                                i++;
+                                b->x -= atof(&line[i]);
+                            }
+                            else
+                                b->x = atof(&line[i]);
+                            while(line[i] != ' ')
+                                i++;
+                            i++;
+                            break;
+                        case 2:
+                            if (line[i] == '+')
+                            {
+                                b->a_bouger = 4;
+                                i++;
+                                b->y += atof(&line[i]);
+                            }
+                            else if (line[i] == '-')
+                            {
+                                b->a_bouger = 5;
+                                i++;
+                                b->y -= atof(&line[i]);
+                            }
+                            else
+                                b->y = atof(&line[i]);
+                            while(line[i] != ' ')
+                                i++;
+                            i++;
+                            break;
+                        case 3:
+                            if (b->angle == 'a')
+                                b->a_bouger = 6;
+                            else if (b->angle == 'b')
+                                b->a_bouger = 7;
+                            else if (b->angle == 'k')
+                                b->a_bouger = 8;
+                            else if (b->angle == 'e')
+                                b->a_bouger = 9;
+                            b->angle = line[i];
+                            i += 2;
+                            break;
+                        case 4:
+                            b->state = line[i];
+                            i += 2;
+                            break;
+                    }
+                    b->a_bouger = 1;
                 }
             }
         }

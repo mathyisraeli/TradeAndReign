@@ -2,12 +2,11 @@
 #include <SDL2/SDL.h>
 #include "../perso.h"
 #include "../clavier.h"
-#include "../ia/ia.h"
 #include "../init_sprite.h"
 //#include "stat.h"
 #include "menu.h"
 #include "../ordre.h"
-#include "../inventory/linked_item.h"
+#include "../../shared/linked_item.h"
 #include "../sound/init_sound.h"
 #include "../graphic_widget/textBox.h"
 #include "../graphic_widget/textInfo.h"

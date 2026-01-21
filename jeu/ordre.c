@@ -168,7 +168,7 @@ void commande(struct linked_list *selected)
 				position.y = (x - moi->x - moi->y  + y) * 17 + 437.5 - ground_altitude[(int)x + (int)y * max_x] + moi->altitude*38;
 				SDL_RenderCopy(renderer, img->g->croix_inverse, NULL, &position);
 				if (lettres->Mouse_Lclick == 0 &&  lettres->Mouse_Rclick == 1)
-					sprintf (ordre + strlen(ordre), "%d 03 %f %d 04 %f ", a->p->id, x, a->p->id, y);
+					sprintf (ordre + strlen(ordre), "0 %d 03 %f 0 %d 04 %f ", a->p->id, x, a->p->id, y);
 				x += menu_cond->space_columns*cos(menu_cond->angle/57.3);
 				y -= menu_cond->space_columns*sin(menu_cond->angle/57.3);
 				n += 1;
@@ -196,7 +196,7 @@ void commande(struct linked_list *selected)
 					position.y = (x - moi->x - moi->y  + y) * 17 + 437.5 - ground_altitude[(int)x + (int)y * max_x] + moi->altitude*38;
 					SDL_RenderCopy(renderer, img->g->croix_inverse, NULL, &position);
 					if (lettres->Mouse_Lclick == 0 &&  lettres->Mouse_Rclick == 1)
-						sprintf (ordre + strlen(ordre), "%d 03 %f %d 04 %f ", a->p->id, x, a->p->id, y);
+						sprintf (ordre + strlen(ordre), "0 %d 03 %f 0 %d 04 %f ", a->p->id, x, a->p->id, y);
 					x += menu_cond->space_columns*cos(menu_cond->angle/57.3);
 					y -= menu_cond->space_columns*sin(menu_cond->angle/57.3);
 					n += 1;
@@ -209,7 +209,7 @@ void commande(struct linked_list *selected)
 					position.y = (x - moi->x - moi->y  + y) * 17 + 437.5 - ground_altitude[(int)x + (int)y * max_x] + moi->altitude*38;
 					SDL_RenderCopy(renderer, img->g->croix_inverse, NULL, &position);
 					if (lettres->Mouse_Lclick == 0 &&  lettres->Mouse_Rclick == 1)
-						sprintf (ordre + strlen(ordre), "%d 03 %f %d 04 %f ", a->p->id, x, a->p->id, y);
+						sprintf (ordre + strlen(ordre), "0 %d 03 %f 0 %d 04 %f ", a->p->id, x, a->p->id, y);
 					x += menu_cond->space_lines*sin(menu_cond->angle/57.3);
 					y += menu_cond->space_lines*cos(menu_cond->angle/57.3);
 					n += 1;
@@ -222,7 +222,7 @@ void commande(struct linked_list *selected)
 					position.y = (x - moi->x - moi->y  + y) * 17 + 437.5 - ground_altitude[(int)x + (int)y * max_x] + moi->altitude*38;
 					SDL_RenderCopy(renderer, img->g->croix_inverse, NULL, &position);
 					if (lettres->Mouse_Lclick == 0 &&  lettres->Mouse_Rclick == 1)
-						sprintf (ordre + strlen(ordre), "%d 03 %f %d 04 %f ", a->p->id, x, a->p->id, y);
+						sprintf (ordre + strlen(ordre), "0 %d 03 %f 0 %d 04 %f ", a->p->id, x, a->p->id, y);
 					x -= menu_cond->space_columns*cos(menu_cond->angle/57.3);
 					y += menu_cond->space_columns*sin(menu_cond->angle/57.3);
 					n += 1;
@@ -235,7 +235,7 @@ void commande(struct linked_list *selected)
 					position.y = (x - moi->x - moi->y  + y) * 17 + 437.5 - ground_altitude[(int)x + (int)y * max_x] + moi->altitude*38;
 					SDL_RenderCopy(renderer, img->g->croix_inverse, NULL, &position);
 					if (lettres->Mouse_Lclick == 0 &&  lettres->Mouse_Rclick == 1)
-						sprintf (ordre + strlen(ordre), "%d 03 %f %d 04 %f ", a->p->id, x, a->p->id, y);
+						sprintf (ordre + strlen(ordre), "0 %d 03 %f 0 %d 04 %f ", a->p->id, x, a->p->id, y);
 					x -= menu_cond->space_lines*sin(menu_cond->angle/57.3);
 					y -= menu_cond->space_lines*cos(menu_cond->angle/57.3);
 					n += 1;
@@ -255,7 +255,7 @@ void commande(struct linked_list *selected)
 				position.y = (x - moi->x - moi->y  + y) * 17 + 437.5 - ground_altitude[(int)x + (int)y * max_x] + moi->altitude*38;
 				SDL_RenderCopy(renderer, img->g->croix_inverse, NULL, &position);
 				if (lettres->Mouse_Lclick == 0 &&  lettres->Mouse_Rclick == 1)
-					sprintf (ordre + strlen(ordre), "%d 03 %f %d 04 %f ", a->p->id, x, a->p->id, y);
+					sprintf (ordre + strlen(ordre), "0 %d 03 %f 0 %d 04 %f ", a->p->id, x, a->p->id, y);
 				x += menu_cond->space_columns*cos(menu_cond->angle/57.3);
 				y -= menu_cond->space_columns*sin(menu_cond->angle/57.3);
 				n += 1;
@@ -287,7 +287,7 @@ void commande(struct linked_list *selected)
 				{
 					SDL_RenderCopy(renderer, img->g->croix_inverse, NULL, &position);
 					if (lettres->Mouse_Rclick == 1)
-						sprintf (ordre + strlen(ordre), "%d 03 %f %d 04 %f ", a->p->id, x, a->p->id, y);
+						sprintf (ordre + strlen(ordre), "0 %d 03 %f 0 %d 04 %f ", a->p->id, x, a->p->id, y);
 					a = a->next;
 				}
 				x += menu_cond->space_columns*cos(menu_cond->angle/57.3);

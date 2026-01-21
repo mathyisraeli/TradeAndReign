@@ -23,10 +23,11 @@ struct personnages *have_char(char *name)
             espace = i;
     if (espace <= 0)
         return NULL;
-    for (struct personnages *l = list; l != NULL; l = l->next)
+    for (int i = 0; i <= list.maxid; i++)
     {
-        if (strncmp(l->nom_de_compte, name, espace-1) == 0)
-            return l;
+        if (0 < list.data[i].pv) 
+            if (strncmp(list.data[i].nom_de_compte, name, espace-1) == 0)
+                return &list.data[i];
     }
     return NULL;
 }

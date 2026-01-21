@@ -1,7 +1,6 @@
 #ifndef STAT
 #define STAT
 #include "../perso.h"
-#include "../ia/pathfinding.h"
 #include "../building.h"
 #include "../clavier.h"
 

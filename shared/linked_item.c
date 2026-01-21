@@ -6,6 +6,8 @@ int count(char *name)
 		return 10;
 	if (strcmp(name, "fleche") == 0)
 		return 20;
+	if (strcmp(name, "herbe") == 0 || strcmp(name, "sable") == 0)
+		return 10;
 	return 1;
 }
 
@@ -169,62 +171,46 @@ void print(struct linked_item *e)
 		putchar('\n');
 }
 
-void echange_item(struct personnages *perso1, struct personnages *perso2)
+struct linked_item *del(struct linked_item *root, struct linked_item *to_del)
 {
-	printf ("%s %s\n", perso1->nom, perso2->nom);
-	printf ("%s %s\n", perso1->item1, perso1->item2);
-	if (strcmp(perso1->item1, "none") == 0)
+	struct linked_item *p;
+	if (root == to_del)
 	{
-		for (struct linked_item *p = perso1->i_list; p != NULL; p =p->next)
+		p = root->next;
+		free(root);
+		return p;
+	}
+	p = root;
+	while (p->next != NULL)
+	{
+		if (p->next == to_del)
 		{
-			if (strcmp(p->nom, perso1->item2) == 0 && p->count >= perso1->count_item2)
-			{
+			p->next = to_del->next;
+			free(to_del);
+			return root;
+		}
+		p = p->next;
+	}
+	return root;
+}
 
-				sprintf (ordre + strlen(ordre), "%d 16 +%d %s %d 16 %d %s %d 17 none none 0 none 0 ", 
-				perso2->id, perso1->count_item2, perso1->item2,
-				perso1->id, perso1->count_item2, perso1->item2, 
-				perso1->id);
-				return;
-			}
-		}
-		sprintf (ordre + strlen(ordre), "%d 17 none none 0 none 0 ", perso1->id);
-	}
-	else if (strcmp(perso1->item2, "none") == 0)
-	{
-		for (struct linked_item *p = perso2->i_list; p != NULL; p =p->next)
-		{
-			if (strcmp(p->nom, perso1->item1) == 0 && p->count >= perso1->count_item1)
-			{
-
-				sprintf (ordre + strlen(ordre), "%d 16 +%d %s %d 16 %d %s %d 17 none none 0 none 0 ", 
-				perso1->id, perso1->count_item1, perso1->item1, 
-				perso2->id, perso1->count_item1, perso1->item1,
-				perso1->id);
-				return;
-			}
-		}
-		sprintf (ordre + strlen(ordre), "%d 17 none none 0 none 0 ", perso1->id);
-	}
-	else
-	{
-		char p1get=0; char p2get = 0;
-		for (struct linked_item *p = perso1->i_list; p != NULL; p =p->next)
-			if (strcmp(p->nom, perso1->item2) == 0 && p->count >= perso1->count_item2)
-				p1get = 1;
-		for (struct linked_item *p = perso2->i_list; p != NULL; p =p->next)
-			if (strcmp(p->nom, perso1->item1) == 0 && p->count >= perso1->count_item1)
-				p2get = 1;
-		if (p1get == 1 && p2get == 1)
-		{
-			sprintf (ordre + strlen(ordre), "%d 16 +%d %s %d 16 +%d %s %d 16 %d %s %d 16 %d %s %d 17 none none 0 none 0 ", 
-			perso1->id, perso1->count_item1, perso1->item1, 
-			perso2->id, perso1->count_item2, perso1->item2,
-			perso1->id, perso1->count_item2, perso1->item2, 
-			perso2->id, perso1->count_item1, perso1->item1,
-			perso1->id);
-		}
-		else
-			sprintf (ordre + strlen(ordre), "%d 17 none none 0 none 0 ", perso1->id);
-	}
-	
+struct linked_item *remove_from_inventory(char *name, struct linked_item *p, int n)
+{
+       while (n > 0 && p != NULL)
+       {
+               struct linked_item *a = exist_in_linked_item(p, name);
+               if (a == NULL)
+                       return p;
+               if (a->count > n)
+               {
+                       a->count -= n;
+                       n = 0;
+               }
+               else
+               {
+                       n -= a->count;
+                       p = del(p, a);
+               }
+       }
+       return p;
 }

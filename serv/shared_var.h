@@ -1,19 +1,20 @@
 #pragma once
 #include <stddef.h>
-#include "map_op.h"
-extern struct personnages *list;
+#include "dynamic_characters_list.h"
+
+extern struct dynamic_char_list list;
 extern struct building *list_building;
 extern  struct linked_ground **ground;
 extern uint8_t **building_altitude;
 extern int *building_id;
 extern int max_x;
 extern int max_y;
-extern int index_ground_modif[99999];
+extern int max_x_biom;
+extern int max_y_biom;
+extern uint8_t send_ground_buffer[7500];
 extern int index_check_altitude[99999];
-extern int n_ground_modif;
+extern char size_background[20];
 extern int n_ground_altitude;
-extern char *background_send;
 extern char *order_send;
-extern size_t size_background_send;
 extern size_t size_order_send;
 extern int rdm_directions[4];

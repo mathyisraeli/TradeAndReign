@@ -14,75 +14,85 @@ float coo_circle(struct personnages *perso)
 
 void collision(void)
 {
-    for (struct personnages *p = list; p != NULL; p=p->next)
+    for (int i = 0; i <= list.maxid; i++)
     {
-        if (p->a_bouger == 1)
+        if (list.data[i].pv <= 0)
+            continue;
+        if (list.data[i].a_bouger == 1)
         {
-            float alt = allowed_to_move(p, p->x, p->y, p->moved_x, p->moved_y);
+            float alt = allowed_to_move(&list.data[i], list.data[i].x, list.data[i].y, list.data[i].moved_x, list.data[i].moved_y);
             if (alt != -1)
             {
-                p->x += p->moved_x;
-                p->y += p->moved_y;
-                p->altitude = alt;
+                list.data[i].x += list.data[i].moved_x;
+                list.data[i].y += list.data[i].moved_y;
+                list.data[i].altitude = alt;
             }
             else
             {
-                p->chemin_is_set = 0;
-                p->moved_x = 0;
-                p->moved_y = 0;
+                list.data[i].chemin_is_set = 0;
+                list.data[i].moved_x = 0;
+                list.data[i].moved_y = 0;
             }
 
         }
     }
-    for (struct personnages *p = list; p != NULL; p=p->next)
+    for (int i = 0; i <= list.maxid; i++)
     {
-        for (struct personnages *pp = p->next; pp != NULL; pp=pp->next)
+        if (list.data[i].pv <= 0)
+            continue;
+        for (int j = i + 1; j <= list.maxid; j++)
         {
-            if (pp->a_bouger || p->a_bouger)
+            if (list.data[j].pv <= 0)
+                continue;
+            if (list.data[i].a_bouger ||  list.data[j].a_bouger)
             {
-                float d = (pp->x - p->x)*(pp->x - p->x) + (pp->y - p->y)*(pp->y - p->y);
-                float ld = (pp->x - pp->moved_x - p->x + p->moved_x)*(pp->x - pp->moved_x - p->x + p->moved_x) + (pp->y - pp->moved_y - p->y + p->moved_y)*(pp->y - pp->moved_y - p->y + p->moved_y);
-                if (d <= ld && d < (coo_circle(pp)+coo_circle(p))*(coo_circle(pp)+coo_circle(p)))
+                float d = ( list.data[j].x - list.data[i].x)*( list.data[j].x - list.data[i].x) + ( list.data[j].y - list.data[i].y)*( list.data[j].y - list.data[i].y);
+                if (d < (coo_circle(&list.data[j])+coo_circle(&list.data[i]))*(coo_circle(&list.data[j])+coo_circle(&list.data[i])))
                 {
-                    float alt = allowed_to_move(p, p->x, p->y, pp->moved_x, pp->moved_y);
-                    if (alt != -1)
+                    if (d <= ( list.data[j].x -  list.data[j].moved_x - list.data[i].x + list.data[i].moved_x)*( list.data[j].x -  list.data[j].moved_x - list.data[i].x + list.data[i].moved_x) + ( list.data[j].y -  list.data[j].moved_y - list.data[i].y + list.data[i].moved_y)*( list.data[j].y -  list.data[j].moved_y - list.data[i].y + list.data[i].moved_y))
                     {
-                        p->x += pp->moved_x /* * pp->weight / p->weight*/;
-                        p->y += pp->moved_y /* * pp->weight / p->weight*/;
-                        p->altitude = alt;
-                        p->a_bouger = 1; 
-                    }
-                    alt = allowed_to_move(pp, pp->x, pp->y, p->moved_x, p->moved_y);
-                    if (alt != -1)
-                    {
-                        pp->x += p->moved_x /* * p->weight / pp->weight*/;
-                        pp->y += p->moved_y /* * p->weight / pp->weight*/;
-                        pp->altitude = alt;
-                        pp->a_bouger = 1;   
+                        float alt = allowed_to_move(&list.data[i], list.data[i].x, list.data[i].y,  list.data[j].moved_x,  list.data[j].moved_y);
+                        if (alt != -1)
+                        {
+                            list.data[i].x +=  list.data[j].moved_x; //  list.data[j].weight / list.data[i].weight;
+                            list.data[i].y +=  list.data[j].moved_y; //  list.data[j].weight / list.data[i].weight
+                            list.data[i].altitude = alt;
+                            list.data[i].a_bouger = 1; 
+                        }
+                        alt = allowed_to_move(&list.data[j],  list.data[j].x,  list.data[j].y, list.data[i].moved_x, list.data[i].moved_y);
+                        if (alt != -1)
+                        {
+                             list.data[j].x += list.data[i].moved_x; //  list.data[i].weight /  list.data[j].weight
+                             list.data[j].y += list.data[i].moved_y; //  list.data[i].weight /  list.data[j].weight
+                             list.data[j].altitude = alt;
+                             list.data[j].a_bouger = 1;   
+                        }
                     }
                 }
             }
         }
-        p->moved_x = 0;
-        p->moved_y = 0;
+        list.data[i].moved_x = 0;
+        list.data[i].moved_y = 0;
         
     }
-    for (struct personnages *p = list; p != NULL; p=p->next)
+    for (int i = 0; i <= list.maxid; i++)
     {
-        if (p->a_bouger == 1)
+        if (list.data[i].pv <= 0)
+            continue;
+        if (list.data[i].a_bouger == 1)
         {
-            int src = (int)p->y * max_x + (int)p->x;
+            int src = (int)list.data[i].y * max_x + (int)list.data[i].x;
 	        int ga = (altitude(src)/38)*2;
-           // printf ("%d %f %d %d\n",p->inside, p->altitude, (int)(p->altitude*2)-ga, building_altitude[src][(int)(p->altitude*2)-ga]);
-	        if (p->inside == -1) 
+           // printf ("%d %f %d %d\n",p->inside, list.data[i].altitude, (int)(p->altitude*2)-ga, building_altitude[src][(int)(p->altitude*2)-ga]);
+	        if (list.data[i].inside == -1) 
 	        {
-		        if ((building_altitude[src][(int)(p->altitude*2)-ga]/10) % 10 == 1) 
+		        if ((building_altitude[src][(int)(list.data[i].altitude*2)-ga]/10) % 10 == 1) 
 		        {
-			        p->inside = building_id[src]; 
+			        list.data[i].inside = building_id[src]; 
 		        }
             }
-	        else if (building_id[src] == -1 || (building_altitude[src][(int)(p->altitude*2)-ga]/10) % 10 == 0)
-			    p->inside = -1; 
+	        else if (building_id[src] == -1 || (building_altitude[src][(int)(list.data[i].altitude*2)-ga]/10) % 10 == 0)
+			    list.data[i].inside = -1; 
 	    }	
     }
 }

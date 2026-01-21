@@ -10,13 +10,10 @@
 #include "perso.h"
 #include "control.h"
 #include "ordre.h"
-#include "ia/ia.h"
-#include "map.h"
 #include <fcntl.h>
 #include "init_sprite.h"
 #include "gui/init_gui.h"
 #include "tools/chiffrement.h"
-#include "ia/pathfinding.h"
 #include "sound/init_sound.h"
 #include "shared_var.h"
 #include "tools/arg_parse.h"

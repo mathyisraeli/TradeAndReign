@@ -1,4 +1,4 @@
-#include "utile.h"
+/*#include "utile.h"
 
 struct linked_client *append_linked(struct linked_client *list, int socket, char *name)
 {
@@ -55,19 +55,4 @@ struct linked_client *remove_linked(struct linked_client *list, int socket)
     }
     return list;
 }
-
-int find_smalest_valid_id(int from)
-{
-    for (struct personnages *l = list; l != NULL; l = l->next)
-	{
-		if (l->id == from)
-		    return find_smalest_valid_id(from + 1);
-	}
-    for (struct building *l = list_building; l != NULL; l = l->next)
-	{
-		if (l->id == from)
-		    return find_smalest_valid_id(from + 1);
-	}
-    return from;
-}
-
+*/

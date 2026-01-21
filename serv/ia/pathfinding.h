@@ -3,10 +3,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#include "../init_sprite.h"
-#include "../map.h"
 #include "../perso.h"
 #include "../shared_var.h"
+#include "../ground.h"
+
+struct personnages;
 
 struct path
 {

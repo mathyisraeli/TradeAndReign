@@ -32,7 +32,7 @@ void addEnemy(struct menu *main_menu)
     }
     else
     {
-        sprintf(ordre + strlen(ordre), "%d 15 +0 %s ", moi->id, main_menu->menuDip->diploTextBox.text);
+        sprintf(ordre + strlen(ordre), "0 %d 15 +0 %s ", moi->id, main_menu->menuDip->diploTextBox.text);
         main_menu->menuDip->errorText.text = "\0";
     }
 }
@@ -48,7 +48,7 @@ void removeEnemy(struct menu *main_menu)
     }
     else
     {
-        sprintf(ordre + strlen(ordre), "%d 15 %s ", moi->id, main_menu->menuDip->diploTextBox.text);
+        sprintf(ordre + strlen(ordre), "0 %d 15 %s ", moi->id, main_menu->menuDip->diploTextBox.text);
         main_menu->menuDip->errorText.text = "\0";
     }
 }
@@ -59,9 +59,9 @@ void setOverlord(struct menu *main_menu)
     if (persoToFind != NULL)
     {
         if (strcmp (main_menu->menuDip->diploTextBox.text, "") == 0)
-            sprintf(ordre + strlen(ordre), "%d 10 %s ", moi->id, moi->nom);
+            sprintf(ordre + strlen(ordre), "0 %d 10 %s ", moi->id, moi->nom);
         else
-            sprintf(ordre + strlen(ordre), "%d 10 %s ", moi->id, main_menu->menuDip->diploTextBox.text);
+            sprintf(ordre + strlen(ordre), "0 %d 10 %s ", moi->id, main_menu->menuDip->diploTextBox.text);
     }
     else
     {

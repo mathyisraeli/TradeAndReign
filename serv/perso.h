@@ -5,9 +5,10 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
-#include "main.h"
 #include "diplo.h"
-#define size_order 2000
+#include "ia/pathfinding.h"
+#include "../shared/linked_item.h"
+#include "building.h"
 
 extern struct personnages *lits;
 
@@ -38,7 +39,6 @@ struct personnages
     int count_item1;
     char item2[50];
     int count_item2;
-    char online;
     char speak[90];
     int animation;
 	int animation_2;
@@ -53,18 +53,24 @@ struct personnages
     int house_id;
     char physique[6];
     /////////////
-	struct personnages *next;
+    char online;
+    float dom;
+    float porte_dom;
+    float vitesse_dep;
     float moved_x;
     float moved_y;
 	char a_bouger;
+    char is_active;
+    int speak_timer;
+    struct path* chemin;
 };
 
-int parse_new(struct personnages *p, char *line);
+int parse_new(struct personnages *p, char *line, char *skin, int id);
 void parse_order(char *line);
-int append_perso(char *line);
 struct personnages *get_ptr_from_id(int id);
 int get_id(char *line, int *i);
 void append_enemi(char *name);
-void remove_perso(void);
 struct personnages *find_perso_by_name(char *name);
 void save_map(int);
+void kill(struct personnages *p);
+int find_smalest_valid_id_perso(int from);

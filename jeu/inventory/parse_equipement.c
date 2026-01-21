@@ -24,7 +24,7 @@ void actualise_stat(struct personnages *p)
 	{
 		for (struct linked_enemie* l = p->e_list; l != NULL; l=l->next)
 			if (l->rang>0)
-				sprintf(ordre + strlen(ordre), "%d 15 %s ", p->id, l->nom);
+				sprintf(ordre + strlen(ordre), "0 %d 15 %s ", p->id, l->nom);
 	}
 	else 
 	{
@@ -34,13 +34,13 @@ void actualise_stat(struct personnages *p)
 			{
 				struct linked_enemie *test = exist_in_linked_enemie(overlord->e_list, l->nom);
 				if (test == NULL || test->rang +1 != l->rang)
-					sprintf(ordre + strlen(ordre), "%d 15 %s ", p->id, l->nom);
+					sprintf(ordre + strlen(ordre), "0 %d 15 %s ", p->id, l->nom);
 			}
 		}
 		for (struct linked_enemie* l = overlord->e_list; l != NULL; l=l->next)
 		{
 			if (exist_in_linked_enemie(p->e_list, l->nom) == NULL)
-				sprintf(ordre + strlen(ordre), "%d 15 +%d %s ", p->id, l->rang+1, l->nom);
+				sprintf(ordre + strlen(ordre), "0 %d 15 +%d %s ", p->id, l->rang+1, l->nom);
 		}
 	}
 	if (p->skin[1] == '1')
@@ -50,7 +50,6 @@ void actualise_stat(struct personnages *p)
 		p->dom = 0;
 		p->poid = 999;
 		p->eau = '0';
-		p->plancher = 0;
 		p->animation = 0;
 		struct to_disp *new = malloc(sizeof(struct to_disp));
 		new->offset_y = 454;
@@ -81,7 +80,6 @@ void actualise_stat(struct personnages *p)
 		p->dom = 0;
 		p->poid = 10000;
 		p->eau = '0';
-		p->plancher = 127;
 	}
 	else if (p->skin[0] == '0' && p->skin[1] == 0)
 	{
@@ -92,7 +90,6 @@ void actualise_stat(struct personnages *p)
 		p->poid = 65;
 		p->eau = '0';
 		p->dom = 1;
-		p->plancher = 'n';
 		struct to_disp *new = malloc(sizeof(struct to_disp));
 		new->x = p->x;
 		new->altitude = p->altitude;
@@ -628,8 +625,5 @@ void init_stat(struct personnages *p)
 	list_disp = deleteKey(p->id);
 	p->speak_timer = 0;
 	p->faim_time = 0;
-    p->chemin_is_set = 0;
-	p->chemin = NULL;
-	p->chemin = malloc(sizeof(struct path) * max_x * max_y);
 	actualise_stat(p);
 }

@@ -1,11 +1,14 @@
 #include "building.h"
 
-int parse_new_building(struct building *b, char *line)
+int parse_new_building(struct building *b, char *line, char *skin, int id)
 {
     int i;
-    sscanf(line, "%s %d %d %d %d %c %c %n", b->skin, &b->id, &b->pv, &b->x, &b->y, &b->angle,&b->state,&i);
-    if(b->id == -1)
-        b->id = find_smalest_valid_id(0);
+    sscanf(line, "%d %d %d %c %c %n",&b->pv, &b->x, &b->y, &b->angle,&b->state,&i);
+    if(id == -1)
+        b->id = find_smalest_valid_id_building(0);
+    else
+        b->id = id;
+    strcpy(b->skin ,skin);
     return i + 1;
 }
 
@@ -21,10 +24,10 @@ struct building *get_ptr_from_id_building(int id)
     return NULL;
 }
 
-int append_building(char *line)
+int append_building(char *line, char *skin, int id)
 {
     struct building *new = malloc(sizeof(struct building));
-    int ret = parse_new_building(new, line);
+    int ret = parse_new_building(new, line, skin, id);
     new->next = NULL;
     new->a_bouger = 1;
     if (list_building == NULL)
@@ -38,6 +41,28 @@ int append_building(char *line)
     }
     printf ("%d\n", ret);
     return ret;
+}
+
+void create_building(int x, int y,char angle, char state, char skin[4], int pv)
+{
+    struct building *new = malloc(sizeof(struct building));
+    if (list_building == NULL)
+        list_building = new;
+    else
+    {
+		struct building *parcour = list_building;
+		while (parcour->next != NULL)
+			parcour = parcour->next;
+        parcour->next = new;
+    }
+    new->id = find_smalest_valid_id_building(0);
+    new->a_bouger = 1;
+    new->x = x;
+    new->y = y;
+    new->angle = angle;
+    new->state = state;
+    strcpy(new->skin, skin);
+    new->pv = pv;
 }
 
 //1st 1 if it's colider outside
@@ -1574,4 +1599,104 @@ void actualise_building_altitude(void)
             }
         }
     }
+}
+
+int find_smalest_valid_id_building(int from)
+{
+    for (struct building *l = list_building; l != NULL; l = l->next)
+	{
+		if (l->id == from)
+		    return find_smalest_valid_id_building(from + 1);
+	}
+    return from;
+}
+
+void add_wood_pillar_or_wood_house(int moix, int moiy)
+{
+    // FULL 3X3
+    for (int i = moix - 2; i < moix + 1; i++)
+    {
+        for (int j = moiy - 2; j < moiy + 1; j++)
+        {
+            if (0 <= i && i + 2 < max_x && 0 <= j && j + 2 < max_y)
+            {
+                char all = 1;
+                for (int r = j; r < j +3; r++)
+                {
+                    for (int c = i; c < i +3; c++)
+                    {
+                        if ((r != moiy || c != moix) && (building_id[r * max_x + c] == -1 || strcmp(get_ptr_from_id_building(building_id[r * max_x + c])->skin,"141") != 0))
+                        {
+                            all = 0;
+                        }
+                    }
+                }
+                if (all == 1)
+                {
+                    create_building(i+2, j+2, 'a', 'a', "112", 500);
+                    for (int r = j; r < j +3; r++)
+                    {
+                        for (int c = i; c < i +3; c++)
+                        {
+                            if (r != moiy || c != moix)
+                            {
+                                struct building *b = get_ptr_from_id_building(building_id[r * max_x + c]);
+                                b->pv = 0;
+                                b->a_bouger = 1;
+                            }
+                        }
+                    }
+                    return;
+                }
+            }
+        }
+    }
+
+
+    for (int j = max(0, moiy-5); j < min(moiy+1,max_y-5); j++)
+    {
+        for (int i = max(0, moix - 5); i <min(moix + 1, max_x - 5);i++)
+        {
+            if (moix == i || moix == i + 5 || moiy == j || moiy == j + 5)
+            {
+                uint8_t err = 0;
+                for (int col = i; col < i + 6; col++)
+                {
+                    if (((col != moix || j != moiy) && (building_id[j * max_x + col] == -1 || strcmp(get_ptr_from_id_building(building_id[j * max_x + col])->skin,"141") != 0)) || ((col != moix || j + 5!= moiy) && (building_id[(j+5) * max_x + col] == -1 || strcmp(get_ptr_from_id_building(building_id[(j+5) * max_x + col])->skin,"141") != 0)))
+                    {
+                        err += 1;
+                        break;
+                    }
+                }
+                if (err > 0)
+                    continue;
+                for (int row = j+1; row < j + 5; row++)
+                {
+                    if (((row != moiy || i != moix) && (building_id[row * max_x + i] == -1 || strcmp(get_ptr_from_id_building(building_id[row * max_x + i])->skin,"141") != 0)) || ((row != moiy || i + 5!= moix) && (building_id[(i+5) + max_x * row] == -1 || strcmp(get_ptr_from_id_building(building_id[(i+5) + max_x * row])->skin,"141") != 0)))
+                    {
+                        err += 1;
+                        break;
+                    }
+                }
+                if (err > 0)
+                    continue;
+                create_building(i+5, j+5, 'a', 'a', "113", 500);
+                for (int r = j; r < j +6; r++)
+                {
+                    for (int c = i; c < i +6; c++)
+                    {
+                        if ((r != moiy || c != moix) && building_id[r * max_x + c] != -1)
+                        {
+                            struct building *b = get_ptr_from_id_building(building_id[r * max_x + c]);
+                            b->pv = 0;
+                            b->a_bouger = 1;
+                        }
+                    }
+                }
+                return;
+            }
+        }
+    }
+    create_building(moix, moiy, 'a', 'a', "141", 5);
+    return;
 }

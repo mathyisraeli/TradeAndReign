@@ -5,8 +5,7 @@
 #include "init_sprite.h"
 #include "perso.h"
 
-int parse_single_cell(char *buffer);
-void create_array(char *ground_string);
+void create_array();
 //struct linked_list *recv_map(int socket);
 
 #endif /* INIT_WORLD_H */

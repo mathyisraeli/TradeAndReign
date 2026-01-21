@@ -10,8 +10,11 @@
 #include "graphic_widget/pictureButton.h"
 //#include "gui/menu.h"
 
-extern SDL_Texture **ground_texture;
-extern int *ground_altitude;
+extern SDL_Texture *ground_texture[2500];
+extern int ground_altitude[2500];
+extern uint8_t ground_buffer[7500];
+extern char *recv_order_string;
+extern int recv_order_string_size;
 extern struct img *img;
 extern struct s_gui *s_gui;
 extern SDL_Renderer *renderer;
@@ -34,7 +37,7 @@ extern struct cond_menu *menu_cond;
 extern struct main_char_stats *my_stats_display;
 extern char should_i_call_my_computer_work;
 extern struct personnages *moi;
+extern int counter_use_item;
 extern uint8_t **building_altitude;
 extern int *building_id;
-extern int counter_use_item;
 #define order_size 2000

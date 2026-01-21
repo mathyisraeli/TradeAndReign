@@ -1,5 +1,4 @@
-#ifndef INVENTAIRE_MENU_H
-#define INVENTAIRE_MENU_H
+#pragma once
 
 #include <SDL2/SDL.h>
 #include "../menu.h"
@@ -11,7 +10,7 @@
 #include "../../graphic_widget/pictureButton.h"
 #include "../../perso.h"
 #include "../../clavier.h"
+#include "../../../shared/define.h"
 
 void menu_inventaire(void);
 
-#endif /* INVENTAIRE_MENU_H */

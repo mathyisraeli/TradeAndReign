@@ -2,6 +2,7 @@
 
 int main(int argc, char *argv[])
 {
+    recv_order_string = malloc(10);
     lettres = calloc(sizeof(struct lettres), 1);
     lettres->wheel = 0;
     lettres->keystates = SDL_GetKeyboardState(NULL);
@@ -93,10 +94,10 @@ bool communicateWithServer(int socket, char* to_send, int size, int flags)
 
 void boucle_jeu(int socket, char *name)
 {
-    char *ground = rec_ground(socket);
-    create_array(ground);
-    free(ground);
+    rec_ground_size(socket);
+    rec_ground_string(socket);
     recv_order(socket);
+    create_array();
     moi = find_perso_by_name(name);	
 	struct linked_list *selected[11] = {0};
 //	struct formation *f= malloc(sizeof(struct formation));
@@ -111,13 +112,14 @@ void boucle_jeu(int socket, char *name)
    // struct timeval start;struct timeval end;
 	while(!done)
 	{
+        //printf ("%f %f\n", moi->x, moi->y);
 	    event = gestion_touche();
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	    SDL_RenderClear(renderer);
         //gettimeofday(&start, NULL);
         if (main_menu->menuTech->on == 0)
         {
-	        display_all();
+	        display_ground();
             display_selected(selected[0]);
             display_elipse_and_personal_datas(moi);
             gui_event(moi);
@@ -149,17 +151,18 @@ void boucle_jeu(int socket, char *name)
                 text->textToPrint[0] = '\0';
             }
         }
-        if (should_i_call_my_computer_work == '1')
+        /*if (should_i_call_my_computer_work == '1')
         {
             my_computer_work(moi);
             should_i_call_my_computer_work = 0;
         }
-	    ia();
+	    ia();*/
         send_orders(socket);
 	    recv_order(socket);
+        rec_ground_string(socket);
+        create_array();
         for (int i = 0; 11>i;i++)
         {
-            //  printf ("%d\n", i);ss
             clean_selected(selected[i]);
         }
 	    list = death();

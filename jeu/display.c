@@ -20,34 +20,101 @@
 }*/
 
 
-void display_ground(int x, int y, int xto, int yto)
+void display_ground(void)
 {
-	SDL_Rect position;
-	x += 1;
-	if (x >= max_x)
-	{
-		y += 1;
-		x = 0;
-	}
-	xto += 1;
-	if (xto >= max_x)
-	{
-		yto += 1;
-		xto = 0;
-	}
-	while (x < xto || y < yto)
-	{
-		if ((x  - moi->x)*(x  - moi->x) + (y  - moi->y)*(y  - moi->y) <= 441)
-		{
-	    	position.x = (x-moi->x - y+moi->y) * 34 + 866;
-			position.y = (x-moi->x + y-moi->y) * 17 + 450 - ground_altitude[x + y * max_x] + moi->altitude*38;
-			position.w = 68;
-			position.h = 34;
-			SDL_RenderCopy(renderer, ground_texture[x + y * max_x], NULL, &position);
-			position.y += 17;
-			position.w = 68;
-			position.h = 89;
-			SDL_RenderCopy(renderer, img->t->w1, NULL, &position);
+    if (moi->inside != -1)
+        return;
+
+    /* --- Fenêtre de rendu --- */
+    int start_x = (int)floor(moi->x) - 24;
+    int start_y = (int)floor(moi->y) - 24;
+    int end_x   = (int)floor(moi->x) + 24;
+    int end_y   = (int)floor(moi->y) + 24;
+
+    if (start_x < 0) start_x = 0;
+    if (start_y < 0) start_y = 0;
+    if (end_x > max_x) end_x = max_x;
+    if (end_y > max_y) end_y = max_y;
+
+    struct to_disp *parcour = list_disp;
+
+    /* Avance jusqu’au premier objet visible */
+        while (parcour && (((int)parcour->x - moi->x) * ((int)parcour->x - moi->x) + ((int)parcour->y - moi->y) * ((int)parcour->y - moi->y) > 441))
+            parcour = parcour->next;
+
+    int ii = 0;
+    SDL_Rect position;
+
+    for (int y = start_y; y < end_y; y++)
+    {
+        for (int x = start_x; x < end_x; x++)
+        {
+            float dx = x - moi->x;
+            float dy = y - moi->y;
+
+            if (dx*dx + dy*dy > 441)
+            {
+                ii++;
+                continue;
+            }
+
+            position.x = (dx - dy) * 34 + 866;
+            position.y = (dx + dy) * 17
+                       + 450
+                       - ground_altitude[ii]
+                       + moi->altitude * 38;
+
+            position.w = 68;
+            position.h = 34;
+
+            SDL_RenderCopy(renderer, ground_texture[ii], NULL, &position);
+
+            position.y += 17;
+            position.h = 89;
+            SDL_RenderCopy(renderer, img->t->w1, NULL, &position);
+
+            /* --- Objets / personnages --- */
+            while (parcour &&
+                   (int)parcour->x == x &&
+                   (int)parcour->y == y)
+            {
+                SDL_QueryTexture(parcour->img, NULL, NULL,
+                                 &position.w, &position.h);
+
+                position.x = (parcour->x - moi->x - parcour->y + moi->y) * 34
+                           + parcour->offset_x
+                           - position.w / 2;
+
+                position.y = (parcour->x - moi->x + parcour->y - moi->y) * 17
+                           + parcour->offset_y
+                           - position.h
+                           - ground_altitude[ii]
+                           + moi->altitude * 38;
+
+                if (parcour->p && parcour->p->inside == -1)
+                {
+                    parcour->p->screenx = position.x;
+                    parcour->p->screeny = position.y;
+                    parcour->p->sizescreenx = position.w;
+                    parcour->p->sizescreeny = position.h;
+                }
+
+                SDL_RenderCopy(renderer, parcour->img, NULL, &position);
+
+                parcour = parcour->next;
+                while (parcour &&
+                      (((int)parcour->x - moi->x) * ((int)parcour->x - moi->x) +
+                       ((int)parcour->y - moi->y) * ((int)parcour->y - moi->y) > 441))
+                    parcour = parcour->next;
+            }
+
+            ii++;
+        }
+    }
+}
+
+		
+	    
 				
 				
 				//if (ground_altitude[x + y * max_x] > 5)
@@ -69,23 +136,13 @@ void display_ground(int x, int y, int xto, int yto)
 				//	}
 				//}
 			//}
-		}
 		
 	
 
-		x += 1;
-		if (x == max_x)
-		{
-			y += 1;
-			x = 0;
-		}
-	}
-}
 
 
 void display_all(void)
-{
-	//bubble_sort_perso();
+{/*
 	SDL_Rect position;
 	int yfrom = 0;
     int xfrom = -1;
@@ -126,6 +183,6 @@ void display_all(void)
 
 	}
 	if (moi->inside == -1)
-		display_ground(xfrom, yfrom, max_x-1, max_y-1);
+		display_ground(xfrom, yfrom, max_x-1, max_y-1);*/
 	
 }

@@ -73,9 +73,9 @@ void craft_menu(void)
         drawTextInfo(renderer, &main_menu->menuCraft->result_craft); 
         if (lettres->keystates[SDL_SCANCODE_O])
         {
-            sprintf (ordre + strlen(ordre), "%d 16 9 wooden-board ", moi->id);
+            sprintf (ordre + strlen(ordre), "0 %d 16 9 wooden-board ", moi->id);
             //Tester au maximum les 9 carrés possibles qui peuvent contenir (x, y)
-            add_wood_pillar_or_wood_house(moix,moiy);
+            printf ("todo %s %d %d\n", "add_wood_pillar_or_wood_house(", moix,moiy);
         }
     }   
 }

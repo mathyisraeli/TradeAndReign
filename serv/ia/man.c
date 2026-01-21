@@ -41,22 +41,30 @@ void eat(struct personnages *perso)
     {
         if (strcmp(p->nom, "fruit") == 0)
         {
-            sprintf(ordre+strlen(ordre), "%d 16 1 fruit %d 07 %d ", perso->id, perso->id, FOOD_VALUE_FRUIT);
+            remove_from_inventory("fruit", perso->i_list, 1);
+            perso->faim += FOOD_VALUE_FRUIT;
+            perso->a_bouger += 1;
             return;
         }
         else if (strcmp(p->nom, "vegetable") == 0)
         {
-            sprintf(ordre+strlen(ordre), "%d 16 1 vegetable %d 07 %d ", perso->id, perso->id, FOOD_VALUE_VEGETABLE);
+            remove_from_inventory("vegetable", perso->i_list, 1);
+            perso->faim += FOOD_VALUE_VEGETABLE;
+            perso->a_bouger += 1;
             return;
         }
         else if (strcmp(p->nom, "meat") == 0)
         {
-            sprintf(ordre+strlen(ordre), "%d 16 1 meat %d 07 %d ", perso->id, perso->id, FOOD_VALUE_MEAT);
+            remove_from_inventory("meat", perso->i_list, 1);
+            perso->faim += FOOD_VALUE_MEAT;
+            perso->a_bouger += 1;
             return;
         }
         else if (strcmp(p->nom, "spice") == 0)
         {
-            sprintf(ordre+strlen(ordre), "%d 16 1 spice %d 07 %d ", perso->id, perso->id, FOOD_VALUE_SPICE);
+            remove_from_inventory("spice", perso->i_list, 1);
+            perso->faim += FOOD_VALUE_SPICE;
+            perso->a_bouger += 1;
             return;
         }
     }
@@ -68,7 +76,7 @@ int avverage_alt(struct personnages *p)
     int sum = 0;
     for (int i = 0; i < house2[0][0]; i++)
         for (int j = 0; j < house2[0][1]; j++)
-            sum += ground_altitude [i * max_x + j - p->house_id];
+            sum += altitude(i * max_x + j - p->house_id);
     return sum / (house2[0][0] * house2[0][1]);
 }
 
@@ -95,7 +103,7 @@ char check_watter_house(struct personnages *p)
 {
     for (int i = 0; i < house2[0][0]; i++)
         for (int j = 0; j < house2[0][1]; j++)
-            if (ground_texture[i * max_x + j - p->house_id] == img->t->ea1 || ground_texture[i * max_x + j - p->house_id] == img->t->ea2 || ground_texture[i * max_x + j - p->house_id] == img->t->ea3)
+            if (ground[i * max_x + j - p->house_id]->texture == ea1 || ground[i * max_x + j - p->house_id]->texture == ea2 || ground[i * max_x + j - p->house_id]->texture == ea3)
                 return 1;
     return 0;
 }
@@ -128,12 +136,16 @@ void put_ground(struct personnages *p)
 {
     if (exist_in_linked_item(p->i_list, "herbe") != NULL)
     {
-        sprintf(ordre+strlen(ordre), "%d 16 1 herbe %d 13 %d he1 ", p->id, p->id, (int)p->x + (int)p->y*max_x);
+        remove_from_inventory("herbe", p->i_list, 1);
+        add_1_pixel((int)p->x + (int)p->y*max_x, he1);
+        p->a_bouger += 1;
         return;
     }
     if (exist_in_linked_item(p->i_list, "sable") != NULL)
     {
-        sprintf(ordre+strlen(ordre), "%d 16 1 sable %d 13 %d sa1 ", p->id, p->id, (int)p->x + (int)p->y*max_x);
+        remove_from_inventory("sable", p->i_list, 1);
+        add_1_pixel((int)p->x + (int)p->y*max_x, sa1);
+        p->a_bouger += 1;
         return ;
     }
 }
@@ -141,23 +153,23 @@ void put_ground(struct personnages *p)
 int find_extreme_altitude_house(struct personnages *p, int *lowgo, int *highgo)
 {
     p = p;
-    int lowest = ground_altitude[-p->house_id];
-    int highest = ground_altitude[-p->house_id];
+    int lowest = altitude(-p->house_id);
+    int highest = altitude(-p->house_id);
     *lowgo = -p->house_id;
     *highgo =  -p->house_id;
     for (int i = 1; i < house2[0][0]+1; i++)
     {
         for (int j = 0; j < house2[0][1]; j++)
         {
-            if (lowest >= ground_altitude[-p->house_id+(i-1)*max_x + j])
+            if (lowest >= altitude(-p->house_id+(i-1)*max_x + j))
             {
                 *lowgo = -p->house_id+(i-1)*max_x + j;
-                lowest = ground_altitude[-p->house_id+(i-1)*max_x + j];
+                lowest = altitude(-p->house_id+(i-1)*max_x + j);
             }
-            else if (ground_altitude[-p->house_id+(i-1)*max_x + j] >= highest)
+            else if (altitude(-p->house_id+(i-1)*max_x + j) >= highest)
             {
                 *highgo = -p->house_id+(i-1)*max_x + j;
-                highest = ground_altitude[-p->house_id+(i-1)*max_x + j];
+                highest = altitude(-p->house_id+(i-1)*max_x + j);
             }
         }
     }
@@ -239,7 +251,7 @@ int find_where_to_build(struct personnages *p)
             if (house2[i][j] == 1)
             {
                 int coo = -p->house_id + (i - 1) * max_x + j;
-                if (building_id[coo] == -1 || strcmp(find_building_by_id(building_id[coo])->skin, "141") != 0)
+                if (building_id[coo] == -1 || strcmp(get_ptr_from_id_building(building_id[coo])->skin, "141") != 0)
                     return coo;
             }
         }
@@ -272,7 +284,7 @@ char check_if_surface_is_flat(struct personnages *p, int coo)
     p = p;
     for (int i = 1; i < house2[0][0]+1; i++)
         for (int j = 0; j < house2[0][1]; j++)
-            if (ground_altitude[coo + (i-1)*max_x + j] != ground_altitude[coo])
+            if (altitude(coo + (i-1)*max_x + j) != altitude(coo))
                 return 0;
     return 1;
 }
@@ -280,44 +292,61 @@ char check_if_surface_is_flat(struct personnages *p, int coo)
 
 void ia_man(struct personnages *p)
 {
+    printf ("%s %d\n", p->nom, p->id);
     if (p->faim < 0)
-        sprintf (ordre + strlen(ordre), "%d 00 -1 ", p->id);
-    
+    {
+        p->pv -= 1;
+        p->a_bouger = 1;
+    }
+    if (p->speak_timer > 0)
+        p->speak_timer --;
     if (p->animation_2 > 0)
 	{
 		if (p->animation >= 3)
-			sprintf (ordre + strlen(ordre), "%d 22 0 %d 21 0 ", p->id, p->id);
+        {
+			p->animation_2 = 0;
+            p->animation = 0;
+            p->a_bouger = 1;
+        }
 		else
-			sprintf(ordre + strlen(ordre), "%d 21 %d ",p->id, p->animation +1 );
+        {
+            p->animation += 1;
+        }
         return;
 	}
 
     if (how_much_food(p->i_list) <= 1000)
     {
 
-        struct personnages *a_tree = NULL;
+        int a_tree = -1;
         float mindist = 99999;
-        for (struct linked_list *parcour = list; parcour != NULL; parcour = parcour->next)
+        for (int i = 0; i <= list.maxid; i++)
         {
-            if (strcmp(parcour->p->skin, "01") == 0 && (parcour->p->x - p->x)*(parcour->p->x - p->x) + (parcour->p->y - p->y) * (parcour->p->y - p->y) < 4 && exist_in_linked_item(parcour->p->i_list, "fruit") != NULL)
+            if (list.data[i].is_active == 0)
+                continue;
+            if (strcmp(list.data[i].skin, "01") == 0 && (list.data[i].x - p->x)*(list.data[i].x - p->x) + (list.data[i].y - p->y) * (list.data[i].y - p->y) < 4 && exist_in_linked_item(list.data[i].i_list, "fruit") != NULL)
             {
-                a_tree = parcour->p;
+                a_tree = i;
                 break;
             }
         }
-        if (a_tree == NULL)
+        if (a_tree == -1)
         {
-            for (struct linked_list *parcour = list; parcour != NULL; parcour = parcour->next)
+            for (int i = 0; i <= list.maxid; i++)
             {
-                if (strcmp(parcour->p->skin, "01") == 0 && (parcour->p->x - p->x)*(parcour->p->x - p->x) + (parcour->p->y - p->y) * (parcour->p->y - p->y) < mindist && exist_in_linked_item(parcour->p->i_list, "fruit") != NULL)
+                if (list.data[i].is_active == 0)
+                    continue;
+                if (strcmp(list.data[i].skin, "01") == 0 && (list.data[i].x - p->x)*(list.data[i].x - p->x) + (list.data[i].y - p->y) * (list.data[i].y - p->y) < mindist && exist_in_linked_item(list.data[i].i_list, "fruit") != NULL)
                 {
-                    a_tree = parcour->p;
-                    mindist = (parcour->p->x - p->x)*(parcour->p->x - p->x) + (parcour->p->y - p->y) * (parcour->p->y - p->y);
+                    a_tree = i;
+                    mindist = (list.data[i].x - p->x)*(list.data[i].x - p->x) + (list.data[i].y - p->y) * (list.data[i].y - p->y);
                 }
             }
-            if (a_tree != NULL)
+            if (a_tree != -1)
             {
-                sprintf(ordre + strlen(ordre), "%d 03 %f %d 04 %f ", p->id, a_tree->x+1, p->id, a_tree->y);
+                p->ordrex = list.data[a_tree].x+1;
+                p->ordrey = list.data[a_tree].y;
+                p->a_bouger = 1;
             }
         }
         else
@@ -325,7 +354,13 @@ void ia_man(struct personnages *p)
             if (can_add("wooden-board", 1, p->i_list) == 0)
                 put_ground(p);
             else
-                sprintf(ordre + strlen(ordre), "%d 16 1 fruit %d 16 +1 fruit ", a_tree->id, p->id);
+            {
+                append_in_inventory("fruit", p->i_list, 1);
+                remove_from_inventory("fruit", list.data[a_tree].i_list, 1);
+                p->a_bouger = 1;
+                list.data[a_tree].a_bouger = 1; 
+
+            }
         }
     }
     else
@@ -339,7 +374,10 @@ void ia_man(struct personnages *p)
         {
             if (pow(p->ordrex - p->x,2) +  pow(p->ordrey - p->y,2) < p->vitesse_dep )
             {
-                sprintf (ordre + strlen(ordre), "%d 03 -1 %d 01 %f %d 02 %f ", p->id, p->id, p->ordrex, p->id, p->ordrey);
+                p->ordrex = -1;
+                p->x = p->ordrex;
+                p->y = p->ordrey;
+                p->a_bouger = 1;
                 p->chemin_is_set = 0;
             }
             else if (p->chemin_is_set == 1 || findpath(p) == 1)
@@ -348,37 +386,65 @@ void ia_man(struct personnages *p)
                 int dst = p->chemin[src].prev;
 
                 if (src + 1 == dst)
-                    sprintf (ordre + strlen(ordre), "%d 01 +%f %d 05 f %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
+                {
+                    p->x += p->vitesse_dep;
+                    p->angle = 'f';
+                }
                 else if (src - 1 == dst)
-                    sprintf (ordre + strlen(ordre), "%d 01 -%f %d 05 b %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5); 
+                {
+                    p->x -= p->vitesse_dep;
+                    p->angle = 'b';
+                }
                 else if (src - max_x == dst)
-                    sprintf (ordre + strlen(ordre), "%d 02 -%f %d 05 d %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
+                {
+                    p->y -= p->vitesse_dep;
+                    p->angle = 'd';
+                }
                 else if (src + max_x == dst)
-                    sprintf (ordre + strlen(ordre), "%d 02 +%f %d 05 h %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
+                {
+                    p->y += p->vitesse_dep;
+                    p->angle = 'd';
+                }
                 else if (src + 1 + max_x == dst)
-                    sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 05 g %d 21 %d ", p->id, p->vitesse_dep*0.707, p->id,p->vitesse_dep*0.707, p->id, p->id, (p->animation+1)%5);
+                {
+                    p->y += p->vitesse_dep*0.707;
+                    p->angle = 'd';
+                    p->x += p->vitesse_dep*0.707;
+                }
                 else if (src + 1 - max_x == dst)
-                    sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 -%f %d 05 e %d 21 %d ", p->id, p->vitesse_dep*0.707, p->id,p->vitesse_dep*0.707, p->id, p->id, (p->animation+1)%5);
+                {
+                    p->y -= p->vitesse_dep*0.707;
+                    p->angle = 'd';
+                    p->x += p->vitesse_dep*0.707;
+                }
                 else if (src - 1 + max_x == dst)
-                    sprintf (ordre + strlen(ordre), "%d 01 -%f %d 02 +%f %d 05 a %d 21 %d ", p->id, p->vitesse_dep*0.707, p->id,p->vitesse_dep*0.707, p->id, p->id, (p->animation+1)%5);
+                {
+                    p->y += p->vitesse_dep*0.707;
+                    p->angle = 'd';
+                    p->x -= p->vitesse_dep*0.707;
+                }
                 else if (src -1 - max_x == dst)
-                    sprintf (ordre + strlen(ordre), "%d 01 -%f %d 02 -%f %d 05 c %d 21 %d ", p->id, p->vitesse_dep*0.707, p->id,p->vitesse_dep*0.707, p->id, p->id, (p->animation+1)%5);
-                else
+                {
+                    p->y -= p->vitesse_dep*0.707;
+                    p->angle = 'd';
+                    p->x -= p->vitesse_dep*0.707;
+                }
+                /*else
                 {
                     if (p->ordrex > p->x)
-                        sprintf (ordre + strlen(ordre), "%d 01 +%f %d 05 f %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
+                        sprintf(ordre + strlen(ordre), "0 %d 01 +%f 0 %d 05 f 0 %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
                     else if (p->ordrex < p->x)
-                        sprintf (ordre + strlen(ordre), "%d 01 -%f %d 05 b %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
+                        sprintf(ordre + strlen(ordre), "0 %d 01 -%f 0 %d 05 b 0 %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
                     if (p->ordrey > p->y)
-                        sprintf (ordre + strlen(ordre), "%d 02 +%f %d 05 h %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
+                        sprintf(ordre + strlen(ordre), "0 %d 02 +%f 0 %d 05 h 0 %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
                     else if (p->ordrey < p->y)
-                        sprintf (ordre + strlen(ordre), "%d 02 -%f %d 05 d %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
-                    }
-
+                        sprintf(ordre + strlen(ordre), "0 %d 02 -%f 0 %d 05 d 0 %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
+                }*/
+                p->a_bouger = 1;
             }
             else
             {
-                sprintf (ordre + strlen(ordre), "%d 03 -1 ", p->id);
+                p->ordrex = -1;
                 p->chemin_is_set = 0;
             }
         }
@@ -391,7 +457,7 @@ void ia_man(struct personnages *p)
                 struct personnages *ee = find_perso_by_name(e->nom);
                 if (ee == NULL)
                 {
-                    sprintf(ordre + strlen(ordre), "%d 15 %s ", p->id, e->nom);
+                    remove_enemie(e->nom, p->e_list);
                 }
                 else
                 {
@@ -406,10 +472,18 @@ void ia_man(struct personnages *p)
             if (closest != NULL)
             {
                 if (mind < p->porte_dom*p->porte_dom)
-                    sprintf (ordre + strlen(ordre), "%d 22 1 %d 21 0 %d 00 -%d ", p->id, p->id, closest->id, p->dom);
+                {
+                    p->animation = 1;
+                    p->animation_2 = 0;
+                    closest->pv -= p->dom;
+                    closest->a_bouger = 1;
+                    p->a_bouger = 1;
+                }
                 else
-                    sprintf (ordre + strlen(ordre), "%d 03 %f %d 04 %f ", p->id, closest->x, p->id, closest->y);
-                    
+                {
+                    p->ordrex = closest->x;
+                    p->ordrey = closest->y;
+                }                    
             }
             else if (p->house_id < 0) // i dont have a house
             {
@@ -419,12 +493,12 @@ void ia_man(struct personnages *p)
                     if (parcour->skin[1] == '1' && (parcour->x - p->x)*(parcour->x - p->x) + (parcour->y - p->y) * (parcour->y - p->y) < 400) // there is a house in his field of view
                     {
                         char nobody = 1;
-                        for (struct linked_list *pa = list; pa != NULL; pa = pa->next)
+                        for (int i = 0; i <= list.maxid; i++)
                         {
-                            if (pa->p->house_id == parcour->id)
+                            if (list.data[i].is_active == 1 && list.data[i].house_id == parcour->id)
                             {
-                                pa = NULL;
                                 nobody = 0;
+                                break;
                             }
                         }
                         if (nobody == 1)
@@ -436,7 +510,7 @@ void ia_man(struct personnages *p)
                 }
                 if (a_house != NULL)
                 {
-                    sprintf (ordre + strlen(ordre), "%d 32 %d ",p->id, a_house->id);
+                    p->house_id = a_house->id;
                 }
                 else // i should build a house
                 {
@@ -449,39 +523,53 @@ void ia_man(struct personnages *p)
                         {
                             if (strcmp(parcour->skin, "141") == 0 && (parcour->x - p->x)*(parcour->x - p->x) + (parcour->y - p->y) * (parcour->y - p->y) < 400)
                             {
-                                sprintf (ordre + strlen(ordre), "%d 32 -%d ",p->id, parcour->x + parcour->y * max_x);
+                                sprintf(ordre + strlen(ordre), "0 %d 32 -%d ",p->id, parcour->x + parcour->y * max_x);
                                 break;
                             }
                         }*/
                         if (moix > 0 && building_id[moix - 1 + moiy * max_x] == -1 && check_can_build(p,moix - 1, moiy))
-                            sprintf(ordre + strlen(ordre), "%d 32 -%d ", p->id, moix-1 + moiy * max_x);
+                            p->house_id = -(moix-1 + moiy * max_x);
                         else if (moix < max_x - 1 && building_id[moix + 1 + moiy * max_x] == -1 && check_can_build(p,moix + 1, moiy))
-                            sprintf(ordre + strlen(ordre), "%d 32 -%d ", p->id, moix+1 + moiy * max_x);
+                            p->house_id = -(moix+1 + moiy * max_x);
                         else if (moiy > 0 && building_id[moix - max_x + moiy * max_x] == -1 && check_can_build(p,moix, moiy-1))
-                            sprintf(ordre + strlen(ordre), "%d 32 -%d ", p->id, moix-max_x + moiy * max_x);
+                            p->house_id = -(moix-max_x + moiy * max_x);
                         else if (moiy < max_y - 1 && building_id[moix + max_x + moiy * max_x] == -1 && check_can_build(p,moix, moiy+1))
-                            sprintf(ordre + strlen(ordre), "%d 32 -%d ", p->id, moix+max_x + moiy * max_x);
+                            p->house_id = -(moix+max_x + moiy * max_x);
                     }
                     else 
                     {
                         int highgo;
                         int lowgo;
                         find_extreme_altitude_house(p, &lowgo, &highgo);
-                        if (ground_altitude[highgo] != ground_altitude[lowgo])
+                        if (altitude(highgo) != altitude(lowgo))
                         {
                             int av = avverage_alt(p);
-                            if (ground_altitude[whereiam] > av && 10 > n_item(p->i_list))
+                            if (altitude(whereiam) > av && 10 > n_item(p->i_list))
                             {
-                                SDL_Texture *t = ground_texture[whereiam];
-                                if (t == img->t->he1 || t == img->t->he2 || t == img->t->he3 || t == img->t->he4 || t == img->t->he5)
-                                    sprintf (ordre + strlen(ordre), "%d 16 +1 herbe %d 08 %d %d 22 2 %d 21 0 ", p->id, p->id, moix + (moiy)*max_x, p->id, p->id);
-                                else if (t == img->t->sa1 || t == img->t->sa2 || t == img->t->sa3)
-                                    sprintf (ordre + strlen(ordre), "%d 16 +1 sable %d 08 %d %d 22 2 %d 21 0 ", p->id, p->id, moix + (moiy)*max_x, p->id, p->id);
-                                else if (t == img->t->ne1 || t == img->t->ne2 || t == img->t->ne3)
-                                    sprintf (ordre + strlen(ordre), "%d 08 %d %d 13 %d ea1 ", p->id, moix + (moiy)*max_x, p->id, moix + (moiy)*max_x); 
+                                if (ground[whereiam]->texture == he1 || ground[whereiam]->texture == he2 || ground[whereiam]->texture == he3 || ground[whereiam]->texture == he4 || ground[whereiam]->texture == he5)
+                                {
+                                    append_in_inventory("herbe", p->i_list, 1);
+                                    remove_1_pixel(moix + (moiy)*max_x);
+                                    p->animation_2 = 2;
+                                    p->animation = 0;
+                                    p->a_bouger = 1;
+                                }
+                                else if (ground[whereiam]->texture == sa1 || ground[whereiam]->texture == sa2 || ground[whereiam]->texture == sa3)
+                                {
+                                    append_in_inventory("sable", p->i_list, 1);
+                                    remove_1_pixel(moix + (moiy)*max_x);
+                                    p->animation_2 = 2;
+                                    p->animation = 0;
+                                    p->a_bouger = 1;
+                                }
+                                else if (ground[whereiam]->texture == ne1 || ground[whereiam]->texture == ne2 || ground[whereiam]->texture == ne3)
+                                {    
+                                    remove_1_pixel(moix + (moiy)*max_x);
+                                    add_1_pixel(ea1, moix + (moiy)*max_x);
+                                }
                             }
                             
-                            else if (av > ground_altitude[whereiam] && have_ground_in_inventory(p->i_list))
+                            else if (av > altitude(whereiam) && have_ground_in_inventory(p->i_list))
                             {
                                 put_ground(p);
                             }
@@ -490,15 +578,18 @@ void ia_man(struct personnages *p)
                                 if (whereiam == lowgo)
                                     put_ground(p);
                                 else
-                                    sprintf(ordre + strlen(ordre), "%d 03 %f %d 04 %f ", p->id, (lowgo%max_x)+0.5, p->id, (lowgo/max_x)+0.5);
+                                {
+                                    p->ordrex = (lowgo%max_x)+0.5;
+                                    p->ordrey = (lowgo/max_x)+0.5;
+                                }
                             }
                             else
                             {
                                 int wheretogo = findnext(p);
                                 int togox = wheretogo%max_x;
                                 int togoy = wheretogo/max_x;
-                                //printf ("%d %d %d\n%d %d %d\n%d %d %d\n_____\n", ground_altitude[-p->house_id], ground_altitude[-p->house_id+1],ground_altitude[-p->house_id+2],ground_altitude[-p->house_id+max_x], ground_altitude[-p->house_id+1+max_x], ground_altitude[-p->house_id+2+max_x],ground_altitude[-p->house_id+2*max_x], ground_altitude[-p->house_id+2*max_x+1],ground_altitude[-p->house_id+2*max_x+2]);
-                                sprintf(ordre + strlen(ordre), "%d 03 %f %d 04 %f ", p->id, togox+0.5, p->id, togoy+0.5);
+                                p->ordrex = togox+0.5;
+                                p->ordrey = togoy+0.5;
                             }
                         }
                         else
@@ -511,36 +602,39 @@ void ia_man(struct personnages *p)
                                 if ((p->x - bx)*(p->x - bx) + (p->y - by) * (p->y - by) < 4)
                                 {
                                     add_wood_pillar_or_wood_house(bx, by);
-                                    sprintf (ordre + strlen(ordre), "%d 16 9 wooden-board ", p->id);
+                                    remove_from_inventory("wooden-board", p->i_list, 9);
+                                    p->a_bouger = 1;
                                 }
                                 else if (can_walk_near_this_place(p, coo) != 1)
                                     printf ("can't aproach house");
                             }
                             else
                             {
-                                struct personnages *a_tree = NULL;
+                                int a_tree = -1;
                                 float mindist = 99999;
-                                for (struct linked_list *parcour = list; parcour != NULL; parcour = parcour->next)
+                                for (int i = 0; i <= list.maxid; i++)
                                 {
-                                    if (strcmp(parcour->p->skin, "01") == 0 && (parcour->p->x - p->x)*(parcour->p->x - p->x) + (parcour->p->y - p->y) * (parcour->p->y - p->y) < 4)
+                                    if (list.data[i].is_active == 1 && strcmp(list.data[i].skin, "01") == 0 && (list.data[i].x - p->x)*(list.data[i].x - p->x) + (list.data[i].y - p->y) * (list.data[i].y - p->y) < 4)
                                     {
-                                        a_tree = parcour->p;
+                                        a_tree = i;
                                         break;
                                     }
                                 }
-                                if (a_tree == NULL)
+                                if (a_tree == -1)
                                 {
-                                    for (struct linked_list *parcour = list; parcour != NULL; parcour = parcour->next)
+                                    for (int i = 0; i <= list.maxid; i++)
                                     {
-                                        if (strcmp(parcour->p->skin, "01") == 0 && (parcour->p->x - p->x)*(parcour->p->x - p->x) + (parcour->p->y - p->y) * (parcour->p->y - p->y) < mindist)
+                                        if (list.data[i].is_active == 1  && strcmp(list.data[i].skin, "01") == 0 && (list.data[i].x - p->x)*(list.data[i].x - p->x) + (list.data[i].y - p->y) * (list.data[i].y - p->y) < mindist)
                                         {
-                                            a_tree = parcour->p;
-                                            mindist = (parcour->p->x - p->x)*(parcour->p->x - p->x) + (parcour->p->y - p->y) * (parcour->p->y - p->y);
+                                            a_tree = i;
+                                            mindist = (list.data[i].x - p->x)*(list.data[i].x - p->x) + (list.data[i].y - p->y) * (list.data[i].y - p->y);
                                         }
                                     }
-                                    if (a_tree != NULL)
+                                    if (a_tree != -1)
                                     {
-                                        sprintf(ordre + strlen(ordre), "%d 03 %f %d 04 %f ", p->id, a_tree->x+1, p->id, a_tree->y);
+                                        p->ordrex = list.data[a_tree].x+1;
+                                        p->ordrey = list.data[a_tree].y;
+                                        p->is_active = 1;
                                     }
                                 }
                                 else
@@ -554,15 +648,28 @@ void ia_man(struct personnages *p)
                                     }
                                     else
                                     {
-                                        if (n_item(a_tree->i_list) > 0)
-                                            sprintf(ordre + strlen(ordre), "%d 16 1 fruit %d 16 +1 fruit ", a_tree->id, p->id);
+                                        if (exist_in_linked_item(list.data[a_tree].i_list, "fruit") != NULL)
+                                        {
+                                            remove_from_inventory("fruit", list.data[a_tree].i_list, 1);
+                                            append_in_inventory("fruit", p->i_list, 1);
+                                            p->a_bouger = 1;
+                                            list.data[a_tree].a_bouger = 1;
+                                        }
                                         else
                                         {
-                                            sprintf (ordre + strlen(ordre), "%d 22 1 %d 21 0 ", p->id, p->id);
-                                            if (a_tree->pv -  p->dom >= 4)
-                                                sprintf(ordre + strlen(ordre), "%d 00 -%d ", a_tree->id, p->dom);
+                                            p->animation_2 = 1;
+                                            p->animation = 0;
+                                            p->a_bouger = 1;
+                                            list.data[a_tree].a_bouger = 1; 
+                                            if (list.data[a_tree].pv -  p->dom >= 4)
+                                                list.data[a_tree].pv -= p->dom;
+                                            else if (list.data[a_tree].pv > 4)
+                                                list.data[a_tree].pv = 4;
                                             else if (can_add("wooden-board", 1, p->i_list) == 1)
-                                                sprintf(ordre + strlen(ordre), "%d 00 -1 %d 16 +1 wooden-board ", a_tree->id, p->id);
+                                            {
+                                                list.data[a_tree].pv -= 1;
+                                                append_in_inventory("wooden-board", p->i_list, 1);
+                                            }
                                         }
                                     }
                                 }
@@ -573,19 +680,26 @@ void ia_man(struct personnages *p)
             }
             else 
             {
-                if (find_building_by_id(p->house_id) == NULL)
-                    sprintf (ordre + strlen(ordre), "%d 32 -1 ",p->id);
+                if (get_ptr_from_id_building(p->house_id) == NULL)
+                {
+                    p->house_id = -1;
+                    p->a_bouger = 1;
+                }
             }
         }
     }
     if (strcmp(p->echange_player, "none") != 0)
     {
-        sprintf (ordre + strlen(ordre), "%d 20 votre proposition est ininteressante\037 %d 17 none none 0 none 0 ", p->id, p->id);
+        sprintf(p->speak, "votre proposition est ininteressante");
+        sprintf(p->item1, "none");
+        sprintf(p->item2, "none");
         p->speak_timer = 1350;
+        p->a_bouger = 1;
     }
-
-    if (p->speak_timer > 0)
-        p->speak_timer --;
     else if (p->speak_timer <= 0 && p->speak[0] != 0)
-        sprintf (ordre + strlen(ordre), "%d 20 \037 ", p->id);
+    {
+        p->speak[0] = 0;
+        p->a_bouger = 1;
+    }    
+    
 }

@@ -6,4 +6,3 @@
 #include "ship.h"
 
 void ia(void);
-void my_computer_work(struct personnages *moi);
