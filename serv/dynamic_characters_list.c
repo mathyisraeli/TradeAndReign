@@ -7,14 +7,15 @@ int append_perso(char *line, char *skin ,int id)
         list.capacity *= 2;
         list.data = realloc(list.data, list.capacity * sizeof(struct personnages));
     }
-    int ret = parse_new(&list.data[id], line, skin, id);
     list.data[id].online = '0';
     list.data[id].e_list = NULL;
-    list.data[id].i_list = NULL;
     list.data[id].is_active = 1;
+    int ret = parse_new(&list.data[id], line, skin);
 
     if (id > list.maxid)
         list.maxid = id;
+    if (skin[0] == '0' && skin[1] == 0)
+        list.data[id].chemin = malloc(sizeof(struct path)*max_x*max_y);
     //printf ("%d %d\n", id, list.maxid);
     return ret;
 }
@@ -29,7 +30,6 @@ int append_empty_perso(void)
     }
     list.data[id].online = '0';
     list.data[id].e_list = NULL;
-    list.data[id].i_list = NULL;
     list.data[id].is_active = 1;
     return id;
 }
@@ -61,8 +61,22 @@ void init_map(void)
     FILE *acount = fopen("map.txt", "r+");
     char line[500];
     size_t len = 500;
+    char skin[5];
+    int id;
     while (fgets(line, len, acount))
     {
-        parse_order(line);
+        int i = 0;
+        while (line[i] != ' ')
+        {
+            skin[i] = line[i];
+            i++;
+        }
+        skin[i] = 0;
+        i++;
+        id = atoi(&line[i]);
+        while (line[i] != ' ')
+            i++;
+        if (skin[0] == '0')
+            append_perso(line + i + 1, skin, id);
     }
 }

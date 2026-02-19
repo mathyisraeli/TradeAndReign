@@ -16,6 +16,6 @@
 void menu_trade(void);
 void accept_trade(void);
 int min(int a, int b);
-void echange_item(struct personnages *perso1, struct personnages *perso2);
+void echange_item_net(struct personnages *perso1, struct personnages *perso2);
 
 #endif /* TRADE_MENU_H */

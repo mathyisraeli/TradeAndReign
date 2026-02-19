@@ -12,58 +12,44 @@
 
 struct personnages
 {
-    char skin[4];
-    int id;
-    int pv; 
-    char nom_de_compte[50];
-    float x;
-    float y;
-    float altitude;
-    float ordrex;
-    float ordrey;
-    char angle;
-    int timer_dom;
-    int faim;
-    int inside;
-    char nom[50];
-    char nom_superieur[50];
-    char titre[50];
-    char religion[50];
-    int nb_vassaux;
-    struct linked_enemie *e_list;
-    struct linked_item *i_list;
-    char echange_player[50];
-    char item1[50];
-    int count_item1;
-    char item2[50];
-    int count_item2;
-    char speak[90];
-    int animation; // gestion frame
-    int animation_2; // ce qu'il est en train de faire
-    char left_hand[50];
-    char right_hand[50];
-    char headgear[50];
-    char tunic[50];
-    char pant[50];
-    char shoes[50];
-    char skill[62];
-    int house_id;
-    char physique[6]; // sexe/taille/couleur_de_peau/couleur_de_cheuveu/coifure
-    ///////////////////////////////////////
-    float screenx;
-    float screeny;
-    float sizescreenx;
-    float sizescreeny;
-    char animation_time;
-    int speak_timer;
-    int faim_time; 
-    int max_pv;
-    int vitesse_dom;
-    float vitesse_dep;
-    int porte_dom;
-    int dom;
-    int poid;
-    char eau; //O si terrestre 1 si aquatique 2 si les deux
+    int id;                         // 1
+    int pv;                         // 2
+    int timer_dom;                  // local
+    int speak_timer;                 // local
+    int nb_vassaux;                 // 3
+    int faim;                       // 4
+    int inside;                     // 5
+    int porte_dom;                  // local
+    int dom;                        // local
+    int poid;                       // local
+    int house_id;                   // 6
+    int animation;                  // 7
+    int animation_2;                // 8
+    int faim_time;                  // local
+    int max_pv;                     // local
+    int vitesse_dom;                // local
+    int items_cnt[12];              // 15 bis               10 premiers item // echange //
+    char angle;                     // 9
+    char skin[4];                   // 0
+    char physique[6];               // 10                  sexe/taille/couleur_de_peau/couleur_de_cheuveu/coifure
+    char nom_de_compte[50];         // 11
+    char nom[50];                   // 12
+    char nom_superieur[50];         // 13 
+    char echange_player[50];        // 14
+    char items[18][50];             // 15 bis               10 premiers item // echange //  left hand right hand headgear tunic pant shoes
+    char speak[90];                 // 23
+    char skill[62];                 // 22
+    float x;                        // 16
+    float y;                        // 17
+    float altitude;                 // 18
+    float ordrex;                   // 19
+    float ordrey;                   // 20
+    float screenx;                  // local
+    float screeny;                  // local
+    float sizescreenx;              // local
+    float sizescreeny;              // local
+    float vitesse_dep;              // local
+    struct linked_enemie *e_list;   // 21
 };
 
 struct linked_list

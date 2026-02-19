@@ -103,7 +103,7 @@ void remove_building_altitude(struct building *parcour)
     }
     else if (strcmp(parcour->skin, "131")  == 0)
     {
-        if (parcour->angle == 'a')
+        if (parcour->angle == 'd')
         {
             building_id[(int)(parcour->y+2) * max_x + (int)(parcour->x+1)] = -1;
             building_id[(int)(parcour->y+1) * max_x + (int)(parcour->x+1)] = -1;
@@ -143,7 +143,7 @@ void remove_building_altitude(struct building *parcour)
             building_id[(int)(parcour->y+4) * max_x + (int)(parcour->x)] = -1;
             building_id[(int)(parcour->y+3) * max_x + (int)(parcour->x-1)] = -1;
         }
-        else if (parcour->angle=='b')
+        else if (parcour->angle=='h')
         {
             building_id[(int)(parcour->y+3) * max_x + (int)(parcour->x+2)] = -1;
             building_id[(int)(parcour->y) * max_x + (int)(parcour->x+2)] = -1;
@@ -183,7 +183,7 @@ void remove_building_altitude(struct building *parcour)
             building_id[(int)(parcour->y-3) * max_x + (int)(parcour->x-1)] = -1;
             building_id[(int)(parcour->y-4) * max_x + (int)(parcour->x)] = -1;  
         }
-        else if (parcour->angle == 'k') // k
+        else if (parcour->angle == 'f') // k
         {
             building_id[(int)(parcour->y+1) * max_x + (int)(parcour->x-2)] = -1;
             building_id[(int)(parcour->y+1) * max_x + (int)(parcour->x-1)] = -1;
@@ -224,7 +224,7 @@ void remove_building_altitude(struct building *parcour)
             building_id[(int)(parcour->y+2) * max_x + (int)(parcour->x-2)] = -1;
 
         }
-        else if (parcour->angle == 'e') // e
+        else if (parcour->angle == 'b') // e
         {
             building_id[(int)(parcour->y+1) * max_x + (int)(parcour->x-3)] = -1;
             building_id[(int)(parcour->y+1) * max_x + (int)(parcour->x-2)] = -1;
@@ -344,7 +344,7 @@ void actualise_building_altitude(struct building *parcour)
     }
     else if (strcmp(parcour->skin, "131")  == 0)
     {
-        if (parcour->angle == 'a')
+        if (parcour->angle == 'd')
         {
             building_id[(int)(parcour->y+2) * max_x + (int)(parcour->x+1)] = parcour->id;
             building_id[(int)(parcour->y+1) * max_x + (int)(parcour->x+1)] = parcour->id;
@@ -384,7 +384,7 @@ void actualise_building_altitude(struct building *parcour)
             building_id[(int)(parcour->y+4) * max_x + (int)(parcour->x)] = parcour->id;
             building_id[(int)(parcour->y+3) * max_x + (int)(parcour->x-1)] = parcour->id;
         }
-        else if (parcour->angle=='b')
+        else if (parcour->angle=='h')
         {
             building_id[(int)(parcour->y+3) * max_x + (int)(parcour->x+2)] = parcour->id;
             building_id[(int)(parcour->y) * max_x + (int)(parcour->x+2)] = parcour->id;
@@ -424,7 +424,7 @@ void actualise_building_altitude(struct building *parcour)
             building_id[(int)(parcour->y-3) * max_x + (int)(parcour->x-1)] = parcour->id;
             building_id[(int)(parcour->y-4) * max_x + (int)(parcour->x)] = parcour->id;  
         }
-        else if (parcour->angle == 'k') // k
+        else if (parcour->angle == 'f') // k
         {
             building_id[(int)(parcour->y+1) * max_x + (int)(parcour->x-2)] = parcour->id;
             building_id[(int)(parcour->y+1) * max_x + (int)(parcour->x-1)] = parcour->id;
@@ -465,7 +465,7 @@ void actualise_building_altitude(struct building *parcour)
             building_id[(int)(parcour->y+2) * max_x + (int)(parcour->x-2)] = parcour->id;
 
         }
-        else if (parcour->angle == 'e') // e
+        else if (parcour->angle == 'b') 
         {
             building_id[(int)(parcour->y+1) * max_x + (int)(parcour->x-3)] = parcour->id;
             building_id[(int)(parcour->y+1) * max_x + (int)(parcour->x-2)] = parcour->id;

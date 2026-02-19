@@ -82,7 +82,6 @@ void recv_order(int socket)
 			if (yalist != NULL)
 			{
 				free_linked_enemie(yalist->e_list);
-				free_linked_item(yalist->i_list);
 				if (yalist == moi)
 				{
 					struct building *oldinside = find_building_by_id(moi->inside);

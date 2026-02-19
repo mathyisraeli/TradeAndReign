@@ -40,4 +40,5 @@ extern struct personnages *moi;
 extern int counter_use_item;
 extern uint8_t **building_altitude;
 extern int *building_id;
+extern int start_x; extern int start_y; extern int end_x; extern int end_y;
 #define order_size 2000

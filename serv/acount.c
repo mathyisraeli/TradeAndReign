@@ -25,7 +25,7 @@ struct personnages *have_char(char *name)
         return NULL;
     for (int i = 0; i <= list.maxid; i++)
     {
-        if (0 < list.data[i].pv) 
+        if (1 == list.data[i].is_active) 
             if (strncmp(list.data[i].nom_de_compte, name, espace-1) == 0)
                 return &list.data[i];
     }

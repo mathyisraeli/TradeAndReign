@@ -8,63 +8,63 @@ typedef struct {
 uint8_t house1[4][3] = {{3,3,0}, {1, 1, 1},{1, 1, 1},{1, 1, 1}};
 uint8_t house2[7][6] = {{6,6,0}, {1, 1, 1,1,1,1},{1, 0, 0,0,0,1},{1, 0, 0,0,0,1},{1, 0, 0,0,0,1},{1, 0, 0,0,0,1},{1, 1, 1,1,1,1}};
 
-char have_ground_in_inventory(struct linked_item *e)
+char have_ground_in_inventory(struct personnages *p)
 {
-    if (exist_in_linked_item(e, "herbe") != NULL)
+    if (find_index_in_inventory("herbe", p->items) != -1)
         return 1;
-    if (exist_in_linked_item(e, "sable") != NULL)
+    if (find_index_in_inventory("sable", p->items) != -1)
         return 1;
     return 0;
 
 }
 
-unsigned int how_much_food(struct linked_item *e)
+unsigned int how_much_food(struct personnages *p)
 {
     unsigned int ret = 0;
-    for (struct linked_item *p = e; p != NULL; p = p->next)
+    for (int i = 0; 10 > i; i++)
     {
-        if (strcmp(p->nom, "fruit") == 0)
-            ret += FOOD_VALUE_FRUIT * p->count;
-        else if (strcmp(p->nom, "vegetable") == 0)
-            ret += FOOD_VALUE_VEGETABLE * p->count;
-        else if (strcmp(p->nom, "meat") == 0)
-            ret += FOOD_VALUE_MEAT * p->count;
-        else if (strcmp(p->nom, "spice") == 0)
-            ret += FOOD_VALUE_SPICE * p->count;
+        if (strcmp(p->items[i], "fruit") == 0)
+            ret += FOOD_VALUE_FRUIT * p->items_cnt[i];
+        else if (strcmp(p->items[i], "vegetable") == 0)
+            ret += FOOD_VALUE_VEGETABLE * p->items_cnt[i];
+        else if (strcmp(p->items[i], "meat") == 0)
+            ret += FOOD_VALUE_MEAT * p->items_cnt[i];
+        else if (strcmp(p->items[i], "spice") == 0)
+            ret += FOOD_VALUE_SPICE * p->items_cnt[i];
     }
     return ret;
 }
 
-void eat(struct personnages *perso)
+void eat(struct personnages *p)
 {
-    for (struct linked_item *p = perso->i_list; p != NULL; p = p->next)
+    for (int i = 0; 10 > i; i++)
     {
-        if (strcmp(p->nom, "fruit") == 0)
+        if (strcmp(p->items[i], "fruit") == 0)
         {
-            remove_from_inventory("fruit", perso->i_list, 1);
-            perso->faim += FOOD_VALUE_FRUIT;
-            perso->a_bouger += 1;
+            remove_from_inventory("fruit", 1, p->items, p->items_cnt);
+            p->faim += FOOD_VALUE_FRUIT;
+            p->a_bouger += 1;
             return;
         }
-        else if (strcmp(p->nom, "vegetable") == 0)
+        else if (strcmp(p->items[i], "vegetable") == 0)
         {
-            remove_from_inventory("vegetable", perso->i_list, 1);
-            perso->faim += FOOD_VALUE_VEGETABLE;
-            perso->a_bouger += 1;
+            remove_from_inventory("vegetable", 1, p->items, p->items_cnt);
+            p->faim += FOOD_VALUE_VEGETABLE;
+            p->a_bouger += 1;
             return;
         }
-        else if (strcmp(p->nom, "meat") == 0)
+        else if (strcmp(p->items[i], "meat") == 0)
         {
-            remove_from_inventory("meat", perso->i_list, 1);
-            perso->faim += FOOD_VALUE_MEAT;
-            perso->a_bouger += 1;
+            remove_from_inventory("meat", 1, p->items, p->items_cnt);
+            p->faim += FOOD_VALUE_MEAT;
+            p->a_bouger += 1;
             return;
         }
-        else if (strcmp(p->nom, "spice") == 0)
+        else if (strcmp(p->items[i], "spice") == 0)
         {
-            remove_from_inventory("spice", perso->i_list, 1);
-            perso->faim += FOOD_VALUE_SPICE;
-            perso->a_bouger += 1;
+            remove_from_inventory("spice", 1, p->items, p->items_cnt);
+            p->faim += FOOD_VALUE_SPICE;
+            p->a_bouger += 1;
             return;
         }
     }
@@ -134,16 +134,16 @@ char go_to_top(struct personnages *p, int top)
 
 void put_ground(struct personnages *p)
 {
-    if (exist_in_linked_item(p->i_list, "herbe") != NULL)
+    if (find_index_in_inventory( "herbe", p->items) != -1)
     {
-        remove_from_inventory("herbe", p->i_list, 1);
+        remove_from_inventory("herbe", 1, p->items, p->items_cnt);
         add_1_pixel((int)p->x + (int)p->y*max_x, he1);
         p->a_bouger += 1;
         return;
     }
-    if (exist_in_linked_item(p->i_list, "sable") != NULL)
+    if (find_index_in_inventory("sable", p->items) != -1)
     {
-        remove_from_inventory("sable", p->i_list, 1);
+        remove_from_inventory("sable", 1, p->items, p->items_cnt);
         add_1_pixel((int)p->x + (int)p->y*max_x, sa1);
         p->a_bouger += 1;
         return ;
@@ -292,7 +292,6 @@ char check_if_surface_is_flat(struct personnages *p, int coo)
 
 void ia_man(struct personnages *p)
 {
-    printf ("%s %d\n", p->nom, p->id);
     if (p->faim < 0)
     {
         p->pv -= 1;
@@ -314,8 +313,8 @@ void ia_man(struct personnages *p)
         }
         return;
 	}
-
-    if (how_much_food(p->i_list) <= 1000)
+    //printf ("%s %d %f %f %f %f\n", p->nom, how_much_food(p->i_list), p->x, p->y, p->ordrex, p->ordrey);
+    if (how_much_food(p) <= 1000)
     {
 
         int a_tree = -1;
@@ -324,7 +323,7 @@ void ia_man(struct personnages *p)
         {
             if (list.data[i].is_active == 0)
                 continue;
-            if (strcmp(list.data[i].skin, "01") == 0 && (list.data[i].x - p->x)*(list.data[i].x - p->x) + (list.data[i].y - p->y) * (list.data[i].y - p->y) < 4 && exist_in_linked_item(list.data[i].i_list, "fruit") != NULL)
+            if (strcmp(list.data[i].skin, "01") == 0 && (list.data[i].x - p->x)*(list.data[i].x - p->x) + (list.data[i].y - p->y) * (list.data[i].y - p->y) < 4 && find_index_in_inventory("fruit", list.data[i].items) != -1)
             {
                 a_tree = i;
                 break;
@@ -336,7 +335,7 @@ void ia_man(struct personnages *p)
             {
                 if (list.data[i].is_active == 0)
                     continue;
-                if (strcmp(list.data[i].skin, "01") == 0 && (list.data[i].x - p->x)*(list.data[i].x - p->x) + (list.data[i].y - p->y) * (list.data[i].y - p->y) < mindist && exist_in_linked_item(list.data[i].i_list, "fruit") != NULL)
+                if (strcmp(list.data[i].skin, "01") == 0 && (list.data[i].x - p->x)*(list.data[i].x - p->x) + (list.data[i].y - p->y) * (list.data[i].y - p->y) < mindist && find_index_in_inventory("fruit", list.data[i].items) != -1)
                 {
                     a_tree = i;
                     mindist = (list.data[i].x - p->x)*(list.data[i].x - p->x) + (list.data[i].y - p->y) * (list.data[i].y - p->y);
@@ -351,12 +350,12 @@ void ia_man(struct personnages *p)
         }
         else
         {
-            if (can_add("wooden-board", 1, p->i_list) == 0)
+            if (can_add("wooden-board", 1, p->items, p->items_cnt) == 0)
                 put_ground(p);
             else
             {
-                append_in_inventory("fruit", p->i_list, 1);
-                remove_from_inventory("fruit", list.data[a_tree].i_list, 1);
+                append_in_inventory("fruit",1, p->items, p->items_cnt);
+                remove_from_inventory("fruit", 1, list.data[a_tree].items, list.data[a_tree].items_cnt);
                 p->a_bouger = 1;
                 list.data[a_tree].a_bouger = 1; 
 
@@ -372,11 +371,11 @@ void ia_man(struct personnages *p)
 
         if (p->ordrex > 0)
         {
-            if (pow(p->ordrex - p->x,2) +  pow(p->ordrey - p->y,2) < p->vitesse_dep )
+            if ((int)p->ordrex == (int)p->x && (int)p->ordrey == (int)p->y)
             {
-                p->ordrex = -1;
                 p->x = p->ordrex;
                 p->y = p->ordrey;
+                p->ordrex = -1;
                 p->a_bouger = 1;
                 p->chemin_is_set = 0;
             }
@@ -544,11 +543,11 @@ void ia_man(struct personnages *p)
                         if (altitude(highgo) != altitude(lowgo))
                         {
                             int av = avverage_alt(p);
-                            if (altitude(whereiam) > av && 10 > n_item(p->i_list))
+                            if (altitude(whereiam) > av && 10 > n_item(p->items))
                             {
                                 if (ground[whereiam]->texture == he1 || ground[whereiam]->texture == he2 || ground[whereiam]->texture == he3 || ground[whereiam]->texture == he4 || ground[whereiam]->texture == he5)
                                 {
-                                    append_in_inventory("herbe", p->i_list, 1);
+                                    append_in_inventory("herbe", 1, p->items, p->items_cnt);
                                     remove_1_pixel(moix + (moiy)*max_x);
                                     p->animation_2 = 2;
                                     p->animation = 0;
@@ -556,7 +555,7 @@ void ia_man(struct personnages *p)
                                 }
                                 else if (ground[whereiam]->texture == sa1 || ground[whereiam]->texture == sa2 || ground[whereiam]->texture == sa3)
                                 {
-                                    append_in_inventory("sable", p->i_list, 1);
+                                    append_in_inventory("sable", 1, p->items, p->items_cnt);
                                     remove_1_pixel(moix + (moiy)*max_x);
                                     p->animation_2 = 2;
                                     p->animation = 0;
@@ -569,11 +568,11 @@ void ia_man(struct personnages *p)
                                 }
                             }
                             
-                            else if (av > altitude(whereiam) && have_ground_in_inventory(p->i_list))
+                            else if (av > altitude(whereiam) && have_ground_in_inventory(p))
                             {
                                 put_ground(p);
                             }
-                            else if (10 == n_item(p->i_list))
+                            else if (10 == n_item(p->items))
                             {
                                 if (whereiam == lowgo)
                                     put_ground(p);
@@ -594,7 +593,7 @@ void ia_man(struct personnages *p)
                         }
                         else
                         {
-                            if (count_item(p->i_list, "wooden-board") >= 9) //si j'ai dans mon inventaire de quoi placer des fondations
+                            if (count_item("wooden-board", p->items, p->items_cnt) >= 9) //si j'ai dans mon inventaire de quoi placer des fondations
                             {
                                 int coo = find_where_to_build(p);
                                 int bx = coo%max_x;
@@ -602,7 +601,7 @@ void ia_man(struct personnages *p)
                                 if ((p->x - bx)*(p->x - bx) + (p->y - by) * (p->y - by) < 4)
                                 {
                                     add_wood_pillar_or_wood_house(bx, by);
-                                    remove_from_inventory("wooden-board", p->i_list, 9);
+                                    remove_from_inventory("wooden-board", 9, p->items, p->items_cnt);
                                     p->a_bouger = 1;
                                 }
                                 else if (can_walk_near_this_place(p, coo) != 1)
@@ -639,19 +638,19 @@ void ia_man(struct personnages *p)
                                 }
                                 else
                                 {
-                                    if (n_item(p->i_list) > 9)
+                                    if (n_item(p->items) > 9)
                                     {
-                                        if (have_ground_in_inventory(p->i_list))
+                                        if (have_ground_in_inventory(p))
                                             put_ground(p);
                                         else
                                             eat(p);
                                     }
                                     else
                                     {
-                                        if (exist_in_linked_item(list.data[a_tree].i_list, "fruit") != NULL)
+                                        if (find_index_in_inventory("fruit", list.data[a_tree].items) != -1)
                                         {
-                                            remove_from_inventory("fruit", list.data[a_tree].i_list, 1);
-                                            append_in_inventory("fruit", p->i_list, 1);
+                                            remove_from_inventory("fruit", 1, list.data[a_tree].items, list.data[a_tree].items_cnt);
+                                            append_in_inventory("fruit", 1, p->items, p->items_cnt);
                                             p->a_bouger = 1;
                                             list.data[a_tree].a_bouger = 1;
                                         }
@@ -665,10 +664,10 @@ void ia_man(struct personnages *p)
                                                 list.data[a_tree].pv -= p->dom;
                                             else if (list.data[a_tree].pv > 4)
                                                 list.data[a_tree].pv = 4;
-                                            else if (can_add("wooden-board", 1, p->i_list) == 1)
+                                            else if (can_add("wooden-board", 1, p->items, p->items_cnt) == 1)
                                             {
                                                 list.data[a_tree].pv -= 1;
-                                                append_in_inventory("wooden-board", p->i_list, 1);
+                                                append_in_inventory("wooden-board",1, p->items, p->items_cnt);
                                             }
                                         }
                                     }
@@ -691,8 +690,8 @@ void ia_man(struct personnages *p)
     if (strcmp(p->echange_player, "none") != 0)
     {
         sprintf(p->speak, "votre proposition est ininteressante");
-        sprintf(p->item1, "none");
-        sprintf(p->item2, "none");
+        sprintf(p->items[10], ".");
+        sprintf(p->items[11], ".");
         p->speak_timer = 1350;
         p->a_bouger = 1;
     }

@@ -180,7 +180,7 @@ void handle_altitude_down(int index)
 
 void handle_altitude_up(int index)
 {
-    if (index - max_x > 0 && (building_id[index-max_x] == -1 || ground[index]->texture == ea1 || ground[index]->texture == ea2 || ground[index]->texture == ea3))
+    if (index - max_x >= 0 && (building_id[index-max_x] == -1 || ground[index]->texture == ea1 || ground[index]->texture == ea2 || ground[index]->texture == ea3))
     {
         int diff4 = diff_alt(index, index-max_x);
         if (diff4 < 0 && maximum_diff(index-max_x) < -diff4)
@@ -392,6 +392,7 @@ void handle_altitude(void)
     for (int i = 0; i < n_ground_altitudee_local; i++)
     {
         int index = index_check_altitude_local[i];
+        int a =  altitude(0);
         for (int i = 0; i <4 ;i++)
         {
             if (rdm_directions[i] == 1)
@@ -403,6 +404,8 @@ void handle_altitude(void)
             else if(rdm_directions[i] == 4)
                 handle_altitude_down(index);
         }
+        if (a != altitude(0))
+            printf ("%d %d %d\n", index, a , altitude(0));   
         
     }
 }

@@ -62,9 +62,9 @@ void create_array(void)
 			case 16:
 				ground_texture[i] = img->t->bl3;
 				break;
-			//case 17:
-			//	ground_texture[i] = img->t->be1;
-			//	break;
+			case 17:
+				ground_texture[i] = img->t->ne1;
+				break;
 			case 18:
 				ground_texture[i] = img->t->ne2;
 				break;
@@ -77,24 +77,24 @@ void create_array(void)
 			case 21:
 				ground_texture[i] = img->t->gr2;
 				break;
-			/*case 21:
-				ground_texture[i] = img->t->gra;
-				break;
 			case 22:
-				ground_texture[i] = img->t->bas;
+				ground_texture[i] = img->t->granit;
 				break;
 			case 23:
-				ground_texture[i] = img->t->cal;
+				ground_texture[i] = img->t->basalt;
 				break;
 			case 24:
-				ground_texture[i] = img->t->sch;
+				ground_texture[i] = img->t->calcaire;
 				break;
 			case 25:
-				ground_texture[i] = img->t->gre;
+				ground_texture[i] = img->t->schiste;
 				break;
 			case 26:
-				ground_texture[i] = img->t->mar;
-				break;		*/	
+				ground_texture[i] = img->t->gres;
+				break;
+			case 27:
+				ground_texture[i] = img->t->marbre;
+				break;	
 		}
 
 		uint16_t alt;

@@ -3,22 +3,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-struct linked_item
-{
-    char nom[50];
-    int count;
-    struct linked_item *next;
-};
 
 int count(char *name);
-int n_item(struct linked_item *l);
-char can_add(char *name, int cnt, struct linked_item *l);
-struct linked_item *append_in_inventory(char *name, struct linked_item *p, int n);
-void moove_item(int a, int b, struct linked_item *l);
-int count_item(struct linked_item *l, char *name);
+int n_item(char items[18][50]);
+char can_add(char *name, int cnt, char items[18][50], int items_cnt[12]);
+void append_in_inventory(char *name, int n, char items[18][50], int items_cnt[12]);
+int count_item(char *name, char items[18][50], int items_cnt[12]);
 struct linked_item *get_item_n(int n, struct linked_item *l);
-struct linked_item *exist_in_linked_item(struct linked_item *e, char *cmp);
-void free_linked_item(struct linked_item *e);
-void print(struct linked_item *e);
-struct linked_item *del(struct linked_item *root, struct linked_item *to_del);
-struct linked_item *remove_from_inventory(char *name, struct linked_item *p, int n);
+int find_index_in_inventory(char *name, char items[18][50]);
+void print(char items[18][50],  int items_cnt[12]);
+void remove_from_inventory(char *name, int n, char items[18][50], int items_cnt[12]);
+void echange_item(char p1_items[18][50], int p1_items_cnt[12], char p2_items[18][50], int p2_items_cnt[12], char p1_echange_player[50]);

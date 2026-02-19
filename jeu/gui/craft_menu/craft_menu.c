@@ -39,18 +39,11 @@ void craft_menu(void)
             moiy = (int)moi->y;
             break;
     }
-    int j = 0;
-    for (struct linked_item *i = moi->i_list; i != NULL; i = i->next)
+    for (int i = 0; 10 > i; i++)
     {
-        sprintf(main_menu->menuCraft->selector->options[j], "%s %d", i->nom, i->count);
-        j += 1;
+        sprintf(main_menu->menuCraft->selector->options[i], "%s %d", moi->items[i], moi->items_cnt[i]);
     }
-    //int max = j;
-    while (j < 10)
-    {
-        strcpy(main_menu->menuCraft->selector->options[j], "empty slot");
-        j+=1;
-    }
+
     drawSelector(renderer, main_menu->menuCraft->selector);
     
     if (lettres->keystates[SDL_SCANCODE_ESCAPE])

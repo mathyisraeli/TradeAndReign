@@ -8,9 +8,9 @@ void gui_event(struct personnages *moi)
 	if (moi->ordrex != -1)
 	{
         position.x = (moi->ordrex - moi->x - moi->ordrey + moi->y) * 34 + 887.5;
-		position.y = (moi->ordrex - moi->x - moi->y  + moi->ordrey) * 17 + 437.5 - ground_altitude[(int)moi->ordrex + (int)moi->ordrey * max_x] + moi->altitude*38;
+		position.y = (moi->ordrex - moi->x - moi->y  + moi->ordrey) * 17 + 437.5 - ground_altitude[((int)moi->ordrey - start_y) * (end_x - start_x) + (int)moi->ordrex - start_x] + moi->altitude*38;
         position.w = 25; position.h =  25;
-		if (powf(moi->x - moi->ordrex, 2) + powf(moi->y - moi->ordrey, 2) < 9)
+		if (powf(moi->x - moi->ordrex, 2) + powf(moi->y - moi->ordrey, 2) < 1)
         {
 			sprintf (ordre + strlen(ordre), "0 %d 03 -1 ", moi->id);
         }
@@ -24,7 +24,7 @@ void gui_event(struct personnages *moi)
         {
             TextInfo bubble = {p->p->speak,  littleFont, 
             (p->p->x - moi->x - p->p->y +  moi->y) * 34 + 900, 
-            (p->p->x - moi->x + p->p->y - moi->y) * 17 + 350 - ground_altitude[(int)p->p->x + (int)p->p->y * max_x] + moi->altitude*38,
+            (p->p->x - moi->x + p->p->y - moi->y) * 17 + 350 - ground_altitude[((int)p->p->y - start_y) * (end_x - start_x) + (int)p->p->x - start_x] + moi->altitude*38,
             0,{255, 255, 255, 255}, 0,0,0};
             drawTextInfo(renderer, &bubble);
         }

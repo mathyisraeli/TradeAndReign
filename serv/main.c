@@ -232,7 +232,9 @@ int main(int argc, char **argv)
                                 p->online = '1';
 							}
 							else
+                            {
 								s = write (events[i].data.fd, "n", 1);
+                            }
                         }
                         else
 							parse_order(buf); 
@@ -240,10 +242,13 @@ int main(int argc, char **argv)
 				}
                 if (done)
                 {
+                    if (statut[i] == 1)
+                    {
+                        chars_connected[i]->online = '0';
+                        chars_connected[i] = NULL;
+                    }
 					statut[i] = 0;
                     close (events[i].data.fd);
-                    chars_connected[i]->online = '0';
-                    chars_connected[i] = NULL;
                 }
             }
         }
@@ -254,7 +259,6 @@ int main(int argc, char **argv)
         {
         	start = end;
             handle_altitude();
-            actualise_building_altitude();
             collision();
             ia();
             int size_order = generate_order();
@@ -273,8 +277,8 @@ int main(int argc, char **argv)
                 melt_snow(save_map_count%max_x);
                 if (save_map_count % 12000 == 0)
                 {
-                    save_map(save_map_count/12000);
-                    save_ground(save_map_count/12000);
+                    //save_map(save_map_count/12000);
+                    //save_ground(save_map_count/12000);
                 }
             }
             

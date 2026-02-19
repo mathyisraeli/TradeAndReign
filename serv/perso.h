@@ -14,58 +14,46 @@ extern struct personnages *lits;
 
 struct personnages
 {
-    char skin[4];
-    int id;
-    int pv;
-    char nom_de_compte[50];
-    float x;
-    float y;
-    float altitude;
-    float ordrex;
-    float ordrey;
-    char angle;
-    int timer_dom;
-    int faim;
-    int inside;
-    char nom[50];
-    char nom_superieur[50];
-    char titre[50];
-    char religion[50];
-    int nb_vassaux;
-    struct linked_enemie *e_list;
-    struct linked_item *i_list;
-    char echange_player[50];
-    char item1[50];
-    int count_item1;
-    char item2[50];
-    int count_item2;
-    char speak[90];
-    int animation;
-	int animation_2;
-    char chemin_is_set;
-    char left_hand[50];
-    char right_hand[50];
-    char headgear[50];
-    char tunic[50];
-    char pant[50];
-    char shoes[50];
-    char skill[62*3];
-    int house_id;
-    char physique[6];
-    /////////////
-    char online;
-    float dom;
-    float porte_dom;
-    float vitesse_dep;
-    float moved_x;
-    float moved_y;
-	char a_bouger;
-    char is_active;
-    int speak_timer;
-    struct path* chemin;
+    // id                                                           -   1
+    int pv;                         //                              -   2
+    int nb_vassaux;                 //                              -   3
+    int timer_dom;                  // NOT NETWORK  -   NOT IN FILE
+    int faim;                       //                              -   4
+    int inside;                     //                              -   5
+    int house_id;                   //                              -   6
+    int animation;                  //                              -   7
+	int animation_2;                //                              -   8
+    int speak_timer;                // NOT NETWORK  -   NOT IN FILE
+    int items_cnt[12];              //                              -   15 BIS
+    char angle;                     //                              -   9
+    char chemin_is_set;             // NOT NETWORK  -   NOT IN FILE   
+    char online;                    // NOT NETWORK  -   NOT IN FILE
+    char a_bouger;                  // NOT NETWORK  -   NOT IN FILE
+    char is_active;                 // NOT NETWORK  -   NOT IN FILE
+    char skin[4];                   //                              -   0
+    char physique[7];               //                              -   10
+    char nom_de_compte[50];         //                              -   11
+    char nom[50];                   //                              -   12
+    char nom_superieur[50];         //                              -   13  
+    char echange_player[50];        //                              -   14
+    char speak[90];                 //                              -   23 (LAST)
+    char skill[62*3];               //                              -   22
+    char items[18][50];             //                              -   15 BIS
+    float x;                        //                              -   16
+    float y;                        //                              -   17
+    float altitude;                 //                              -   18
+    float ordrex;                   //                              -   19
+    float ordrey;                   //                              -   20
+    float dom;                      // NOT NETWORK  -   NOT IN FILE
+    float porte_dom;                // NOT NETWORK  -   NOT IN FILE
+    float vitesse_dep;              // NOT NETWORK  -   NOT IN FILE
+    float moved_x;                  // NOT NETWORK  -   NOT IN FILE
+    float moved_y;                  // NOT NETWORK  -   NOT IN FILE
+    struct linked_enemie *e_list;   //                              -   21
+    struct path* chemin;            // NOT NETWORK  -   NOT IN FILE
 };
 
-int parse_new(struct personnages *p, char *line, char *skin, int id);
+int parse_new(struct personnages *p, char *line, char *skin);
 void parse_order(char *line);
 struct personnages *get_ptr_from_id(int id);
 int get_id(char *line, int *i);

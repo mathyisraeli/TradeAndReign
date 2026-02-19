@@ -49,7 +49,6 @@ void actualise_stat(struct personnages *p)
 		p->max_pv = 200;
 		p->dom = 0;
 		p->poid = 999;
-		p->eau = '0';
 		p->animation = 0;
 		struct to_disp *new = malloc(sizeof(struct to_disp));
 		new->offset_y = 454;
@@ -66,7 +65,7 @@ void actualise_stat(struct personnages *p)
 		new->x = p->x;
 		new->y = p->y;
 		new->id = p->id;
-		
+		new->b = NULL;
 		new->p = p;
 		new->floor = 1;
 		new->altitude = p->altitude;
@@ -79,7 +78,6 @@ void actualise_stat(struct personnages *p)
 		p->max_pv = 99999;
 		p->dom = 0;
 		p->poid = 10000;
-		p->eau = '0';
 	}
 	else if (p->skin[0] == '0' && p->skin[1] == 0)
 	{
@@ -88,7 +86,6 @@ void actualise_stat(struct personnages *p)
 		p->vitesse_dom = 100;
 		p->vitesse_dep = 0.2;
 		p->poid = 65;
-		p->eau = '0';
 		p->dom = 1;
 		struct to_disp *new = malloc(sizeof(struct to_disp));
 		new->x = p->x;
@@ -103,7 +100,7 @@ void actualise_stat(struct personnages *p)
 		new->offset_x = 900	;
 		new->offset_y = 450;
 		sortedInsert(new);
-		if (strcmp(p->pant, "empty") == 0)
+		if (strcmp(p->items[16], ".") == 0) // if no pant
 		{
 			struct to_disp *nnew = malloc(sizeof(struct to_disp));
 			nnew->x = p->x;
@@ -132,76 +129,76 @@ void actualise_stat_building(struct building *b)
 	{
 		if (b->skin[2] == '2')
 		{
-			insert(b->x, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 866, 475, NULL, b,img->s->wooden_house_3x3_faceline[2]);
-			insert(b->x, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 891, 441, NULL, b,img->s->wooden_house_3x3_faceline[1]);
-			insert(b->x, b->y-2, ground_altitude[b->y*max_x + b->x],b->id, 0, 891, 478, NULL, b,img->s->wooden_house_3x3_faceline[0]);
+			insert(b->x, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 866, 475, NULL, b,img->s->wooden_house_3x3_faceline[2]);
+			insert(b->x, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 891, 441, NULL, b,img->s->wooden_house_3x3_faceline[1]);
+			insert(b->x, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 891, 478, NULL, b,img->s->wooden_house_3x3_faceline[0]);
 		}
 		else if (b->skin[2] == '1')
 		{
 			if (moi != NULL && b->id == moi->inside)
 			{
-				insert(b->x-1, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 485, NULL, b,img->s->terracotta_house_3x3_inside[0]);
-				insert(b->x-2, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 485, NULL, b,img->s->terracotta_house_3x3_inside[1]);
-				insert(b->x-1, b->y-1,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 485, NULL, b,img->s->terracotta_house_3x3_inside[2]);
-				insert(b->x-2, b->y-1, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 485, NULL, b,img->s->terracotta_house_3x3_inside[3]);
-				insert(b->x-1, b->y-2,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 485, NULL, b,img->s->terracotta_house_3x3_inside[4]);
-				insert(b->x-2, b->y-2,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 476, NULL, b,img->s->terracotta_house_3x3_inside[5]);
+				insert(b->x-1, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 485, NULL, b,img->s->terracotta_house_3x3_inside[0]);
+				insert(b->x-2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 485, NULL, b,img->s->terracotta_house_3x3_inside[1]);
+				insert(b->x-1, b->y-1,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 485, NULL, b,img->s->terracotta_house_3x3_inside[2]);
+				insert(b->x-2, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 485, NULL, b,img->s->terracotta_house_3x3_inside[3]);
+				insert(b->x-1, b->y-2,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 485, NULL, b,img->s->terracotta_house_3x3_inside[4]);
+				insert(b->x-2, b->y-2,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 476, NULL, b,img->s->terracotta_house_3x3_inside[5]);
 			}
 			else
 			{
-				insert(b->x, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b,img->s->terracotta_house_3x3[0]);
-				insert(b->x, b->y-1, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b,img->s->terracotta_house_3x3[1]);
-				insert(b->x, b->y-2, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b,img->s->terracotta_house_3x3[2]);
-				insert(b->x-1, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b,img->s->terracotta_house_3x3[3]);
-				insert(b->x-1, b->y-1,ground_altitude[b->y*max_x + b->x], b->id, 0, 909, 446, NULL, b,img->s->terracotta_house_3x3[4]);
-				insert(b->x-1, b->y-2,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 427, NULL, b,img->s->terracotta_house_3x3[5]);
-				insert(b->x-2, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 891, 484, NULL, b,img->s->terracotta_house_3x3[6]);
-				insert(b->x-2, b->y-1, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 399, NULL, b,img->s->terracotta_house_3x3[7]);
-				insert(b->x-2, b->y-2, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 408, NULL, b,img->s->terracotta_house_3x3[8]);	
+				insert(b->x, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b,img->s->terracotta_house_3x3[0]);
+				insert(b->x, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b,img->s->terracotta_house_3x3[1]);
+				insert(b->x, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b,img->s->terracotta_house_3x3[2]);
+				insert(b->x-1, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b,img->s->terracotta_house_3x3[3]);
+				insert(b->x-1, b->y-1,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 909, 446, NULL, b,img->s->terracotta_house_3x3[4]);
+				insert(b->x-1, b->y-2,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 427, NULL, b,img->s->terracotta_house_3x3[5]);
+				insert(b->x-2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 891, 484, NULL, b,img->s->terracotta_house_3x3[6]);
+				insert(b->x-2, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 399, NULL, b,img->s->terracotta_house_3x3[7]);
+				insert(b->x-2, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 408, NULL, b,img->s->terracotta_house_3x3[8]);	
 			}
 		}
 		else if (b->skin[2] == '3')
 		{
 			if (moi != NULL && b->id == moi->inside)
-				insert(b->x-5, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 650, NULL, b,img->s->wooden_house_6x6[10]);
+				insert(b->x-5, b->y-5, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 650, NULL, b,img->s->wooden_house_6x6[10]);
 			else
 			{
-				insert(b->x, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 409, NULL, b,img->s->wooden_house_6x6[1]);
-				insert(b->x-1, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[4]);
-				insert(b->x-2, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[3]);
-				insert(b->x-3, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[3]);
-				insert(b->x-4, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[3]);
-				insert(b->x-5, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[5]);
-				insert(b->x, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[8]);
-				insert(b->x-1, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
-				insert(b->x-2, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
-				insert(b->x-3, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
-				insert(b->x-4, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
-				insert(b->x-5, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
-				insert(b->x, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[9]);
-				insert(b->x-1, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
-				insert(b->x-2, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
-				insert(b->x-3, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
-				insert(b->x-4, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
-				insert(b->x-5, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
-				insert(b->x, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[6]);
-				insert(b->x-1, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
-				insert(b->x-2, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
-				insert(b->x-3, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
-				insert(b->x-4, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
-				insert(b->x-5, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
-				insert(b->x, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[7]);
-				insert(b->x-1, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
-				insert(b->x-2, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
-				insert(b->x-3, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
-				insert(b->x-4, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
-				insert(b->x-5, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
-				insert(b->x, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[2]);
-				insert(b->x-1, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
-				insert(b->x-2, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
-				insert(b->x-3, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
-				insert(b->x-4, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
-				insert(b->x-5, b->y-5, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 409, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-1, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[4]);
+				insert(b->x-2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[3]);
+				insert(b->x-3, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[3]);
+				insert(b->x-4, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[3]);
+				insert(b->x-5, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[5]);
+				insert(b->x, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[8]);
+				insert(b->x-1, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-2, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-3, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-4, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-5, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 389, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[9]);
+				insert(b->x-1, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-2, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-3, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-4, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x-5, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 371, NULL, b,img->s->wooden_house_6x6[1]);
+				insert(b->x, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[6]);
+				insert(b->x-1, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-2, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-3, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-4, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-5, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 357, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[7]);
+				insert(b->x-1, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-2, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-3, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-4, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-5, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 376, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x, b->y-5, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b,img->s->wooden_house_6x6[2]);
+				insert(b->x-1, b->y-5, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-2, b->y-5, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-3, b->y-5, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-4, b->y-5, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
+				insert(b->x-5, b->y-5, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 399, NULL, b,img->s->wooden_house_6x6[0]);
 			}
 	
 		}
@@ -209,11 +206,11 @@ void actualise_stat_building(struct building *b)
 	}
 	else if (strcmp(b->skin, "125") == 0)
 	{
-		insert(b->x, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b,img->s->bridgePillar);
-		insert(b->x+4, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b,img->s->bridgePillar);
-		insert(b->x+1, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 408, NULL, b,img->s->bridgeSlab);
-		insert(b->x+2, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 408, NULL, b,img->s->bridgeSlab);
-		insert(b->x+3, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 408, NULL, b,img->s->bridgeSlab);
+		insert(b->x, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b,img->s->bridgePillar);
+		insert(b->x+4, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b,img->s->bridgePillar);
+		insert(b->x+1, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 408, NULL, b,img->s->bridgeSlab);
+		insert(b->x+2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 408, NULL, b,img->s->bridgeSlab);
+		insert(b->x+3, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 408, NULL, b,img->s->bridgeSlab);
 	}
 		
 	else if (strcmp(b->skin, "131") == 0)
@@ -221,392 +218,392 @@ void actualise_stat_building(struct building *b)
 		if (moi != NULL && b->id == moi->inside)
 		//if (1 == 1)
 		{
-			if (b->angle =='a')
+			if (b->angle =='h')
 			{
-				insert(b->x-2, b->y-3,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y-3,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y-3, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y-3,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y-3, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y-2,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y-2,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y-2,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y-2,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);	
-				insert(b->x-2, b->y-1,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y-1,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y-1, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y-1,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y+1,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y+1,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y+1,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y+1,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y+2,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y+2,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-0, b->y+2,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y+2,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y+2,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y+3,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y+3, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y+3,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y-4, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y-4, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y-4,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y+4,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y-2, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_50cm_wood);
-				insert(b->x, b->y-1,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_100cm_wood);
-				insert(b->x, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_150cm_wood);
-				insert(b->x, b->y+1, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y+3,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 468, NULL, b, img->s->ship1_flat_wood_up_triangle);
-				insert(b->x+1, b->y+4,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 468, NULL, b, img->s->ship1_flat_wood_up_triangle);
-				insert(b->x-2, b->y-4,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood_down_triangle);
-				insert(b->x+2, b->y-4,ground_altitude[b->y*max_x + b->x], b->id, 0, 883, 484, NULL, b, img->s->ship1_flat_wood_left_triangle);
-				insert(b->x-1, b->y+4,ground_altitude[b->y*max_x + b->x], b->id, 0, 917, 484, NULL, b, img->s->ship1_flat_wood_right_triangle);
-				insert(b->x-2, b->y+3,ground_altitude[b->y*max_x + b->x], b->id, 0, 917, 484, NULL, b, img->s->ship1_flat_wood_right_triangle);		
+				insert(b->x-2, b->y-3,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y-3,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y-3,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y-2,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y-2,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y-2,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y-2,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);	
+				insert(b->x-2, b->y-1,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y-1,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y-1,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y+1,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y+1,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y+1,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y+1,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y+2,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y+2,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-0, b->y+2,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y+2,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y+2,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y+3,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y+3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y+3,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y-4,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y+4,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_50cm_wood);
+				insert(b->x, b->y-1,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_100cm_wood);
+				insert(b->x, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_150cm_wood);
+				insert(b->x, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y+3,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 468, NULL, b, img->s->ship1_flat_wood_up_triangle);
+				insert(b->x+1, b->y+4,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 468, NULL, b, img->s->ship1_flat_wood_up_triangle);
+				insert(b->x-2, b->y-4,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood_down_triangle);
+				insert(b->x+2, b->y-4,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 883, 484, NULL, b, img->s->ship1_flat_wood_left_triangle);
+				insert(b->x-1, b->y+4,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 917, 484, NULL, b, img->s->ship1_flat_wood_right_triangle);
+				insert(b->x-2, b->y+3,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 917, 484, NULL, b, img->s->ship1_flat_wood_right_triangle);		
+			}
+			else if (b->angle =='d')
+			{
+				insert(b->x-2, b->y-2,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y-2,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y-2,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y-1,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y-1,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y-1,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y-1,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y+3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y+3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y+3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y+3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y+3,ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y+4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y+4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y+4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_50cm_wood);
+				insert(b->x, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_100cm_wood);
+				insert(b->x, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_150cm_wood);
+				insert(b->x, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y+4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 468, NULL, b, img->s->ship1_flat_wood_up_triangle);
+				insert(b->x-1, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0,  900, 484, NULL, b, img->s->ship1_flat_wood_down_triangle);
+				insert(b->x+2, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 883, 484, NULL, b, img->s->ship1_flat_wood_left_triangle);
+				insert(b->x+1, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 883, 484, NULL, b, img->s->ship1_flat_wood_left_triangle);
+				insert(b->x-2, b->y+4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 917, 484, NULL, b, img->s->ship1_flat_wood_right_triangle);
+				insert(b->x-2, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood_down_triangle);
+			}
+			else if (b->angle =='f')
+			{
+				insert(b->x-3, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-3, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-3, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-3, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-3, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-4, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-4, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-4, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+3, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+3, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+3, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+4, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_50cm_wood);
+				insert(b->x-1, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_100cm_wood);
+				insert(b->x, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_150cm_wood);
+				insert(b->x+1, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+4, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 468, NULL, b, img->s->ship1_flat_wood_up_triangle);
+				insert(b->x+3, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 468, NULL, b, img->s->ship1_flat_wood_up_triangle);
+				insert(b->x-4, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood_down_triangle);
+				insert(b->x+4, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0,883, 484, NULL, b, img->s->ship1_flat_wood_left_triangle);
+				insert(b->x+3, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 883, 484, NULL, b, img->s->ship1_flat_wood_left_triangle);
+				insert(b->x-4, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0,917, 484, NULL, b, img->s->ship1_flat_wood_right_triangle);
 			}
 			else if (b->angle =='b')
 			{
-				insert(b->x-2, b->y-2,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y-2,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y-2, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y-2,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y-1,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y-1,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y-1,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y-1,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y+1, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y+1, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y+1, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y+1, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y+2, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y+2, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y+2, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y+2, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y+3, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y+3, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y+3, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y+3, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y+3,ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y-2, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y+4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y+4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y+4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_50cm_wood);
-				insert(b->x, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_100cm_wood);
-				insert(b->x, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_150cm_wood);
-				insert(b->x, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y+4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 468, NULL, b, img->s->ship1_flat_wood_up_triangle);
-				insert(b->x-1, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0,  900, 484, NULL, b, img->s->ship1_flat_wood_down_triangle);
-				insert(b->x+2, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 883, 484, NULL, b, img->s->ship1_flat_wood_left_triangle);
-				insert(b->x+1, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 883, 484, NULL, b, img->s->ship1_flat_wood_left_triangle);
-				insert(b->x-2, b->y+4, ground_altitude[b->y*max_x + b->x], b->id, 0, 917, 484, NULL, b, img->s->ship1_flat_wood_right_triangle);
-				insert(b->x-2, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood_down_triangle);
-			}
-			else if (b->angle =='e')
-			{
-				insert(b->x-3, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-3, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-3, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-3, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-3, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-4, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-4, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-4, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+3, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+3, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+3, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+4, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_50cm_wood);
-				insert(b->x-1, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_100cm_wood);
-				insert(b->x, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_150cm_wood);
-				insert(b->x+1, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+4, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 468, NULL, b, img->s->ship1_flat_wood_up_triangle);
-				insert(b->x+3, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 468, NULL, b, img->s->ship1_flat_wood_up_triangle);
-				insert(b->x-4, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood_down_triangle);
-				insert(b->x+4, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0,883, 484, NULL, b, img->s->ship1_flat_wood_left_triangle);
-				insert(b->x+3, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 883, 484, NULL, b, img->s->ship1_flat_wood_left_triangle);
-				insert(b->x-4, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0,917, 484, NULL, b, img->s->ship1_flat_wood_right_triangle);
-			}
-			else if (b->angle =='k')
-			{
-				insert(b->x+3, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+3, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+3, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+3, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+3, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-2, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-1, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+1, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-3, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-3, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-3, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+4, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+4, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+4, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x-4, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
-				insert(b->x+2, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_50cm_wood);
-				insert(b->x+1, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_100cm_wood);
-				insert(b->x, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_150cm_wood);
-				insert(b->x-1, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+4, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0,900, 468, NULL, b, img->s->ship1_flat_wood_up_triangle);
-				insert(b->x-4, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood_down_triangle);
-				insert(b->x-3, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood_down_triangle);
-				insert(b->x+4, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 883, 484, NULL, b, img->s->ship1_flat_wood_left_triangle);
-				insert(b->x-4, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 917, 484, NULL, b, img->s->ship1_flat_wood_right_triangle);
-				insert(b->x-3, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 917, 484, NULL, b, img->s->ship1_flat_wood_right_triangle);
+				insert(b->x+3, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+3, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+3, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+3, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+3, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-2, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-1, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+1, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-3, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-3, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-3, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+4, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+4, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+4, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x-4, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood);
+				insert(b->x+2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_50cm_wood);
+				insert(b->x+1, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_100cm_wood);
+				insert(b->x, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_150cm_wood);
+				insert(b->x-1, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+4, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0,900, 468, NULL, b, img->s->ship1_flat_wood_up_triangle);
+				insert(b->x-4, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood_down_triangle);
+				insert(b->x-3, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_flat_wood_down_triangle);
+				insert(b->x+4, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 883, 484, NULL, b, img->s->ship1_flat_wood_left_triangle);
+				insert(b->x-4, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 917, 484, NULL, b, img->s->ship1_flat_wood_right_triangle);
+				insert(b->x-3, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 917, 484, NULL, b, img->s->ship1_flat_wood_right_triangle);
 			}
 		}
 		else
 		{
-			if (b->angle =='a')
+			if (b->angle =='h')
 			{
-				insert(b->x-2, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y+3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x, b->y+3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y+3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x, b->y+4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y+3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 467, NULL, b, img->s->ship1_200cm_wood_triangle);
-				insert(b->x+1, b->y+4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 467, NULL, b, img->s->ship1_200cm_wood_triangle);
-				insert(b->x-2, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 409, NULL, b, img->s->ship1_flat_wood_down_triangle);
-				insert(b->x+2, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0,  883, 409, NULL, b, img->s->ship1_flat_wood_left_triangle);
-				insert(b->x-1, b->y+4, ground_altitude[b->y*max_x + b->x], b->id, 0, 917, 409, NULL, b, img->s->ship1_flat_wood_right_triangle);
-				insert(b->x-2, b->y+3, ground_altitude[b->y*max_x + b->x], b->id, 0, 917, 409, NULL, b, img->s->ship1_flat_wood_right_triangle);
+				insert(b->x-2, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y+3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x, b->y+3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y+3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x, b->y+4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y+3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 467, NULL, b, img->s->ship1_200cm_wood_triangle);
+				insert(b->x+1, b->y+4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 467, NULL, b, img->s->ship1_200cm_wood_triangle);
+				insert(b->x-2, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 409, NULL, b, img->s->ship1_flat_wood_down_triangle);
+				insert(b->x+2, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0,  883, 409, NULL, b, img->s->ship1_flat_wood_left_triangle);
+				insert(b->x-1, b->y+4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 917, 409, NULL, b, img->s->ship1_flat_wood_right_triangle);
+				insert(b->x-2, b->y+3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 917, 409, NULL, b, img->s->ship1_flat_wood_right_triangle);
 				if (b->state != '0')
 				{
-					insert(b->x, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 882, 409	, NULL, b, img->s->ship1_bigSail);
-					insert(b->x, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 882, 409, NULL, b, img->s->ship1_bigSail);
+					insert(b->x, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 882, 409	, NULL, b, img->s->ship1_bigSail);
+					insert(b->x, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 882, 409, NULL, b, img->s->ship1_bigSail);
 				}
 				else
 				{
-					insert(b->x, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 882, 409	, NULL, b, img->s->ship1_bigSailFolded);
-					insert(b->x, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 882, 409, NULL, b, img->s->ship1_bigSailFolded);
+					insert(b->x, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 882, 409	, NULL, b, img->s->ship1_bigSailFolded);
+					insert(b->x, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 882, 409, NULL, b, img->s->ship1_bigSailFolded);
 				}
 			}
 
+			else if (b->angle =='d')
+			{
+				insert(b->x-2, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y+3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y+3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y+3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y+3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y+4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x, b->y+4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y+4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y+4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 467, NULL, b, img->s->ship1_200cm_wood_triangle);
+				insert(b->x-1, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 409, NULL, b, img->s->ship1_flat_wood_down_triangle);
+				insert(b->x+2, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 883, 409, NULL, b, img->s->ship1_flat_wood_left_triangle);
+				insert(b->x+1, b->y-4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 883, 409, NULL, b, img->s->ship1_flat_wood_left_triangle);
+				insert(b->x-2, b->y+4, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 917, 409, NULL, b, img->s->ship1_flat_wood_right_triangle);
+				insert(b->x-2, b->y-3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 409, NULL, b, img->s->ship1_flat_wood_down_triangle);
+				if (b->state != '0')
+				{
+					insert(b->x, b->y+3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 882, 409	, NULL, b, img->s->ship1_bigSail);
+					insert(b->x, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 882, 409, NULL, b, img->s->ship1_bigSail);
+				}
+				else
+				{
+					insert(b->x, b->y+3, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 882, 409	, NULL, b, img->s->ship1_bigSailFolded);
+					insert(b->x, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 882, 409, NULL, b, img->s->ship1_bigSailFolded);
+				}
+			}
+			else if (b->angle =='f')
+			{
+				insert(b->x-3, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-3, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-3, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-3, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-4, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-4, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-4, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+3, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+3, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+3, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+4, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+4, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 467, NULL, b, img->s->ship1_200cm_wood_triangle);
+				insert(b->x+3, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 467, NULL, b, img->s->ship1_200cm_wood_triangle);
+				insert(b->x-4, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 409, NULL, b, img->s->ship1_flat_wood_down_triangle);
+				insert(b->x+4, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 883, 409, NULL, b, img->s->ship1_flat_wood_left_triangle);
+				insert(b->x+3, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 883, 409, NULL, b, img->s->ship1_flat_wood_left_triangle);
+				insert(b->x-4, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 917, 409, NULL, b, img->s->ship1_flat_wood_right_triangle);
+				if (b->state != '0')
+				{
+					insert(b->x-3, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 882, 409	, NULL, b, img->s->ship1_bigSail);
+					insert(b->x+2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 882, 409, NULL, b, img->s->ship1_bigSail);
+				}
+				else
+				{
+					insert(b->x-3, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 882, 409	, NULL, b, img->s->ship1_bigSailFolded);
+					insert(b->x+2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 882, 409, NULL, b, img->s->ship1_bigSailFolded);
+				}
+			}
 			else if (b->angle =='b')
 			{
-				insert(b->x-2, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y+3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y+3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y+3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y+3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y+4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x, b->y+4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y+4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y+4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 467, NULL, b, img->s->ship1_200cm_wood_triangle);
-				insert(b->x-1, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 409, NULL, b, img->s->ship1_flat_wood_down_triangle);
-				insert(b->x+2, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 883, 409, NULL, b, img->s->ship1_flat_wood_left_triangle);
-				insert(b->x+1, b->y-4, ground_altitude[b->y*max_x + b->x], b->id, 0, 883, 409, NULL, b, img->s->ship1_flat_wood_left_triangle);
-				insert(b->x-2, b->y+4, ground_altitude[b->y*max_x + b->x], b->id, 0, 917, 409, NULL, b, img->s->ship1_flat_wood_right_triangle);
-				insert(b->x-2, b->y-3, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 409, NULL, b, img->s->ship1_flat_wood_down_triangle);
+				insert(b->x+3, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+3, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+3, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+3, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-2, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-1, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+1, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+2, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-3, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-3, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-3, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+4, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+4, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+4, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x-4, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
+				insert(b->x+4, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 467, NULL, b, img->s->ship1_200cm_wood_triangle);
+				insert(b->x-4, b->y-1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 409, NULL, b, img->s->ship1_flat_wood_down_triangle);
+				insert(b->x-3, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 900, 409, NULL, b, img->s->ship1_flat_wood_down_triangle);
+				insert(b->x+4, b->y-2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 883, 409, NULL, b, img->s->ship1_flat_wood_left_triangle);
+				insert(b->x-4, b->y+1, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 917, 409, NULL, b, img->s->ship1_flat_wood_right_triangle);
+				insert(b->x-3, b->y+2, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 917, 409, NULL, b, img->s->ship1_flat_wood_right_triangle);
 				if (b->state != '0')
 				{
-					insert(b->x, b->y+3, ground_altitude[b->y*max_x + b->x], b->id, 0, 882, 409	, NULL, b, img->s->ship1_bigSail);
-					insert(b->x, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 882, 409, NULL, b, img->s->ship1_bigSail);
+					insert(b->x+3, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 882, 409	, NULL, b, img->s->ship1_bigSail);
+					insert(b->x-2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 882, 409, NULL, b, img->s->ship1_bigSail);
 				}
 				else
 				{
-					insert(b->x, b->y+3, ground_altitude[b->y*max_x + b->x], b->id, 0, 882, 409	, NULL, b, img->s->ship1_bigSailFolded);
-					insert(b->x, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 882, 409, NULL, b, img->s->ship1_bigSailFolded);
-				}
-			}
-			else if (b->angle =='e')
-			{
-				insert(b->x-3, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-3, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-3, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-3, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-4, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-4, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-4, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+3, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+3, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+3, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+4, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+4, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 467, NULL, b, img->s->ship1_200cm_wood_triangle);
-				insert(b->x+3, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 467, NULL, b, img->s->ship1_200cm_wood_triangle);
-				insert(b->x-4, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 409, NULL, b, img->s->ship1_flat_wood_down_triangle);
-				insert(b->x+4, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 883, 409, NULL, b, img->s->ship1_flat_wood_left_triangle);
-				insert(b->x+3, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 883, 409, NULL, b, img->s->ship1_flat_wood_left_triangle);
-				insert(b->x-4, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 917, 409, NULL, b, img->s->ship1_flat_wood_right_triangle);
-				if (b->state != '0')
-				{
-					insert(b->x-3, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 882, 409	, NULL, b, img->s->ship1_bigSail);
-					insert(b->x+2, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 882, 409, NULL, b, img->s->ship1_bigSail);
-				}
-				else
-				{
-					insert(b->x-3, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 882, 409	, NULL, b, img->s->ship1_bigSailFolded);
-					insert(b->x+2, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 882, 409, NULL, b, img->s->ship1_bigSailFolded);
-				}
-			}
-			else if (b->angle =='k')
-			{
-				insert(b->x+3, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+3, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+3, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+3, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-2, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-1, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+1, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+2, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-3, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-3, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-3, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+4, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+4, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+4, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x-4, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 484, NULL, b, img->s->ship1_200cm_wood);
-				insert(b->x+4, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 467, NULL, b, img->s->ship1_200cm_wood_triangle);
-				insert(b->x-4, b->y-1, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 409, NULL, b, img->s->ship1_flat_wood_down_triangle);
-				insert(b->x-3, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 900, 409, NULL, b, img->s->ship1_flat_wood_down_triangle);
-				insert(b->x+4, b->y-2, ground_altitude[b->y*max_x + b->x], b->id, 0, 883, 409, NULL, b, img->s->ship1_flat_wood_left_triangle);
-				insert(b->x-4, b->y+1, ground_altitude[b->y*max_x + b->x], b->id, 0, 917, 409, NULL, b, img->s->ship1_flat_wood_right_triangle);
-				insert(b->x-3, b->y+2, ground_altitude[b->y*max_x + b->x], b->id, 0, 917, 409, NULL, b, img->s->ship1_flat_wood_right_triangle);
-				if (b->state != '0')
-				{
-					insert(b->x+3, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 882, 409	, NULL, b, img->s->ship1_bigSail);
-					insert(b->x-2, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 882, 409, NULL, b, img->s->ship1_bigSail);
-				}
-				else
-				{
-					insert(b->x+3, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 882, 409	, NULL, b, img->s->ship1_bigSailFolded);
-					insert(b->x-2, b->y, ground_altitude[b->y*max_x + b->x], b->id, 0, 882, 409, NULL, b, img->s->ship1_bigSailFolded);
+					insert(b->x+3, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 882, 409	, NULL, b, img->s->ship1_bigSailFolded);
+					insert(b->x-2, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x], b->id, 0, 882, 409, NULL, b, img->s->ship1_bigSailFolded);
 				}
 			}
 		}
@@ -615,7 +612,7 @@ void actualise_stat_building(struct building *b)
 	{
 		if (b->skin[2] == '1') // bois
 		{	
-			insert(b->x, b->y, ground_altitude[b->y*max_x + b->x],b->id, 0, 900, 483, NULL, b,img->s->wood_pillar);
+			insert(b->x, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 483, NULL, b,img->s->wood_pillar);
 		}
 	}
 }

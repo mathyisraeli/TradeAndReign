@@ -42,7 +42,6 @@ void free_linked(struct linked_list *list, char free_content)
 			
 			free(list->p);
 			//free_linked_char(list->p->e_list);
-			free_linked_item(list->p->i_list);
 		}
 		free(list);
 	}
@@ -141,7 +140,6 @@ struct linked_list *death(void)
 		printf ("%s just died\n", tmp->p->nom);
 		list = list->next;
 		free_linked_enemie(tmp->p->e_list);
-		free_linked_item(tmp->p->i_list);
 		list_disp = deleteKey(tmp->p->id);
 		free(tmp->p);
 		free(tmp);
@@ -160,7 +158,6 @@ struct linked_list *death(void)
 		prev->next = tmp->next;
 		printf ("%s just died\n", tmp->p->nom);
 		free_linked_enemie(tmp->p->e_list);
-        free_linked_item(tmp->p->i_list);
 		list_disp = deleteKey(tmp->p->id);
         free(tmp->p);
         free(tmp);

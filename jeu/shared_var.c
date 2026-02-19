@@ -30,3 +30,4 @@ int *building_id;
 int counter_use_item;
 uint8_t **building_altitude;
 int *building_id;
+int start_x; int start_y; int end_x; int end_y;

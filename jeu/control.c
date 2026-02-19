@@ -128,7 +128,7 @@ void deplacement(struct personnages *moi)
 			{
 				if (closestt->pv -  moi->dom >= 4)
 					sprintf(ordre + strlen(ordre), "0 %d 00 -%d ", closestt->id, moi->dom);
-				else if (can_add("wooden-board", 1, moi->i_list) == 1)
+				else if (can_add("wooden-board", 1, moi->items, moi->items_cnt) == 1)
 					sprintf(ordre + strlen(ordre), "0 %d 00 -1 0 %d 16 +1 wooden-board ", closestt->id, moi->id);
 			}
 			else
@@ -180,38 +180,26 @@ void deplacement(struct personnages *moi)
 		}
 		if(lettres->keystates[SDL_SCANCODE_S])
 		{
-			//if (counter_use_item > 3)
-			//{
-				int x;int y;
-				if ((int)moi->x > 25)
-					x = 25;	
-				else
-					x= (int)moi->x;
-				if ((int)moi->y > 25)
-					y = 25;
-				else
-					y 	= (int)moi->y;
-				int largeur = min(max_x,(int)floor(moi->x) + 24) - max(0, (int)floor(moi->x) - 24);
-				if (10 > n_item(moi->i_list) && ground_altitude[x + largeur * y] > 0 && find_building_by_id(building_id[(int)moi->x + ((int)moi->y)*max_x]) == NULL)
+				if (10 > n_item(moi->items) && ground_altitude[((int)moi->y - start_y) * (end_x - start_x) + (int)moi->x - start_x] > 0 && find_building_by_id(building_id[(int)moi->x + ((int)moi->y)*max_x]) == NULL)
 				{
-					SDL_Texture *t = ground_texture[x + largeur * y];
+					SDL_Texture *t = ground_texture[((int)moi->y - start_y) * (end_x - start_x) + (int)moi->x - start_x];
 					if (t == img->t->he1 || t == img->t->he2 || t == img->t->he3 || t == img->t->he4 || t == img->t->he5)
 						sprintf (ordre + strlen(ordre), "0 %d 16 +1 herbe 0 %d 08 %d 0 %d 22 2 0 %d 21 0 ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x, moi->id, moi->id);
 					else if (t == img->t->sa1 || t == img->t->sa2 || t == img->t->sa3)
 						sprintf (ordre + strlen(ordre), "0 %d 16 +1 sable 0 %d 08 %d 0 %d 22 2 0 %d 21 0 ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x, moi->id, moi->id);
 					else if (t == img->t->ne1 || t == img->t->ne2 || t == img->t->ne3)
 						sprintf (ordre + strlen(ordre), "0 %d 08 %d 0 %d 13 %d ea1 ", moi->id, (int)moi->x + ((int)moi->y)*max_x, moi->id, (int)moi->x + ((int)moi->y)*max_x);
-					else if (t == img->t->granit && (strcmp(moi->left_hand, "wood pickaxe") == 0 || strcmp(moi->left_hand, "stone pickaxe") == 0 || strcmp(moi->left_hand, "bronze pickaxe") == 0 || strcmp(moi->left_hand, "iron pickaxe") == 0 || strcmp(moi->left_hand, "steel pickaxe") == 0))
+					else if (t == img->t->granit && (strcmp(moi->items[12], "wood pickaxe") == 0 || strcmp(moi->items[12], "stone pickaxe") == 0 || strcmp(moi->items[12], "bronze pickaxe") == 0 || strcmp(moi->items[12], "iron pickaxe") == 0 || strcmp(moi->items[12], "steel pickaxe") == 0))
 						sprintf (ordre + strlen(ordre), "0 %d 16 +1 granit 0 %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
-					else if (t == img->t->basalt && (strcmp(moi->left_hand, "wood pickaxe") == 0 || strcmp(moi->left_hand, "stone pickaxe") == 0 || strcmp(moi->left_hand, "bronze pickaxe") == 0 || strcmp(moi->left_hand, "iron pickaxe") == 0 || strcmp(moi->left_hand, "steel pickaxe") == 0))
+					else if (t == img->t->basalt && (strcmp(moi->items[12], "wood pickaxe") == 0 || strcmp(moi->items[12], "stone pickaxe") == 0 || strcmp(moi->items[12], "bronze pickaxe") == 0 || strcmp(moi->items[12], "iron pickaxe") == 0 || strcmp(moi->items[12], "steel pickaxe") == 0))
 						sprintf (ordre + strlen(ordre), "0 %d 16 +1 basalt 0 %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
-					else if (t == img->t->calcaire && (strcmp(moi->left_hand, "wood pickaxe") == 0 || strcmp(moi->left_hand, "stone pickaxe") == 0 || strcmp(moi->left_hand, "bronze pickaxe") == 0 || strcmp(moi->left_hand, "iron pickaxe") == 0 || strcmp(moi->left_hand, "steel pickaxe") == 0))
+					else if (t == img->t->calcaire && (strcmp(moi->items[12], "wood pickaxe") == 0 || strcmp(moi->items[12], "stone pickaxe") == 0 || strcmp(moi->items[12], "bronze pickaxe") == 0 || strcmp(moi->items[12], "iron pickaxe") == 0 || strcmp(moi->items[12], "steel pickaxe") == 0))
 						sprintf (ordre + strlen(ordre), "0 %d 16 +1 calcaire 0 %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
-					else if (t == img->t->gres && (strcmp(moi->left_hand, "wood pickaxe") == 0 || strcmp(moi->left_hand, "stone pickaxe") == 0 || strcmp(moi->left_hand, "bronze pickaxe") == 0 || strcmp(moi->left_hand, "iron pickaxe") == 0 || strcmp(moi->left_hand, "steel pickaxe") == 0))
+					else if (t == img->t->gres && (strcmp(moi->items[12], "wood pickaxe") == 0 || strcmp(moi->items[12], "stone pickaxe") == 0 || strcmp(moi->items[12], "bronze pickaxe") == 0 || strcmp(moi->items[12], "iron pickaxe") == 0 || strcmp(moi->items[12], "steel pickaxe") == 0))
 						sprintf (ordre + strlen(ordre), "0 %d 16 +1 gres 0 %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
-					else if (t == img->t->marbre && (strcmp(moi->left_hand, "wood pickaxe") == 0 || strcmp(moi->left_hand, "stone pickaxe") == 0 || strcmp(moi->left_hand, "bronze pickaxe") == 0 || strcmp(moi->left_hand, "iron pickaxe") == 0 || strcmp(moi->left_hand, "steel pickaxe") == 0))
+					else if (t == img->t->marbre && (strcmp(moi->items[12], "wood pickaxe") == 0 || strcmp(moi->items[12], "stone pickaxe") == 0 || strcmp(moi->items[12], "bronze pickaxe") == 0 || strcmp(moi->items[12], "iron pickaxe") == 0 || strcmp(moi->items[12], "steel pickaxe") == 0))
 						sprintf (ordre + strlen(ordre), "0 %d 16 +1 marbre 0 %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
-					else if (t == img->t->schiste && (strcmp(moi->left_hand, "wood pickaxe") == 0 || strcmp(moi->left_hand, "stone pickaxe") == 0 || strcmp(moi->left_hand, "bronze pickaxe") == 0 || strcmp(moi->left_hand, "iron pickaxe") == 0 || strcmp(moi->left_hand, "steel pickaxe") == 0))
+					else if (t == img->t->schiste && (strcmp(moi->items[12], "wood pickaxe") == 0 || strcmp(moi->items[12], "stone pickaxe") == 0 || strcmp(moi->items[12], "bronze pickaxe") == 0 || strcmp(moi->items[12], "iron pickaxe") == 0 || strcmp(moi->items[12], "steel pickaxe") == 0))
 						sprintf (ordre + strlen(ordre), "0 %d 16 +1 schiste 0 %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
 
 

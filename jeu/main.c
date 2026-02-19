@@ -112,7 +112,15 @@ void boucle_jeu(int socket, char *name)
    // struct timeval start;struct timeval end;
 	while(!done)
 	{
-        //printf ("%f %f\n", moi->x, moi->y);
+        start_x = (int)moi->x - 24;
+        start_y = (int)moi->y - 24;
+        end_x   = (int)moi->x + 24;
+        end_y   = (int)moi->y + 24;
+        if (start_x < 0) start_x = 0;
+        if (start_y < 0) start_y = 0;
+        if (end_x > max_x) end_x = max_x;
+        if (end_y > max_y) end_y = max_y;
+        //printf ("%f %f %f\n", moi->x, moi->y, moi->altitude);
 	    event = gestion_touche();
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	    SDL_RenderClear(renderer);

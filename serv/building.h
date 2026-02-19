@@ -21,7 +21,8 @@ struct building
 
 int append_building(char *line, char *skin, int id);
 int parse_new_building(struct building *b, char *line, char *skin, int id);
-void actualise_building_altitude(void);
+void remove_building_altitude(struct building *b);
+void add_building_altitude(struct building *b);
 struct building *get_ptr_from_id_building(int id);
 int find_smalest_valid_id_building(int from);
 void add_wood_pillar_or_wood_house(int moix, int moiy);

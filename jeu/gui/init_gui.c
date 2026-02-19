@@ -34,7 +34,7 @@ static void init_inventory_menu(struct menu_inventaire *menuInv)
     const char *inventory_actions[] = {"Consume", "Equip yourself", "Drop"};
     menuInv->actions = initializeSelector(550, 50, 250, 50, (SDL_Color){75, 0, 130, 255}, (SDL_Color){221, 160, 221, 255}, (SDL_Color){255, 255, 255, 255}, littleFont, allocate_and_initialize_options(inventory_actions, 3), 3);
 
-    const char *equipment_options[] = {moi->left_hand, moi->right_hand, moi->headgear, moi->tunic, moi->pant, moi->shoes};
+    const char *equipment_options[] = {moi->items[12], moi->items[13], moi->items[14], moi->items[15], moi->items[16], moi->items[17]};
     menuInv->equipement = initializeSelector(850, 50, 250, 50, (SDL_Color){75, 0, 130, 255}, (SDL_Color){221, 160, 221, 255}, (SDL_Color){255, 255, 255, 255}, littleFont, allocate_and_initialize_options(equipment_options, 6), 6);
 }
 

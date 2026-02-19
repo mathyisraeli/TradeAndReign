@@ -11,206 +11,156 @@ int count(char *name)
 	return 1;
 }
 
-int n_item(struct linked_item *l)
+int n_item(char items[18][50])
 {
 	int ret = 0;
-	for (struct linked_item *p = l; p != NULL; p = p->next)
-		ret += 1;
+	for (int i = 0; i < 10; i++)
+		if (items[i][0] == '.' && items[i][1] == 0)
+			ret += 1;
 	return ret;
 }
 
-char can_add(char *name, int cnt, struct linked_item *l)
+char can_add(char *name, int cnt, char items[18][50], int items_cnt[12])
 {
 	int max = count(name);
-	int cnt_slot = 0;
-	while (l != NULL)
+	int available = 0;
+	for (int i = 0; i < 10; i++)
 	{
-		if (strcmp(name, l->nom) == 0)
-			cnt -= max - l->count;
-		cnt_slot += 1;
-		if (0 >= cnt)
-			return 1;
-		l = l->next;
+		if (strcmp(name, items[i]) == 0)
+			available += max - items_cnt[i];
+		else if (items[i][0] == '.' && items[i][1] == 0)
+			available += max;
 	}
-	while (10 > cnt_slot)
-	{
-		cnt -= max;
-		cnt_slot += 1;
-		if (0 >= cnt)
-			return 1;
-	}
-	return 0;
+	return available >= cnt;
 }
 
-struct linked_item *append_in_inventory(char *name, struct linked_item *p, int n)
+void append_in_inventory(char *name, int n, char items[18][50], int items_cnt[12])
 {
-	if (p == NULL)
+	int max = count(name);
+	for (int i = 0; i < 10; i++)
 	{
-		p = malloc(sizeof(struct linked_item));
-		p->nom[0] = 0;
-		p->count = n;
-		strcat(p->nom, name);
-		p->next = NULL;
-		return p;
-	}
-	else
-	{
-		struct linked_item *parcour = p;
-		while (parcour->next != NULL)
+		if (strcmp(items[i], name) == 0)
 		{
-			parcour = parcour->next;
-			if (strcmp(parcour->nom, name) == 0)
+			if (max > items_cnt[i])
 			{
-				int max = count(name);
-				if (max > parcour->count)
+				int b = max - items_cnt[i];
+				if (b >= n)
 				{
-					int b = max - parcour->count;
-					if (b >= n)
-					{
-						parcour->count += n;
-						return p;
-					}
-					else
-					{
-						parcour->count = max;
-						n -= b;
-					}
+					items_cnt[i] += n;
+					return;
+				}
+				else
+				{
+					items_cnt[i] = max;
+					n -= b;
 				}
 			}
 		}
-		struct linked_item *new = malloc(sizeof(struct linked_item));
-		new->nom[0] = 0;
-		new->count = n;
-		strcat(new->nom, name);
-		new->next = NULL;
-		parcour->next = new;
-		return p;
 	}
-}
-
-void moove_item(int a, int b, struct linked_item *l)
-{
-	struct linked_item *sa = NULL;
-	struct linked_item *sb = NULL;
-	char tmp[50];
-	tmp[0] = 0;
-	int i = 0;
-	while (i <= a || i <= b)
+	for (int i = 0; i < 10; i++)
 	{
-		if (l == NULL)
+		if (strcmp(items[i], ".") == 0)
+		{
+			sprintf(items[i], "%s", name);
+			items_cnt[i] = n;
 			return;
-		if (i == a)
-			sa = l;
-		if (i == b)
-			sb = l;
-		i++;
-		l = l->next;
-	}
-	strcat(tmp, sa->nom);
-	int tmpi = sa->count;
-	sa->nom[0] = 0;
-	sa->count = sb->count;
-	strcat(sa->nom, sb->nom);
-	sb->nom[0] = 0;
-	sb->count = tmpi;
-	strcat(sb->nom, tmp);
-}
-
-int count_item(struct linked_item *l, char *name)
-{
-	int i = 0;
-	while (l != NULL)
-	{
-		if (strcmp(l->nom, name) == 0)
-			i+= l->count;
-		l = l->next;
-	}
-	return i;
-}
-
-struct linked_item *get_item_n(int n, struct linked_item *l)
-{
-	while (l != NULL)
-	{
-		if (n == 1)
-			return l;
-		l = l->next;
-		n -= 1;
-	}
-	return NULL;
-}
-
-struct linked_item *exist_in_linked_item(struct linked_item *e, char *cmp)
-{
-	while (e != NULL)
-	{
-		if (strcmp(e->nom, cmp) == 0)
-			return e;
-		e = e->next;
-	}
-	return NULL;
-}
-
-void free_linked_item(struct linked_item *e)
-{
-	if (e != NULL)
-	{
-		free_linked_item(e->next);
-		free(e);
+		}
 	}
 }
 
-void print(struct linked_item *e)
+int count_item(char *name, char items[18][50], int items_cnt[12])
 {
-	if (e != NULL)
+	int ret = 0;
+	for (int i = 0; i < 10; i++)
 	{
-		printf ("%s ", e->nom);
-		print(e->next);
+		if (strcmp(items[i], name) == 0)
+			ret += items_cnt[i];
+	}
+	return ret;
+}
+
+int find_index_in_inventory(char *name, char items[18][50])
+{
+	for (int i = 0; i < 10; i++)
+		if (strcmp(items[i], name) == 0)
+			return i;
+	return -1;
+}
+
+void print(char items[18][50],  int items_cnt[12])
+{
+    for (int i = 0; i < 10; i++)
+		printf ("%s %d ", items[i], items_cnt[i]);
+	putchar('\n');
+}
+
+void remove_from_inventory(char *name, int n, char items[18][50], int items_cnt[12])
+{
+	for (int i = 0; i < 10; i++)
+	{
+		if (strcmp(items[i], name) == 0)
+		{
+			if (items_cnt[i] >= n)
+			{
+				items_cnt[i] -= n;
+				return;
+			}
+			else
+			{
+				n -= items_cnt[i];
+				items_cnt[i] = 0;
+			}
+		}
+	}
+}
+
+void echange_item(char p1_items[18][50], int p1_items_cnt[12], char p2_items[18][50], int p2_items_cnt[12], char p1_echange_player[50])
+{
+	if (strcmp(p1_items[10], ".") == 0)
+	{
+		for (int i = 0; 10 > i; i++)
+		{
+			if (strcmp(p2_items[i], p1_items[11]) == 0 && p2_items_cnt[i] >= p1_items_cnt[11])
+			{
+				append_in_inventory(p1_items[11], p1_items_cnt[11], p1_items, p1_items_cnt);
+				remove_from_inventory(p1_items[11], p1_items_cnt[11], p2_items, p2_items_cnt);
+				return;
+			}
+		}
+	}
+	if (strcmp(p1_items[11], ".") == 0)
+	{
+		for (int i = 0; 10 > i; i++)
+		{
+			if (strcmp(p1_items[i], p1_items[10]) == 0 && p1_items_cnt[i] >= p1_items_cnt[10])
+			{
+				remove_from_inventory(p1_items[10], p1_items_cnt[10], p1_items, p1_items_cnt);
+				append_in_inventory(p1_items[10], p1_items_cnt[10], p2_items, p2_items_cnt);
+				return;
+			}
+		}
 	}
 	else
-		putchar('\n');
-}
-
-struct linked_item *del(struct linked_item *root, struct linked_item *to_del)
-{
-	struct linked_item *p;
-	if (root == to_del)
 	{
-		p = root->next;
-		free(root);
-		return p;
-	}
-	p = root;
-	while (p->next != NULL)
-	{
-		if (p->next == to_del)
+		char p1get=0; char p2get = 0;
+        for (int i = 0; 10 > i; i++)
+        {
+			if (strcmp(p2_items[i], p1_items[11]) == 0 && p2_items_cnt[i] >= p1_items_cnt[11])
+                p1get = 1;
+            if (strcmp(p1_items[i], p1_items[10]) == 0 && p1_items_cnt[i] >= p1_items_cnt[10])
+                p2get = 1;
+        }
+		if (p1get == 1 && p2get == 1)
 		{
-			p->next = to_del->next;
-			free(to_del);
-			return root;
-		}
-		p = p->next;
-	}
-	return root;
-}
-
-struct linked_item *remove_from_inventory(char *name, struct linked_item *p, int n)
-{
-       while (n > 0 && p != NULL)
-       {
-               struct linked_item *a = exist_in_linked_item(p, name);
-               if (a == NULL)
-                       return p;
-               if (a->count > n)
-               {
-                       a->count -= n;
-                       n = 0;
-               }
-               else
-               {
-                       n -= a->count;
-                       p = del(p, a);
-               }
-       }
-       return p;
+			append_in_inventory(p1_items[11], p1_items_cnt[11], p1_items, p1_items_cnt);
+			remove_from_inventory(p1_items[11], p1_items_cnt[11], p2_items, p2_items_cnt);
+			remove_from_inventory(p1_items[10], p1_items_cnt[10], p1_items, p1_items_cnt);
+			append_in_inventory(p1_items[10], p1_items_cnt[10], p2_items, p2_items_cnt);
+	    }
+    }
+	p1_items[10][0] =  '.'; p1_items[10][1] = 0;
+	p1_items[11][0] =  '.'; p1_items[11][1] = 0;	
+	p1_items_cnt[10] = 0;	
+	p1_items_cnt[11] = 0;
+	p1_echange_player[0] = '.' ; p1_echange_player[1] = 0;
 }

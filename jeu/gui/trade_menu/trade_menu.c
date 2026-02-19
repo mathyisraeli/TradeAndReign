@@ -1,63 +1,58 @@
 #include "trade_menu.h"
 
-void echange_item(struct personnages *perso1, struct personnages *perso2)
+//items10 is removed to perso1 and given to perso2
+//items11 is removed to perso2 and given to perso1
+
+void echange_item_net(struct personnages *perso1, struct personnages *perso2)
 {
-	printf ("%s %s\n", perso1->nom, perso2->nom);
-	printf ("%s %s\n", perso1->item1, perso1->item2);
-	if (strcmp(perso1->item1, "none") == 0)
+	//printf ("%s %s\n", perso1->nom, perso2->nom);
+	//printf ("%s %s\n", perso1->item1, perso1->item2);
+	if (strcmp(perso1->items[10], ".") == 0)
 	{
-		for (struct linked_item *p = perso1->i_list; p != NULL; p =p->next)
+		for (int i = 0; 10 > i; i++)
 		{
-			if (strcmp(p->nom, perso1->item2) == 0 && p->count >= perso1->count_item2)
+			if (strcmp(perso2->items[i], perso1->items[11]) == 0 && perso2->items_cnt[i] >= perso1->items_cnt[11])
 			{
-
-				sprintf (ordre + strlen(ordre), "0 %d 16 +%d %s 0 %d 16 %d %s 0 %d 17 none none 0 none 0 ", 
-				perso2->id, perso1->count_item2, perso1->item2,
-				perso1->id, perso1->count_item2, perso1->item2, 
-				perso1->id);
+				sprintf (ordre + strlen(ordre), "0 %d 16 +%d %s 0 %d 16 %d %s 0 ", 
+				perso1->id, perso1->items_cnt[11], perso1->items[11],
+				perso2->id, perso1->items_cnt[11], perso1->items[11]);
 				return;
 			}
 		}
-		sprintf (ordre + strlen(ordre), "0 %d 17 none none 0 none 0 ", perso1->id);
 	}
-	else if (strcmp(perso1->item2, "none") == 0)
+	if (strcmp(perso1->items[11], ".") == 0)
 	{
-		for (struct linked_item *p = perso2->i_list; p != NULL; p =p->next)
+		for (int i = 0; 10 > i; i++)
 		{
-			if (strcmp(p->nom, perso1->item1) == 0 && p->count >= perso1->count_item1)
+			if (strcmp(perso1->items[i], perso1->items[10]) == 0 && perso1->items_cnt[i] >= perso1->items_cnt[10])
 			{
-
-				sprintf (ordre + strlen(ordre), "0 %d 16 +%d %s 0 %d 16 %d %s 0 %d 17 none none 0 none 0 ", 
-				perso1->id, perso1->count_item1, perso1->item1, 
-				perso2->id, perso1->count_item1, perso1->item1,
-				perso1->id);
+				sprintf (ordre + strlen(ordre), "0 %d 16 +%d %s 0 %d 16 %d %s 0 ", 
+				perso2->id, perso1->items_cnt[10], perso1->items[10],
+				perso1->id, perso1->items_cnt[10], perso1->items[10]);
 				return;
 			}
 		}
-		sprintf (ordre + strlen(ordre), "0 %d 17 none none 0 none 0 ", perso1->id);
 	}
 	else
 	{
 		char p1get=0; char p2get = 0;
-		for (struct linked_item *p = perso1->i_list; p != NULL; p =p->next)
-			if (strcmp(p->nom, perso1->item2) == 0 && p->count >= perso1->count_item2)
-				p1get = 1;
-		for (struct linked_item *p = perso2->i_list; p != NULL; p =p->next)
-			if (strcmp(p->nom, perso1->item1) == 0 && p->count >= perso1->count_item1)
-				p2get = 1;
+        for (int i = 0; 10 > i; i++)
+        {
+			if (strcmp(perso2->items[i], perso1->items[11]) == 0 && perso2->items_cnt[i] >= perso1->items_cnt[11])
+                p1get = 1;
+            if (strcmp(perso1->items[i], perso1->items[10]) == 0 && perso1->items_cnt[i] >= perso1->items_cnt[10])
+                p2get = 1;
+        }
 		if (p1get == 1 && p2get == 1)
 		{
-			sprintf (ordre + strlen(ordre), "0 %d 16 +%d %s 0 %d 16 +%d %s 0 %d 16 %d %s 0 %d 16 %d %s 0 %d 17 none none 0 none 0 ", 
-			perso1->id, perso1->count_item1, perso1->item1, 
-			perso2->id, perso1->count_item2, perso1->item2,
-			perso1->id, perso1->count_item2, perso1->item2, 
-			perso2->id, perso1->count_item1, perso1->item1,
-			perso1->id);
-		}
-		else
-			sprintf (ordre + strlen(ordre), "0 %d 17 none none 0 none 0 ", perso1->id);
-	}
-	
+			sprintf (ordre + strlen(ordre), "0 %d 16 +%d %s 0 %d 16 +%d %s 0 %d 16 %d %s 0 %d 16 %d %s 0 ", 
+			perso1->id, perso1->items_cnt[11], perso1->items[11], 
+			perso2->id, perso1->items_cnt[10], perso1->items[10],
+			perso2->id, perso1->items_cnt[11], perso1->items[11], 
+			perso1->id, perso1->items_cnt[10], perso1->items[10]);
+	    }
+    }
+	sprintf (ordre + strlen(ordre), "0 %d 17 none none 0 none 0 ", perso1->id);	
 }
 
 
@@ -89,29 +84,11 @@ void menu_trade(void)
     {
         echange_player.text =  chosen->nom;
         drawTextInfo(renderer, &echange_player);
-        int j = 0;
-        for (struct linked_item *i = moi->i_list; i != NULL; i = i->next)
-        {
-            sprintf(main_menu->menuInv->selector->options[j], "%s %d/%d", i->nom, min(main_menu->menuTrad->count1, i->count), i->count);
-            j += 1;
-        }
-        while (j < 10)
-        {
-            strcpy(main_menu->menuInv->selector->options[j], "empty slot");
-            j+=1;
-        }
+        for (int i = 0; 10 > i; i++)
+            sprintf(main_menu->menuInv->selector->options[i], "%s %d/%d", moi->items[i], min(main_menu->menuTrad->count1, moi->items_cnt[i]),moi->items_cnt[i]);
         drawSelector(renderer, main_menu->menuInv->selector);
-        j = 0;
-        for (struct linked_item *i = chosen->i_list; i != NULL; i = i->next)
-        {
-            sprintf(main_menu->menuTrad->selector2->options[j], "%s %d/%d", i->nom, min(main_menu->menuTrad->count2, i->count), i->count);
-            j += 1;
-        }
-        while (j < 10)
-        {
-            strcpy(main_menu->menuTrad->selector2->options[j], "empty slot");
-            j+=1;
-        }
+        for (int i = 0; 10 > i; i++)
+            sprintf(main_menu->menuTrad->selector2->options[i], "%s %d/%d",  chosen->items[i], min(main_menu->menuTrad->count2,  chosen->items_cnt[i]), chosen->items_cnt[i]);
         drawSelector(renderer, main_menu->menuTrad->selector2);
         if (lettres->keystates[SDL_SCANCODE_ESCAPE])
             main_menu->menuTrad->on = 0;
@@ -140,27 +117,10 @@ void menu_trade(void)
         if (lettres->keystates[SDL_SCANCODE_TAB])
             main_menu->menuTrad->tab *= -1;
         if (lettres->keystates[SDL_SCANCODE_RETURN])
-        {
-            struct linked_item *i = moi->i_list;
-            int a = 0;
-            while (a < main_menu->menuInv->selector->selectedOption && i != NULL)
-            {
-                a += 1;
-                i = i->next;
-            }
-            a = 0;
-            struct linked_item *i2 = chosen->i_list;
-            while (a < main_menu->menuTrad->selector2->selectedOption && i2 != NULL)
-            {
-                a += 1;
-                i2 = i2->next;
-            }
-            if (i != NULL && i2 != NULL)
-                sprintf (ordre + strlen(ordre), "0 %d 17 %s %s %d %s %d ", chosen->id, moi->nom, i->nom, min(i->count, main_menu->menuTrad->count1), i2->nom, min(i2->count, main_menu->menuTrad->count2));
-            else if (i != NULL)
-                sprintf (ordre + strlen(ordre), "0 %d 17 %s %s %d none 0 ", chosen->id, moi->nom, i->nom, min(i->count, main_menu->menuTrad->count1));
-            else if (i2 != NULL)
-                sprintf (ordre + strlen(ordre), "0 %d 17 %s none 0 %s %d ", chosen->id, moi->nom, i2->nom, min(i2->count, main_menu->menuTrad->count2));
+        {    
+            sprintf (ordre + strlen(ordre), "0 %d 17 %s %s %d %s %d ", 
+            chosen->id, moi->nom, chosen->items[main_menu->menuTrad->selector2->selectedOption], min(chosen->items_cnt[main_menu->menuTrad->selector2->selectedOption], main_menu->menuTrad->count1), 
+            moi->items[main_menu->menuInv->selector->selectedOption], min(moi->items_cnt[ main_menu->menuInv->selector->selectedOption], main_menu->menuTrad->count2));
         }
     }
     else
@@ -180,7 +140,7 @@ void accept_trade(void)
         menu_cond->acceptTrade = -1;
     drawTextBox(renderer, &menu_cond->bgEventTextBox, false);
     char text[300];
-    sprintf (text, "%s propose you to trade %d %s against %d %s", moi->echange_player, moi->count_item1, moi->item1, moi->count_item2, moi->item2);
+    sprintf (text, "%s propose you to trade %d %s against %d %s", moi->echange_player, moi->items_cnt[10], moi->items[10], moi->items_cnt[11], moi->items[11]);
     TextInfo text_display = {text,  littleFont, 200, 150,0,{255, 255, 255, 255}, 0,0,0};
     drawSelector(renderer, menu_cond->selector_accept_trade);
     drawTextInfo(renderer, &text_display);
@@ -191,7 +151,7 @@ void accept_trade(void)
     if (lettres->keystates[SDL_SCANCODE_RETURN] == 1)
     {
         if(menu_cond->selector_accept_trade->selectedOption == 0)
-            echange_item(moi, find_perso_by_name(moi->echange_player));
+            echange_item_net(moi, find_perso_by_name(moi->echange_player));
         else if(menu_cond->selector_accept_trade->selectedOption == 1)
             sprintf (ordre + strlen(ordre), "0 %d 17 none none 0 none 0 ", moi->id); // decline
         else

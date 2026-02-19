@@ -21,58 +21,50 @@ char watter_around(int coo)
 void ia_arbre(struct personnages *p)
 {
     p->animation += 1; 
-    if (p->animation > 60)
+    if (p->animation > 1200)
     {
-        if (p->faim > 20)
+        p->animation = 0;
+        char w = watter_around((int)p->x + ((int)p->y)*max_x);
+        if (w == 2)
         {
-            char w = watter_around((int)p->x + ((int)p->y)*max_x);
-            if (w == 2)
+            p->pv -= 1;
+            p->a_bouger = 1;
+        }
+        if (w== 1)
+        {   
+            if (p->pv > 25) 
             {
-                p->pv -= 1;
+                append_in_inventory("fruit", 1, p->items, p->items_cnt);
                 p->a_bouger = 1;
-            }
-            if (w== 1)
-            {   
-                if (p->pv > 25)
+                if (count_item("fruit", p->items, p->items_cnt) == 20)
                 {
-                    append_in_inventory("fruit", p->i_list, 1);
-                    p->faim -= 21;
-                    p->animation = 0; 
-                    p->a_bouger = 1;
-                }
-                if (50 > p->pv)
-                {
-                    p->a_bouger = 1;
-                    p->pv += 1;
+                    remove_from_inventory("fruit", 20, p->items, p->items_cnt);
+                    int j = append_empty_perso();
+                    sprintf (list.data[j].skin, "01");
+                    list.data[j].pv = 50;
+                    sprintf (list.data[j].echange_player, "none");
+                    for (int i = 0; 18 > i; i++)
+                    {
+                        list.data[j].items[i][0] = '.';
+                        list.data[j].items[i][1] = 0;
+                    }
+                    list.data[j].x = p->x + 1;
+                    list.data[j].y = p->y;
+                    list.data[j].angle = 'a';
+                    list.data[j].faim = 0;
                 }
             }
-        }
-        else
-        {
-            p->faim += 1;
-            p->animation = 0; 
-        }
-        if (count_item(p->i_list, "fruit") == 20)
-        {
-            int j = append_empty_perso();
-            sprintf (list.data[j].skin, "01");
-            list.data[j].pv = 50;
-            sprintf (list.data[j].echange_player, "none");
-            sprintf (list.data[j].item1, "none");
-            sprintf (list.data[j].item2, "none");
-            list.data[j].x = p->x + 1;
-            list.data[j].y = p->y;
-            list.data[j].count_item1 = 0;
-            list.data[j].count_item2 = 0;
-            list.data[j].angle = 'a';
-            list.data[j].faim = 0;
-
+            if (50 > p->pv)
+            {
+                p->a_bouger = 1;
+                p->pv += 1;
+            }
         }
     }
-    /*if (strcmp(p->echange_player, "none") != 0)
+    if (strcmp(p->echange_player, ".") != 0)
     {
         struct personnages *echange_player = find_perso_by_name(p->echange_player);
-        if (echange_player != NULL && 9 > (echange_player->x - moi->x)*(echange_player->x - moi->x)+(echange_player->y - moi->y)*(echange_player->y - moi->y))
-            echange_item(p, echange_player);
-    } *///todo 
+        if (echange_player != NULL && 9 > (echange_player->x - p->x)*(echange_player->x - p->x)+(echange_player->y - p->y)*(echange_player->y - p->y))
+            echange_item(p->items, p->items_cnt, echange_player->items, echange_player->items_cnt, p->echange_player);
+    }  
 }
