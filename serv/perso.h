@@ -24,6 +24,7 @@ struct personnages
     int animation;                  //                              -   7
 	int animation_2;                //                              -   8
     int speak_timer;                // NOT NETWORK  -   NOT IN FILE
+    int echange_player;             //                              -   14
     int items_cnt[12];              //                              -   15 BIS
     char angle;                     //                              -   9
     char chemin_is_set;             // NOT NETWORK  -   NOT IN FILE   
@@ -35,7 +36,7 @@ struct personnages
     char nom_de_compte[50];         //                              -   11
     char nom[50];                   //                              -   12
     char nom_superieur[50];         //                              -   13  
-    char echange_player[50];        //                              -   14
+    
     char speak[90];                 //                              -   23 (LAST)
     char skill[62*3];               //                              -   22
     char items[18][50];             //                              -   15 BIS

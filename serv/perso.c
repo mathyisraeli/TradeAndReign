@@ -7,9 +7,9 @@ int parse_new(struct personnages *p, char *line, char *skin)
     char tmpI[10];
     char tmpN[50];
     p->skill[0] = 0;
-    sscanf(line, "%d %d %d %d %d %d %d %c %s %s %s %s %s %d %s %d %s %d %s %d %s %d %s %d %s %d %s %d %s %d %s %d %s %d %s %d %s %s %s %s %s %s %s %f %f %f %f %f %n", 
+    sscanf(line, "%d %d %d %d %d %d %d %c %s %s %s %s %d %d %s %d %s %d %s %d %s %d %s %d %s %d %s %d %s %d %s %d %s %d %s %d %s %s %s %s %s %s %s %f %f %f %f %f %n", 
     &p->pv, &p->nb_vassaux, &p->faim, &p->inside, &p->house_id, &p->animation, &p->animation_2, &p->angle, p->physique, p->nom_de_compte, p->nom, p->nom_superieur, 
-    p->echange_player, &p->items_cnt[0], p->items[0], &p->items_cnt[1], p->items[1], &p->items_cnt[2], p->items[2], &p->items_cnt[3], p->items[3], &p->items_cnt[4], p->items[4],
+    &p->echange_player, &p->items_cnt[0], p->items[0], &p->items_cnt[1], p->items[1], &p->items_cnt[2], p->items[2], &p->items_cnt[3], p->items[3], &p->items_cnt[4], p->items[4],
     &p->items_cnt[5], p->items[5], &p->items_cnt[6], p->items[6], &p->items_cnt[7], p->items[7], &p->items_cnt[8], p->items[8], &p->items_cnt[9], p->items[9], &p->items_cnt[10], p->items[10], 
     &p->items_cnt[11], p->items[11],  p->items[12],  p->items[13],  p->items[14],  p->items[15],  p->items[16],  p->items[17],  &p->x, &p->y, &p->altitude, &p->ordrex, &p->ordrey, &i);
     while (line[i] != ']')

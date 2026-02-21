@@ -130,7 +130,7 @@ void menu_trade(void)
 
 void accept_trade(void)
 {
-    struct personnages *echange_player = find_perso_by_name(moi->echange_player);
+    struct personnages *echange_player = find_perso_by_id(moi->echange_player);
     if (echange_player == NULL || (echange_player->x - moi->x)*(echange_player->x - moi->x)+(echange_player->y - moi->y)*(echange_player->y - moi->y) > 9)
     {
         sprintf (ordre + strlen(ordre), "0 %d 17 none none 0 none 0 ", moi->id); // decline
@@ -140,7 +140,7 @@ void accept_trade(void)
         menu_cond->acceptTrade = -1;
     drawTextBox(renderer, &menu_cond->bgEventTextBox, false);
     char text[300];
-    sprintf (text, "%s propose you to trade %d %s against %d %s", moi->echange_player, moi->items_cnt[10], moi->items[10], moi->items_cnt[11], moi->items[11]);
+    sprintf (text, "do you want to trade %d %s against %d %s ?", moi->items_cnt[10], moi->items[10], moi->items_cnt[11], moi->items[11]);
     TextInfo text_display = {text,  littleFont, 200, 150,0,{255, 255, 255, 255}, 0,0,0};
     drawSelector(renderer, menu_cond->selector_accept_trade);
     drawTextInfo(renderer, &text_display);
@@ -151,7 +151,7 @@ void accept_trade(void)
     if (lettres->keystates[SDL_SCANCODE_RETURN] == 1)
     {
         if(menu_cond->selector_accept_trade->selectedOption == 0)
-            echange_item_net(moi, find_perso_by_name(moi->echange_player));
+            echange_item_net(moi, find_perso_by_id(moi->echange_player));
         else if(menu_cond->selector_accept_trade->selectedOption == 1)
             sprintf (ordre + strlen(ordre), "0 %d 17 none none 0 none 0 ", moi->id); // decline
         else

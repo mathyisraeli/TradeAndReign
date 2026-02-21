@@ -687,7 +687,7 @@ void ia_man(struct personnages *p)
             }
         }
     }
-    if (strcmp(p->echange_player, "none") != 0)
+    if (p->echange_player != -1)
     {
         sprintf(p->speak, "votre proposition est ininteressante");
         sprintf(p->items[10], ".");

@@ -91,7 +91,7 @@ char conditional_menu(struct linked_list *selected)
         manage_formation_menu();
         to_ret = 1;
     }
-    if (strcmp(moi->echange_player, "none") != 0)
+    if (moi->echange_player != -1)
     {
         menu_cond->accept_trade.isPressed = 1;
         if (lettres->keystates[SDL_SCANCODE_L])

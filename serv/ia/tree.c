@@ -42,7 +42,7 @@ void ia_arbre(struct personnages *p)
                     int j = append_empty_perso();
                     sprintf (list.data[j].skin, "01");
                     list.data[j].pv = 50;
-                    sprintf (list.data[j].echange_player, "none");
+                    list.data[j].echange_player = -1;
                     for (int i = 0; 18 > i; i++)
                     {
                         list.data[j].items[i][0] = '.';
@@ -61,10 +61,9 @@ void ia_arbre(struct personnages *p)
             }
         }
     }
-    if (strcmp(p->echange_player, ".") != 0)
+    if (p->echange_player != -1)
     {
-        struct personnages *echange_player = find_perso_by_name(p->echange_player);
-        if (echange_player != NULL && 9 > (echange_player->x - p->x)*(echange_player->x - p->x)+(echange_player->y - p->y)*(echange_player->y - p->y))
-            echange_item(p->items, p->items_cnt, echange_player->items, echange_player->items_cnt, p->echange_player);
+        if (list.data[p->echange_player].is_active && 9 > (list.data[p->echange_player].x - p->x)*(list.data[p->echange_player].x - p->x)+(list.data[p->echange_player].y - p->y)*(list.data[p->echange_player].y - p->y))
+            p->echange_player = echange_item(p->items, p->items_cnt, list.data[p->echange_player].items, list.data[p->echange_player].items_cnt);
     }  
 }

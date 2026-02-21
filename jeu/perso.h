@@ -28,6 +28,7 @@ struct personnages
     int faim_time;                  // local
     int max_pv;                     // local
     int vitesse_dom;                // local
+    int echange_player;             // 14
     int items_cnt[12];              // 15 bis               10 premiers item // echange //
     char angle;                     // 9
     char skin[4];                   // 0
@@ -35,7 +36,6 @@ struct personnages
     char nom_de_compte[50];         // 11
     char nom[50];                   // 12
     char nom_superieur[50];         // 13 
-    char echange_player[50];        // 14
     char items[18][50];             // 15 bis               10 premiers item // echange //  left hand right hand headgear tunic pant shoes
     char speak[90];                 // 23
     char skill[62];                 // 22

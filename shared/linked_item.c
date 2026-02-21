@@ -114,7 +114,7 @@ void remove_from_inventory(char *name, int n, char items[18][50], int items_cnt[
 	}
 }
 
-void echange_item(char p1_items[18][50], int p1_items_cnt[12], char p2_items[18][50], int p2_items_cnt[12], char p1_echange_player[50])
+int echange_item(char p1_items[18][50], int p1_items_cnt[12], char p2_items[18][50], int p2_items_cnt[12])
 {
 	if (strcmp(p1_items[10], ".") == 0)
 	{
@@ -124,7 +124,7 @@ void echange_item(char p1_items[18][50], int p1_items_cnt[12], char p2_items[18]
 			{
 				append_in_inventory(p1_items[11], p1_items_cnt[11], p1_items, p1_items_cnt);
 				remove_from_inventory(p1_items[11], p1_items_cnt[11], p2_items, p2_items_cnt);
-				return;
+				break;
 			}
 		}
 	}
@@ -136,7 +136,7 @@ void echange_item(char p1_items[18][50], int p1_items_cnt[12], char p2_items[18]
 			{
 				remove_from_inventory(p1_items[10], p1_items_cnt[10], p1_items, p1_items_cnt);
 				append_in_inventory(p1_items[10], p1_items_cnt[10], p2_items, p2_items_cnt);
-				return;
+				break;
 			}
 		}
 	}
@@ -162,5 +162,5 @@ void echange_item(char p1_items[18][50], int p1_items_cnt[12], char p2_items[18]
 	p1_items[11][0] =  '.'; p1_items[11][1] = 0;	
 	p1_items_cnt[10] = 0;	
 	p1_items_cnt[11] = 0;
-	p1_echange_player[0] = '.' ; p1_echange_player[1] = 0;
+	return -1;
 }
