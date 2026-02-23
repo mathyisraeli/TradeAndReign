@@ -4,7 +4,10 @@ void menu_inventaire(void)
 {
     for (int i = 0; 10 > i; i++)
     {
-        sprintf(main_menu->menuInv->selector->options[i], "%s %d", moi->items[i], moi->items_cnt[i]);
+        if (moi->items_cnt[i] <= 0 || (moi->items[i][0] == '.' && moi->items[i][1] == '\0'))
+            main_menu->menuInv->selector->options[i][0] = '\0';
+        else
+            sprintf(main_menu->menuInv->selector->options[i], "%s %d", moi->items[i], moi->items_cnt[i]);
     }
 
     drawSelector(renderer, main_menu->menuInv->selector);

@@ -53,12 +53,12 @@ void death(void)
     }
 }
 
-void init_map(void)
+void init_map(const char *map_path)
 {
     list.data = malloc(10 *sizeof(struct personnages));
     list.capacity = 10;
     list.maxid = 0;
-    FILE *acount = fopen("map.txt", "r+");
+    FILE *acount = fopen(map_path, "r+");
     char line[500];
     size_t len = 500;
     char skin[5];

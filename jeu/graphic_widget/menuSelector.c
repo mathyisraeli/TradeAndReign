@@ -47,20 +47,23 @@ void drawSelector(SDL_Renderer* renderer, Selector* selector) {
 
         SDL_RenderFillRect(renderer, &destinationRect);
 
-        // Displaying the text of the option
-        SDL_Surface* textSurface = TTF_RenderText_Solid(selector->font, selector->options[i], selector->textColor);
-        SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-
-        SDL_Rect textDestination;
-        textDestination.x = destinationRect.x + 10;
-        textDestination.y = destinationRect.y + 10;
-        textDestination.w = textSurface->w;
-        textDestination.h = textSurface->h;
-
-        SDL_RenderCopy(renderer, textTexture, NULL, &textDestination);
-
-        SDL_DestroyTexture(textTexture);
-        SDL_FreeSurface(textSurface);
+        // Displaying the text of the option (skip if empty - TTF_RenderText_Solid can return NULL)
+        if (selector->options[i] != NULL && selector->options[i][0] != '\0')
+        {
+            SDL_Surface* textSurface = TTF_RenderText_Solid(selector->font, selector->options[i], selector->textColor);
+            if (textSurface != NULL)
+            {
+                SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+                SDL_Rect textDestination;
+                textDestination.x = destinationRect.x + 10;
+                textDestination.y = destinationRect.y + 10;
+                textDestination.w = textSurface->w;
+                textDestination.h = textSurface->h;
+                SDL_RenderCopy(renderer, textTexture, NULL, &textDestination);
+                SDL_DestroyTexture(textTexture);
+                SDL_FreeSurface(textSurface);
+            }
+        }
 
         destinationRect.y += 70; // Increase the Y position for the next option
     }

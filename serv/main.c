@@ -58,17 +58,30 @@ static int make_socket_non_blocking (int sfd)
 
 int main(int argc, char **argv)
 {
-	if (argc != 2)
+	if (argc != 3)
 	{
-		printf ("error 1 : serv need a port\n");
+		printf("usage: %s <port> <world_id 1-12>\n", argv[0]);
 		return 1;
 	}
+
+    int world_id = atoi(argv[2]);
+    if (world_id < 1 || world_id > 12)
+    {
+        printf("error: world_id must be between 1 and 12\n");
+        return 1;
+    }
+
+    char ground_path[64];
+    char map_path[64];
+    snprintf(ground_path, sizeof(ground_path), "world/g%d.txt", world_id);
+    snprintf(map_path, sizeof(map_path), "world/m%d.txt", world_id);
+
     unsigned int save_map_count = 0;
 	char *ground_str;
-	load_file_as_string("ground.txt", &ground_str);
+	load_file_as_string(ground_path, &ground_str);
 	create_array(ground_str);
     free(ground_str);
-	init_map();
+	init_map(map_path);
 	//list = croissance_pop(list);
 
 	char statut[MAXEVENTS] = {0};

@@ -11,5 +11,5 @@ struct dynamic_char_list{
 
 int append_perso(char *line, char *skin ,int id);
 void death(void);
-void init_map(void);
+void init_map(const char *map_path);
 int append_empty_perso(void);

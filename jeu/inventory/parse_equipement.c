@@ -79,7 +79,7 @@ void actualise_stat(struct personnages *p)
 		p->dom = 0;
 		p->poid = 10000;
 	}
-	else if (p->skin[0] == '0' && p->skin[1] == 0)
+	else if (p->skin[0] == '0' && (p->skin[1] == 0 || p->skin[1] == '0'))
 	{
 		list_disp = deleteKey(p->id);
 		p->max_pv = 10;
@@ -87,6 +87,7 @@ void actualise_stat(struct personnages *p)
 		p->vitesse_dep = 0.2;
 		p->poid = 65;
 		p->dom = 1;
+		p->porte_dom = 2;  /* punch range: ~2 tiles */
 		struct to_disp *new = malloc(sizeof(struct to_disp));
 		new->x = p->x;
 		new->altitude = p->altitude;

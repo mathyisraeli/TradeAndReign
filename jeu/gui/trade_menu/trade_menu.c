@@ -85,10 +85,20 @@ void menu_trade(void)
         echange_player.text =  chosen->nom;
         drawTextInfo(renderer, &echange_player);
         for (int i = 0; 10 > i; i++)
-            sprintf(main_menu->menuInv->selector->options[i], "%s %d/%d", moi->items[i], min(main_menu->menuTrad->count1, moi->items_cnt[i]),moi->items_cnt[i]);
+        {
+            if (moi->items_cnt[i] <= 0 || (moi->items[i][0] == '.' && moi->items[i][1] == '\0'))
+                main_menu->menuInv->selector->options[i][0] = '\0';
+            else
+                sprintf(main_menu->menuInv->selector->options[i], "%s %d/%d", moi->items[i], min(main_menu->menuTrad->count1, moi->items_cnt[i]), moi->items_cnt[i]);
+        }
         drawSelector(renderer, main_menu->menuInv->selector);
         for (int i = 0; 10 > i; i++)
-            sprintf(main_menu->menuTrad->selector2->options[i], "%s %d/%d",  chosen->items[i], min(main_menu->menuTrad->count2,  chosen->items_cnt[i]), chosen->items_cnt[i]);
+        {
+            if (chosen->items_cnt[i] <= 0 || (chosen->items[i][0] == '.' && chosen->items[i][1] == '\0'))
+                main_menu->menuTrad->selector2->options[i][0] = '\0';
+            else
+                sprintf(main_menu->menuTrad->selector2->options[i], "%s %d/%d", chosen->items[i], min(main_menu->menuTrad->count2, chosen->items_cnt[i]), chosen->items_cnt[i]);
+        }
         drawSelector(renderer, main_menu->menuTrad->selector2);
         if (lettres->keystates[SDL_SCANCODE_ESCAPE])
             main_menu->menuTrad->on = 0;

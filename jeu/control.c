@@ -15,124 +15,98 @@ void deplacement(struct personnages *moi)
 	{
 		sprintf (ordre + strlen(ordre), "0 %d 22 1 0 %d 21 0 ", moi->id, moi->id);
 		struct personnages *closestt = NULL;
-		float closest = moi->porte_dom*moi->porte_dom;
+		struct building *closest_building = NULL;
+		float reach_sq = moi->porte_dom > 0 ? moi->porte_dom * moi->porte_dom : 4.0f;
+		float closest = reach_sq;
+		float closest_building_dist = reach_sq;
 		for (struct linked_list *parcour = list; parcour != NULL; parcour = parcour->next)
 		{
+			if (parcour->p == moi)
+				continue;
 			float distx = parcour->p->x - moi->x;
 			float disty = parcour->p->y - moi->y;
-			if (moi->angle == 'e') // bas droite
-			{	
-				if (fabs(disty) < 0.5)
-				{
-					float dist = distx*distx + disty*disty;
-					if (distx > 0 && closest > dist)
-					{
-						closest = dist;
-						closestt = parcour->p;
-					}
-				}
-			}
-			else if (moi->angle == 'j') //haut gauche
-			{	
-				if (fabs(disty) < 0.5)
-				{
-					float dist = distx*distx + disty*disty;
-					if (distx < 0 && closest > dist)
-					{
-						closest = dist;
-						closestt = parcour->p;
-					}
-				}
-			}
-			else if (moi->angle == 'b') // haut droite
-			{	
-				if (fabs(distx) < 0.5)
-				{
-					float dist = distx*distx + disty*disty;
-					if (disty < 0 && closest > dist)
-					{
-						closest = dist;
-						closestt = parcour->p;
-					}
-				}
-			}
-			else if (moi->angle == 'h') //bas gauche
-			{	
-				if (fabs(distx) < 0.5)
-				{
-					float dist = distx*distx + disty*disty;
-					if (disty > 0 && closest > dist)
-					{
-						closest = dist;
-						closestt = parcour->p;
-					}
-				}
-			}
-			else if (moi->angle == 'g') // bas
-			{	
-				if (distx > 0 && disty > 0)
-				{
-					float dist = distx*distx + disty*disty;
-					if (distx/disty > 0.65 && disty/distx > 0.65 && closest > dist)
-					{
-						closest = dist;
-						closestt = parcour->p;
-					}
-
-				}
-			}
-			else if (moi->angle == 'a') // haut
-			{	
-				if (distx < 0 && disty < 0)
-				{
-					float dist = distx*distx + disty*disty;
-					if (distx/disty > 0.65 && disty/distx > 0.65 && closest > dist)
-					{
-						closest = dist;
-						closestt = parcour->p;
-					}
-
-				}
-			}
-			else if (moi->angle == 'k') // gauche
-			{	
-				if (distx < 0 && disty > 0)
-				{
-					float dist = distx*distx + disty*disty;
-					if (-distx/disty > 0.65 && -disty/distx > 0.65 && closest > dist)
-					{
-						closest = dist;
-						closestt = parcour->p;
-					}
-
-				}
-			}
-			else if (moi->angle == 'd') // droite
-			{	
-				if (distx > 0 && disty < 0)
-				{
-					float dist = distx*distx + disty*disty;
-					if (-distx/disty > 0.65 && -disty/distx > 0.65 && closest > dist)
-					{
-						closest = dist;
-						closestt = parcour->p;
-					}
-
-				}
-			}
-
-		}
-		if (closestt)
-		{
-			if (closestt->skin[1] == '1')
+			float dist = distx * distx + disty * disty;	
+			int in_cone = 0;
+			/* same tile or adjacent: allow hit regardless of facing (continuous positions) */
+			if (dist < 2.5f)
+				in_cone = 1;
+			else if (moi->angle == 'e') /* +0.7x -0.7y */
+				in_cone = (distx > 0 && fabs(disty) <= distx * 1.5f);
+			else if (moi->angle == 'a') /* -0.7x +0.7y */
+				in_cone = (distx < 0 && fabs(disty) <= -distx * 1.5f);
+			else if (moi->angle == 'c') /* -0.7x -0.7y */
+				in_cone = (distx < 0 && disty < 0 && distx / (disty + 0.001f) > 0.4f && disty / (distx + 0.001f) > 0.4f);
+			else if (moi->angle == 'g') /* +0.7x +0.7y */
+				in_cone = (distx > 0 && disty > 0 && distx / (disty + 0.001f) > 0.4f && disty / (distx + 0.001f) > 0.4f);
+			else if (moi->angle == 'b') /* -speed in x */
+				in_cone = (distx < 0 && fabs(disty) <= -distx * 1.5f);
+			else if (moi->angle == 'd') /* -speed in y */
+				in_cone = (disty < 0 && fabs(distx) <= -disty * 1.5f);
+			else if (moi->angle == 'f') /* +speed in x */
+				in_cone = (distx > 0 && fabs(disty) <= distx * 1.5f);
+			else if (moi->angle == 'h') /* +speed in y */
+				in_cone = (disty > 0 && fabs(distx) <= disty * 1.5f);
+			if (in_cone && dist < closest)
 			{
-				if (closestt->pv -  moi->dom >= 4)
-					sprintf(ordre + strlen(ordre), "0 %d 00 -%d ", closestt->id, moi->dom);
-				else if (can_add("wooden-board", 1, moi->items, moi->items_cnt) == 1)
-					sprintf(ordre + strlen(ordre), "0 %d 00 -1 0 %d 16 +1 wooden-board ", closestt->id, moi->id);
+				closest = dist;
+				closestt = parcour->p;
 			}
-			else
-				sprintf(ordre + strlen(ordre), "0 %d 00 -%d ", closestt->id, moi->dom);
+		}
+		/* also check buildings (use continuous moi->x/y, buildings are tile-based) */
+		for (struct building *b = list_building; b != NULL; b = b->next)
+		{
+			/* building center: use tile center (b->x+0.5, b->y+0.5) for same-tile fairness */
+			float bx = (float)b->x + 0.5f, by = (float)b->y + 0.5f;
+			float distx = bx - moi->x;
+			float disty = by - moi->y;
+			float dist = distx * distx + disty * disty;
+			if (dist > reach_sq)
+				continue;
+			int in_cone = 0;
+			if (dist < 2.5f) /* same tile or adjacent */
+				in_cone = 1;
+			else if (moi->angle == 'e')
+				in_cone = (distx > 0 && fabs(disty) <= distx * 1.5f);
+			else if (moi->angle == 'b')
+				in_cone = (distx < 0 && fabs(disty) <= -distx * 1.5f);
+			else if (moi->angle == 'h')
+				in_cone = (disty > 0 && fabs(distx) <= disty * 1.5f);
+			else if (moi->angle == 'g')
+				in_cone = (distx > 0 && disty > 0 && distx / (disty + 0.001f) > 0.4f && disty / (distx + 0.001f) > 0.4f);
+			else if (moi->angle == 'a' || moi->angle == 'c')
+				in_cone = (distx < 0 && disty < 0 && distx / (disty + 0.001f) > 0.4f && disty / (distx + 0.001f) > 0.4f);
+			else if (moi->angle == 'd')
+				in_cone = (disty < 0 && fabs(distx) <= -disty * 1.5f);
+			else if (moi->angle == 'f')
+				in_cone = (distx > 0 && fabs(disty) <= distx * 1.5f);
+			if (in_cone && dist < closest_building_dist)
+			{
+				closest_building_dist = dist;
+				closest_building = b;
+			}
+		}
+
+		/* choose closest target among personnages and buildings */
+		if (closestt || closest_building)
+		{
+			if (closestt && (!closest_building || closest <= closest_building_dist))
+			{
+				/* hit personnage (including trees, skin[1]=='1') */
+				if (closestt->skin[1] == '1')
+				{
+					if (closestt->pv -  moi->dom >= 4)
+						sprintf(ordre + strlen(ordre), "0 %d 00 -%d ", closestt->id, moi->dom);
+					else if (can_add("wooden-board", 1, moi->items, moi->items_cnt) == 1)
+						sprintf(ordre + strlen(ordre), "0 %d 00 -1 0 %d 16 +1 wooden-board ", closestt->id, moi->id);
+				}
+				else
+					sprintf(ordre + strlen(ordre), "0 %d 00 -%d ", closestt->id, moi->dom);
+			}
+			else if (closest_building)
+			{
+				/* hit building */
+				sprintf(ordre + strlen(ordre), "1 %d 00 -%d ", closest_building->id, moi->dom);
+			}
 		}
 	}
 	else
