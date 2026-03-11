@@ -61,5 +61,4 @@ int get_id(char *line, int *i);
 void append_enemi(char *name);
 struct personnages *find_perso_by_name(char *name);
 void save_map(int);
-void kill(struct personnages *p);
 int find_smalest_valid_id_perso(int from);

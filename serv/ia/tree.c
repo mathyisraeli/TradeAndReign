@@ -23,6 +23,11 @@ void ia_arbre(struct personnages *p)
     p->animation += 1; 
     if (p->animation > 1200)
     {
+        if (p->altitude*38 != altitude((int)p->x + ((int)p->y)*max_x))
+        {
+            p->altitude = altitude((int)p->x + ((int)p->y)*max_x)/ 38;
+            p->a_bouger = 1;
+        }
         p->animation = 0;
         char w = watter_around((int)p->x + ((int)p->y)*max_x);
         if (w == 2)

@@ -3,6 +3,7 @@
 #include "dynamic_characters_list.h"
 
 extern struct dynamic_char_list list;
+extern struct dynamic_char_bioms_list *list_bioms;
 extern struct building *list_building;
 extern  struct linked_ground **ground;
 extern uint8_t **building_altitude;

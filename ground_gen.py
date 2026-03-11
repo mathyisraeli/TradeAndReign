@@ -2,11 +2,31 @@ import random
 from math import nan, isnan
 from sys import argv
 import numpy as np
+import string
 
 maxalt = 3800
 biomsize = 20
 nb_bioms =  10
 bioms =     [[nan for i in range(nb_bioms)] for i in range(nb_bioms)]
+
+def generate_random_name():
+    # Définir la longueur du nom aléatoire entre 4 et 20
+    name_length = random.randint(4, 20)
+    
+    # Créer une liste de lettres (minuscules et majuscules) et de voyelles pour avoir un nom plus naturel
+    vowels = "aeiouy"
+    consonants = "bcdfghjklmnpqrstvwxyz"
+    
+    # Créer un nom en alternant voyelles et consonnes pour plus de réalisme
+    name = []
+    for i in range(name_length):
+        if i % 2 == 0:
+            name.append(random.choice(consonants))
+        else:
+            name.append(random.choice(vowels))
+    
+    # Joindre les lettres pour créer un string
+    return ''.join(name).capitalize()  # On capitalise la première lettre pour ressembler à un nom propre
 
 for y in range(nb_bioms):
     for x in range(nb_bioms):
@@ -122,10 +142,11 @@ for y in range(0, sizey):
             if "he" in tex:
                 if random.randint(1,50) == 1:
                     characters.append("01 " + str(len(characters)+1 )   + " 50 0 100 -1 -1 0 0 a 000000 . . . -1 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . . . . . . . " + str(x+0.5)  + " " + str(y+0.5) + " " + str(altitude[y][x]/38) + " -1 -1 [] []\n")
+                elif random.randint(1, 1500) == 1:
+                    characters.append("0 " + str(len(characters)+1 )   + " 10 0 99999 -1 -1 0 0 a " + str(random.randint(0,1)) + str(random.randint(0,2)) + str(random.randint(0, 9)) + "000 . " + generate_random_name() +" . -1 10 fruit 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . . . . . . . " + str(x+0.5) + " " + str(y+0.5) + " " + str(altitude[y][x]/38) + " -1 -1 [] []\n")
     to_write = to_write[:-1] + "\n"
 
 
-characters.append("0 " + str(len(characters)+1 )   + " 10 0 99999 -1 -1 0 0 a 000000 thyma thyma . -1 10 fruit 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . . . . . . .  100.5 100.5 " + str(altitude[100][100]/38) + " -1 -1 [] []\n")
 
 ground.write(to_write)
 print("snow", cnt1, "not snow", cnt2, "low ground", cnt3)

@@ -11,7 +11,7 @@ int append_perso(char *line, char *skin ,int id)
     list.data[id].e_list = NULL;
     list.data[id].is_active = 1;
     int ret = parse_new(&list.data[id], line, skin);
-
+    append_perso_bioms(id, (int)(list.data[id].y * 0.04f) * max_x_biom + (int)(list.data[id].x * 0.04f));
     if (id > list.maxid)
         list.maxid = id;
     if (skin[0] == '0' && skin[1] == 0)
@@ -40,7 +40,14 @@ void death(void)
     {
         if (list.data[i].is_active == 1 && list.data[i].pv <= 0)
         {
-            kill(&list.data[i]);
+            free_linked_enemie(list.data[i].e_list);
+            remove_perso_bioms(i, (int)(list.data[i].y * 0.04f) * (max_x / 25) + (int)(list.data[i].x * 0.04f));
+            struct personnages *s = find_perso_by_name(list.data[i].nom_superieur);
+            if (s != NULL)
+            {
+                s->nb_vassaux -= 1;
+                s->a_bouger = 1;
+            }
             list.data[i].is_active = 0;
             if (i == list.maxid)
                 list.maxid -= 1;

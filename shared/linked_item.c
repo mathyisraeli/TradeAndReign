@@ -15,7 +15,7 @@ int n_item(char items[18][50])
 {
 	int ret = 0;
 	for (int i = 0; i < 10; i++)
-		if (items[i][0] == '.' && items[i][1] == 0)
+		if (items[i][0] != '.' || items[i][1] != 0)
 			ret += 1;
 	return ret;
 }
@@ -109,6 +109,8 @@ void remove_from_inventory(char *name, int n, char items[18][50], int items_cnt[
 			{
 				n -= items_cnt[i];
 				items_cnt[i] = 0;
+				items[i][0] = '.';
+				items[i][1] = 0;
 			}
 		}
 	}

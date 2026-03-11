@@ -343,7 +343,8 @@ void remove_1_pixel(int index)
 
 void add_1_pixel(int index, enum Texture texture)
 {
-    //printf ("add %d\n", index);
+    //if (index == 0)
+    //    printf ("add %d\n", index);
     if (ground[index] == NULL)
         return;
     if (ground[index]->texture == texture)
@@ -392,7 +393,7 @@ void handle_altitude(void)
     for (int i = 0; i < n_ground_altitudee_local; i++)
     {
         int index = index_check_altitude_local[i];
-        int a =  altitude(0);
+        //int a =  altitude(0);
         for (int i = 0; i <4 ;i++)
         {
             if (rdm_directions[i] == 1)
@@ -404,8 +405,8 @@ void handle_altitude(void)
             else if(rdm_directions[i] == 4)
                 handle_altitude_down(index);
         }
-        if (a != altitude(0))
-            printf ("%d %d %d\n", index, a , altitude(0));   
+        //if (a != altitude(0))
+        //    printf ("%d %d %d\n", index, a , altitude(0));   
         
     }
 }
@@ -414,8 +415,6 @@ void create_array(char *ground_string)
 {
     int i = 0;
     sscanf (ground_string, "%d %d", &max_x, &max_y);
-    max_x_biom = max_x/60;
-    max_y_biom = max_y/60;
     while (ground_string[i] != '\n')
         i++;
     i++;

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Tableau des Mondes</title>
+
+    <!-- Polices élégantes et lisibles -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Merriweather&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            background-color: #2c2416;
+            font-family: 'Merriweather', serif;
+            color: #2b1d0e;
+        }
+
+        h1 {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .card {
+            background: #e8d8b5;
+            border: 3px solid #8b6f3d;
+            padding: 20px;
+            box-shadow: 4px 4px 0px #1a140c;
+            min-height: 240px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .world-title {
+            font-family: 'Cinzel', serif;
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #5a3e1b;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0;
+            border: 2px solid #8b6f3d;
+            background: #f4ecd8;
+            font-family: 'Merriweather', serif;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px;
+            background: #8b6f3d;
+            color: white;
+            border: 2px solid #5a3e1b;
+            cursor: pointer;
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #a3824a;
+        }
+
+        .existing {
+            color: #1f4d1f;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .occupied {
+            background: #d2c09a;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Trade And Reign – Cycle des 24 Heures</h1>
+
+<div class="grid">
+
+{% for world in worlds %}
+    <div class="card {% if world.character %}occupied{% endif %}">
+
+        <div class="world-title">
+            MONDE {{ world.world }}<br>
+            {{ world.start_hour }}h - {{ world.end_hour }}h
+        </div>
+
+        {% if world.character %}
+            <div class="existing">
+                nom : {{ world.character.name }}
+            </div>
+        {% else %}
+            <form action="{{ url_for('create_character') }}" method="POST">
+
+                <input type="hidden" name="world" value="{{ world.world }}">
+
+                <input type="text" name="name" placeholder="name" required>
+
+                <select name="sex">
+                    <option value="man">man</option>
+                    <option value="woman">woman</option>
+                </select>
+
+                <select name="skin">
+                    <option value="bronze">bronze</option>
+                    <option value="chocolate">chocolate</option>
+                    <option value="coffee">coffee</option>
+                    <option value="ebony">ebony</option>
+                    <option value="gold">gold</option>
+                    <option value="ivory">ivory</option>
+                    <option value="leather">leather</option>
+                    <option value="marble">marble</option>
+                    <option value="oak">oak</option>
+                    <option value="sand">sand</option>
+                </select>
+
+                <select name="size">
+                    <option value="small">small</option>
+                    <option value="medium">medium</option>
+                    <option value="large">large</option>
+                </select>
+
+                <button type="submit">Nouveau</button>
+
+            </form>
+        {% endif %}
+
+    </div>
+{% endfor %}
+
+</div>
+
+</body>
+</html>

@@ -97,6 +97,7 @@ void actualise_stat(struct personnages *p)
 		new->next = NULL;
 		new->p = p;
 		new->floor = 1;
+		new->img = 0;
 		new->img = img->s->Man[p->physique[0]-'0'][p->physique[2]-'0'][p->animation_2][p->animation][p->angle - 'a'];
 		new->offset_x = 900	;
 		new->offset_y = 450;

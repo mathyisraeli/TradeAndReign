@@ -1,5 +1,5 @@
 CC      = gcc
-CFLAGS  = -Wall -Wextra -std=c99 -g -pg -no-pie -Werror
+CFLAGS  = -Wall -Wextra -no-pie -Werror -std=c99 -g 
 
 # ===== CLIENT (SDL) =====
 CLIENT_TARGET = tradeAndReign
@@ -19,7 +19,7 @@ SERVER_TARGET = serveur
 
 SERV_SRC = $(shell find serv -name "*.c")
 SERVER_SRC = $(SERV_SRC) $(SHARED_SRC)
-SERVER_LDFLAGS = -lm
+SERVER_LDFLAGS = -lm -g
 SERVER_OBJ = $(SERVER_SRC:.c=.o)
 
 # ===== RULES =====

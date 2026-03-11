@@ -69,17 +69,6 @@ int parse_new(struct personnages *p, char *line, char *skin)
     return i;
 }
 
-void kill(struct personnages *p)
-{
-	free_linked_enemie(p->e_list);
-	struct personnages *s = find_perso_by_name(p->nom_superieur);
-    if (s != NULL)
-    {
-    	s->nb_vassaux -= 1;
-        s->a_bouger = 1;
-    }
-}
-
 struct personnages *find_perso_by_name(char *name)
 {
     for (int i = 0; i <= list.maxid; i++)

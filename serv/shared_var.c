@@ -5,6 +5,7 @@ int max_y_biom;
 int max_x_biom;
 struct linked_ground **ground;
 struct dynamic_char_list list;
+struct dynamic_char_bioms_list *list_bioms;
 struct building *list_building = NULL;
 uint8_t **building_altitude;
 int *building_id;

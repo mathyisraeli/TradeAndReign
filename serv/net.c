@@ -45,7 +45,6 @@ void send_all_chars(int socket)
     }
     int s = strlen(order);
     sprintf (order_send, "%d", s);
-    printf ("%d\n", s);
     send(socket, order_send, s + 10, MSG_NOSIGNAL);
 }
 

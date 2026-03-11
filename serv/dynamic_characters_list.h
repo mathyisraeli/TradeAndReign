@@ -2,6 +2,7 @@
 #include "perso.h"
 #include <stdlib.h>
 #include "shared_var.h"
+#include "bioms.h"
 
 struct dynamic_char_list{
     struct personnages *data;  // tableau dynamique

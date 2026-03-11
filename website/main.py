@@ -7,12 +7,6 @@ app.secret_key = os.urandom(24)  # Vous pouvez également définir une clé secr
 
 mapstr = ""
 
-def find_smalest_valid_id(fromid):
-    for l in mapstr:
-        if int(l.split(' ')[1]) == fromid:
-            return find_smalest_valid_id(fromid + 1)
-    return fromid
-
 # Fonction pour ajouter un utilisateur au fichier texte
 def add_user_to_file(pseudo, password, mail):
     with open("acount.txt", "r") as f:
@@ -21,7 +15,7 @@ def add_user_to_file(pseudo, password, mail):
                 return False
 
     with open("acount.txt", "a") as f:
-        f.write(f"{pseudo} {password} {mail}\n")
+        f.write(f"{pseudo} {password} {mail} 0\n")
     return True
 
 def verify_credentials(username, password):
@@ -49,41 +43,91 @@ def login():
 def my_account():
     if 'username' not in session:
         return redirect(url_for('register'))
+
     username = session['username']
-    with open('acount.txt', 'r') as file: 
+    nmonth = 0
+
+    # Vérification abonnement
+    with open('acount.txt', 'r') as file:
         for line in file:
-            l = line.split(' ')
+            l = line.strip().split(' ')
             if l[0] == username:
-                nmonth = l[3]
-    if int(nmonth) == 0:
-        return "pour jouer il faut payer (1€ / mois)"
-    with open('map.txt', 'r') as file: 
-        for line in file:
-            l = line.split(' ')
-            if l[3] == username:
-                return "<p> name : " + l[13] + "</p><p> hp : " + l[2] + "</p><p> leader : " + l[14] + '</p><a href="/logout">Disconnect</a>'
-    return redirect(url_for('create_character'))
+                nmonth = int(l[3])
+                break
+
+    if nmonth == 0:
+        return "Pour jouer il faut payer (1€ / mois)"
+
+    worlds_data = []
+
+    for i in range(1, 13):
+        character = None
+
+        with open(f'world/m{i}.txt', 'r') as file:
+            for line in file:
+                l = line.strip().split(' ')
+                if l[0] == '0' and l[11] == username:
+                    character = {
+                        "name": l[12]
+                    }
+                    break
+
+        worlds_data.append({
+            "world": i,
+            "start_hour": (i - 1) * 2,
+            "end_hour": i * 2,
+            "character": character
+        })
+
+    return render_template("my_account.html", worlds=worlds_data)
 
 
-@app.route('/create_character.html', methods=['POST', 'GET'])
+@app.route('/create_character.html', methods=['POST'])
 def create_character():
-    global mapstr
     if 'username' not in session:
         return redirect(url_for('register'))
-    if request.method == 'POST':
-        with open('map.txt', 'r') as file:
-            mapstr = file.read().splitlines()
-            file.close()
-            for line in mapstr:
-                l = line.split(' ')
-                if l[0] == 0 and l[13] == request.form['nom']:
-                    return render_template('create_character.html', error="Un personnage avec le même nom existe déjà.")
-        newid = find_smalest_valid_id(0)
-        with open("map.txt", "a") as f:
-            f.write(f"0 {newid} 10 {session['username']} 12.000000 75.00000 0.5 -1.000000 908.785156 e 0 99999 -1 {request.form['nom']} thyma none none 0 none none 0 none 0 3 0 0 empty empty empty empty empty test [] []\n")
-        return redirect(url_for('my_account'))
-    elif request.method == 'GET':
-        return render_template('create_character.html')
+
+    username = session['username']
+
+    world = request.form['world']
+    nom = request.form['name']
+    sexe = request.form['sex']
+    peau = request.form['skin']
+    gabarit = request.form['size']
+
+    new_line = f"{world} {username} {nom} {sexe} {peau} {gabarit}\n"
+
+    lines = []
+
+    # Lire les anciennes demandes si le fichier existe
+    try:
+        with open("request.txt", "r") as f:
+            lines = f.readlines()
+    except FileNotFoundError:
+        pass  # Le fichier sera créé plus bas
+
+    updated = False
+    new_lines = []
+
+    for line in lines:
+        l = line.strip().split(" ")
+
+        # Si même monde ET même username → on écrase
+        if l[0] == world and l[1] == username:
+            new_lines.append(new_line)
+            updated = True
+        else:
+            new_lines.append(line)
+
+    # Si aucune ancienne demande trouvée → on ajoute
+    if not updated:
+        new_lines.append(new_line)
+
+    # Réécriture complète du fichier
+    with open("request.txt", "w") as f:
+        f.writelines(new_lines)
+
+    return redirect(url_for('my_account'))
 
 # Route d'inscription
 @app.route('/register.html', methods=['GET', 'POST'])
@@ -95,7 +139,7 @@ def register():
             # Récupérer les données du formulaire
             pseudo = request.form['pseudo']
             password = request.form['password']
-            mail = request.form['mail']  
+            mail = request.form['email']  
 
             # Ajouter l'utilisateur au fichier
             if add_user_to_file(pseudo, password, mail) == True:

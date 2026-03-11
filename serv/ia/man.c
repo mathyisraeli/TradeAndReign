@@ -289,6 +289,108 @@ char check_if_surface_is_flat(struct personnages *p, int coo)
     return 1;
 }
 
+int find_something(int xbiom, int ybiom, char skin[4])
+{
+    int offsets[9][2] = {
+        {-1,-1}, 
+        {-1, 0},
+        {-1, 1},
+        {0, -1},
+        {0,  0}, 
+        {0,  1},
+        {1, -1},
+        {1,  0},
+        {1,  1}
+    };
+    for (int n = 0; n < 9; n++)
+    {
+        int nx = xbiom + offsets[n][0];
+        int ny = ybiom + offsets[n][1];
+        if (nx >= max_x_biom || ny >= max_y_biom || nx < 0 || ny < 0)
+            continue;
+        for (int j = 0; j < list_bioms[nx + ny * max_x_biom].size; j++)
+        {
+            if (strcmp(list.data[list_bioms[nx + ny * max_x_biom].data[j]].skin, skin) == 0)
+                return list_bioms[nx + ny * max_x_biom].data[j];
+        }
+    }
+    return -1;
+}
+
+int find_something_closer_than(struct personnages *p, char skin[4], float maxdist)
+{
+    int xbiom = (int)(p->x*0.04);
+    int ybiom = (int)(p->y*0.04);
+    int offsets[9][2] = {
+        {-1,-1}, 
+        {-1, 0},
+        {-1, 1},
+        {0, -1},
+        {0,  0}, 
+        {0,  1},
+        {1, -1},
+        {1,  0}, 
+        {1,  1}
+    };
+
+    for (int n = 0; n < 9; n++)
+    {
+        int nx = xbiom + offsets[n][0];
+        int ny = ybiom + offsets[n][1];
+        if (nx >= max_x_biom || ny >= max_y_biom || nx < 0 || ny < 0)
+            continue;
+        for (int j = 0; j < list_bioms[nx + ny * max_x_biom].size; j++)
+        {
+            struct personnages *pp = &list.data[list_bioms[nx + ny * max_x_biom].data[j]];
+            if (strcmp(pp->skin, skin) == 0 && (pp->x - p->x)*(pp->x - p->x) + (pp->y - p->y) * (pp->y - p->y) < maxdist)
+                return list_bioms[nx + ny * max_x_biom].data[j];
+        }
+    }
+    return -1;
+}
+
+int find_something_closest(struct personnages *p, char skin[4])
+{
+    int xbiom = (int)(p->x*0.04);
+    int ybiom = (int)(p->y*0.04);
+    int offsets[9][2] = {
+        {-1,-1}, 
+        {-1, 0},
+        {-1, 1},
+        {0, -1},
+        {0,  0}, 
+        {0,  1},
+        {1, -1},
+        {1,  0}, 
+        {1,  1}
+    };
+
+    int ret = -1;
+    float mindist = 9999999;
+
+    for (int n = 0; n < 9; n++)
+    {
+        int nx = xbiom + offsets[n][0];
+        int ny = ybiom + offsets[n][1];
+        if (nx >= max_x_biom || ny >= max_y_biom || nx < 0 || ny < 0)
+            continue;
+        for (int j = 0; j < list_bioms[nx + ny * max_x_biom].size; j++)
+        {
+            struct personnages *pp = &list.data[list_bioms[nx + ny * max_x_biom].data[j]];
+            if (strcmp(pp->skin, skin) == 0)
+            {
+                float dist = (pp->x - p->x)*(pp->x - p->x) + (pp->y - p->y) * (pp->y - p->y);
+                if (dist < mindist)
+                {
+                    ret = list_bioms[nx + ny * max_x_biom].data[j];
+                    mindist = dist;
+                }
+            }
+
+        }
+    }
+    return ret;
+}
 
 void ia_man(struct personnages *p)
 {
@@ -386,60 +488,48 @@ void ia_man(struct personnages *p)
 
                 if (src + 1 == dst)
                 {
-                    p->x += p->vitesse_dep;
+                    p->moved_x += p->vitesse_dep;
                     p->angle = 'f';
                 }
                 else if (src - 1 == dst)
                 {
-                    p->x -= p->vitesse_dep;
+                    p->moved_x -= p->vitesse_dep;
                     p->angle = 'b';
                 }
                 else if (src - max_x == dst)
                 {
-                    p->y -= p->vitesse_dep;
+                    p->moved_y -= p->vitesse_dep;
                     p->angle = 'd';
                 }
                 else if (src + max_x == dst)
                 {
-                    p->y += p->vitesse_dep;
-                    p->angle = 'd';
+                    p->moved_y += p->vitesse_dep;
+                    p->angle = 'h';
                 }
                 else if (src + 1 + max_x == dst)
                 {
-                    p->y += p->vitesse_dep*0.707;
-                    p->angle = 'd';
-                    p->x += p->vitesse_dep*0.707;
+                    p->moved_y += p->vitesse_dep*0.707;
+                    p->angle = 'g';
+                    p->moved_x += p->vitesse_dep*0.707;
                 }
                 else if (src + 1 - max_x == dst)
                 {
-                    p->y -= p->vitesse_dep*0.707;
-                    p->angle = 'd';
-                    p->x += p->vitesse_dep*0.707;
+                    p->moved_y -= p->vitesse_dep*0.707;
+                    p->angle = 'e';
+                    p->moved_x += p->vitesse_dep*0.707;
                 }
                 else if (src - 1 + max_x == dst)
                 {
-                    p->y += p->vitesse_dep*0.707;
-                    p->angle = 'd';
-                    p->x -= p->vitesse_dep*0.707;
+                    p->moved_y += p->vitesse_dep*0.707;
+                    p->angle = 'a';
+                    p->moved_x -= p->vitesse_dep*0.707;
                 }
                 else if (src -1 - max_x == dst)
                 {
-                    p->y -= p->vitesse_dep*0.707;
-                    p->angle = 'd';
-                    p->x -= p->vitesse_dep*0.707;
+                    p->moved_x -= p->vitesse_dep*0.707;
+                    p->angle = 'c';
+                    p->moved_y -= p->vitesse_dep*0.707;
                 }
-                /*else
-                {
-                    if (p->ordrex > p->x)
-                        sprintf(ordre + strlen(ordre), "0 %d 01 +%f 0 %d 05 f 0 %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
-                    else if (p->ordrex < p->x)
-                        sprintf(ordre + strlen(ordre), "0 %d 01 -%f 0 %d 05 b 0 %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
-                    if (p->ordrey > p->y)
-                        sprintf(ordre + strlen(ordre), "0 %d 02 +%f 0 %d 05 h 0 %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
-                    else if (p->ordrey < p->y)
-                        sprintf(ordre + strlen(ordre), "0 %d 02 -%f 0 %d 05 d 0 %d 21 %d ", p->id, p->vitesse_dep, p->id, p->id, (p->animation+1)%5);
-                }*/
-                p->a_bouger = 1;
             }
             else
             {
@@ -564,7 +654,7 @@ void ia_man(struct personnages *p)
                                 else if (ground[whereiam]->texture == ne1 || ground[whereiam]->texture == ne2 || ground[whereiam]->texture == ne3)
                                 {    
                                     remove_1_pixel(moix + (moiy)*max_x);
-                                    add_1_pixel(ea1, moix + (moiy)*max_x);
+                                    add_1_pixel(moix + (moiy)*max_x,ea1);
                                 }
                             }
                             
@@ -609,68 +699,51 @@ void ia_man(struct personnages *p)
                             }
                             else
                             {
-                                int a_tree = -1;
-                                float mindist = 99999;
-                                for (int i = 0; i <= list.maxid; i++)
+                                int a_tree = find_something_closest(p, "O1\0\0");
+                                if (a_tree != -1)
                                 {
-                                    if (list.data[i].is_active == 1 && strcmp(list.data[i].skin, "01") == 0 && (list.data[i].x - p->x)*(list.data[i].x - p->x) + (list.data[i].y - p->y) * (list.data[i].y - p->y) < 4)
+                                    if ((list.data[a_tree].x - p->x)*(list.data[a_tree].x - p->x) + (list.data[a_tree].y - p->y) * (list.data[a_tree].y - p->y) < 4)
                                     {
-                                        a_tree = i;
-                                        break;
-                                    }
-                                }
-                                if (a_tree == -1)
-                                {
-                                    for (int i = 0; i <= list.maxid; i++)
-                                    {
-                                        if (list.data[i].is_active == 1  && strcmp(list.data[i].skin, "01") == 0 && (list.data[i].x - p->x)*(list.data[i].x - p->x) + (list.data[i].y - p->y) * (list.data[i].y - p->y) < mindist)
+                                        if (n_item(p->items) > 9)
                                         {
-                                            a_tree = i;
-                                            mindist = (list.data[i].x - p->x)*(list.data[i].x - p->x) + (list.data[i].y - p->y) * (list.data[i].y - p->y);
+                                            if (have_ground_in_inventory(p))
+                                                put_ground(p);
+                                            else
+                                                eat(p);
                                         }
-                                    }
-                                    if (a_tree != -1)
-                                    {
-                                        p->ordrex = list.data[a_tree].x+1;
-                                        p->ordrey = list.data[a_tree].y;
-                                        p->is_active = 1;
+                                        else
+                                        {
+                                            if (find_index_in_inventory("fruit", list.data[a_tree].items) != -1)
+                                            {
+                                                remove_from_inventory("fruit", 1, list.data[a_tree].items, list.data[a_tree].items_cnt);
+                                                append_in_inventory("fruit", 1, p->items, p->items_cnt);
+                                                p->a_bouger = 1;
+                                                list.data[a_tree].a_bouger = 1;
+                                            }
+                                            else
+                                            {
+                                                p->animation_2 = 1;
+                                                p->animation = 0;
+                                                p->a_bouger = 1;
+                                                list.data[a_tree].a_bouger = 1; 
+                                                if (list.data[a_tree].pv -  p->dom >= 4)
+                                                    list.data[a_tree].pv -= p->dom;
+                                                else if (list.data[a_tree].pv > 4)
+                                                    list.data[a_tree].pv = 4;
+                                                else if (can_add("wooden-board", 1, p->items, p->items_cnt) == 1)
+                                                {
+                                                    list.data[a_tree].pv -= 1;
+                                                    append_in_inventory("wooden-board",1, p->items, p->items_cnt);
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                                 else
                                 {
-                                    if (n_item(p->items) > 9)
-                                    {
-                                        if (have_ground_in_inventory(p))
-                                            put_ground(p);
-                                        else
-                                            eat(p);
-                                    }
-                                    else
-                                    {
-                                        if (find_index_in_inventory("fruit", list.data[a_tree].items) != -1)
-                                        {
-                                            remove_from_inventory("fruit", 1, list.data[a_tree].items, list.data[a_tree].items_cnt);
-                                            append_in_inventory("fruit", 1, p->items, p->items_cnt);
-                                            p->a_bouger = 1;
-                                            list.data[a_tree].a_bouger = 1;
-                                        }
-                                        else
-                                        {
-                                            p->animation_2 = 1;
-                                            p->animation = 0;
-                                            p->a_bouger = 1;
-                                            list.data[a_tree].a_bouger = 1; 
-                                            if (list.data[a_tree].pv -  p->dom >= 4)
-                                                list.data[a_tree].pv -= p->dom;
-                                            else if (list.data[a_tree].pv > 4)
-                                                list.data[a_tree].pv = 4;
-                                            else if (can_add("wooden-board", 1, p->items, p->items_cnt) == 1)
-                                            {
-                                                list.data[a_tree].pv -= 1;
-                                                append_in_inventory("wooden-board",1, p->items, p->items_cnt);
-                                            }
-                                        }
-                                    }
+                                    p->ordrex = list.data[a_tree].x+1;
+                                    p->ordrey = list.data[a_tree].y;
+                                    p->is_active = 1;
                                 }
                             }
                         }

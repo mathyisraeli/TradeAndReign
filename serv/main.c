@@ -58,6 +58,7 @@ static int make_socket_non_blocking (int sfd)
 
 int main(int argc, char **argv)
 {
+    setbuf(stdout, NULL);
 	if (argc != 3)
 	{
 		printf("usage: %s <port> <world_id 1-12>\n", argv[0]);
@@ -81,7 +82,9 @@ int main(int argc, char **argv)
 	load_file_as_string(ground_path, &ground_str);
 	create_array(ground_str);
     free(ground_str);
+    init_bioms();
 	init_map(map_path);
+    count_pop(world_id);
 	//list = croissance_pop(list);
 
 	char statut[MAXEVENTS] = {0};
@@ -124,7 +127,6 @@ int main(int argc, char **argv)
 
 	order_send = malloc(10000);
     size_order_send = 10000;
-	
 	//debout boucle, on suppose que la carte est initialisée.
     struct timeval start;struct timeval end;
     gettimeofday(&start, NULL);
@@ -271,9 +273,11 @@ int main(int argc, char **argv)
         if (elapsedTime >= 75)
         {
         	start = end;
+            //printf ("handle altitude\n");
             handle_altitude();
-            collision();
             ia();
+            //printf ("collision\n");
+            collision();
             int size_order = generate_order();
             for (int i = 0; i < MAXEVENTS ;i++)
             {

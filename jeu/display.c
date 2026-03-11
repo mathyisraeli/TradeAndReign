@@ -27,7 +27,7 @@ void display_ground(void)
     {
         for (struct to_disp *parcour = list_disp;parcour != NULL; parcour=parcour->next)
         {
-            if (parcour->p && parcour->p->inside == moi->inside && (int)parcour->x - moi->x * (int)parcour->x - moi->x + (int)parcour->y - moi->y * (int)parcour->y - moi->y <= 441)
+            if (parcour->p && parcour->p->inside == moi->inside && ((int)parcour->x - moi->x) * ((int)parcour->x - moi->x) + ((int)parcour->y - moi->y) * ((int)parcour->y - moi->y) <= 441)
             {
                 SDL_QueryTexture(parcour->img, NULL, NULL,&position.w, &position.h);
                 position.x = (parcour->x - moi->x - parcour->y + moi->y) * 34 + parcour->offset_x - position.w / 2;
