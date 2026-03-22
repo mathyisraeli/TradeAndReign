@@ -74,7 +74,9 @@ void recv_order(int socket)
 				actualise_building_altitude(yalist);
 			}
 			else
+			{
 				res += append_building(&recv_order_string[res]);
+			}
 		}
 		else
 		{

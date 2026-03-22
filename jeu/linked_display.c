@@ -20,7 +20,7 @@ void sortedInsert(struct to_disp* new_node)
     }
 }
 
-struct to_disp* deleteKey(int id) 
+struct to_disp* deleteKey_char(int id) 
 { 
     if (!list_disp) 
         return list_disp; 
@@ -30,7 +30,26 @@ struct to_disp* deleteKey(int id)
         list_disp = list_disp->next; 
     struct to_disp *curr = list_disp, *prev = NULL; 
     while (curr) { 
-        if (curr->id == id) 
+        if (curr->id == id && curr->b == NULL) 
+            prev->next = curr->next; 
+        else
+            prev = curr; 
+        curr = curr->next; 
+    } 
+    return list_disp; 
+} 
+
+struct to_disp* deleteKey_build(int id) 
+{ 
+    if (!list_disp) 
+        return list_disp; 
+    // Until the head data is equal to the key move the head 
+    // pointer 
+    while (list_disp && list_disp->id == id) 
+        list_disp = list_disp->next; 
+    struct to_disp *curr = list_disp, *prev = NULL; 
+    while (curr) { 
+        if (curr->id == id && curr->p == NULL) 
             prev->next = curr->next; 
         else
             prev = curr; 

@@ -18,4 +18,6 @@ extern char size_background[20];
 extern int n_ground_altitude;
 extern char *order_send;
 extern size_t size_order_send;
+extern char will_create_building_char[999];
 extern int rdm_directions[4];
+extern struct heap heap_pathfinding;

@@ -35,10 +35,8 @@ extern struct speak *speakBubble;
 extern struct menu *main_menu;
 extern struct cond_menu *menu_cond;
 extern struct main_char_stats *my_stats_display;
-extern char should_i_call_my_computer_work;
 extern struct personnages *moi;
 extern int counter_use_item;
-extern uint8_t **building_altitude;
 extern int *building_id;
 extern int start_x; extern int start_y; extern int end_x; extern int end_y;
 #define order_size 2000

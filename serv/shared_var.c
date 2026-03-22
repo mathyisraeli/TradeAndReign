@@ -16,5 +16,8 @@ char size_background[20];
 
 int n_ground_altitude;
 char *order_send;
+char will_create_building_char[999];
 size_t size_order_send;
 int rdm_directions[4] = {1,2,3,4};
+
+struct heap heap_pathfinding;

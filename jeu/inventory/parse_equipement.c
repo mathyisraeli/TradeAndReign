@@ -45,7 +45,7 @@ void actualise_stat(struct personnages *p)
 	}
 	if (p->skin[1] == '1')
 	{
-		list_disp = deleteKey(p->id);
+		list_disp = deleteKey_char(p->id);
 		p->max_pv = 200;
 		p->dom = 0;
 		p->poid = 999;
@@ -81,7 +81,7 @@ void actualise_stat(struct personnages *p)
 	}
 	else if (p->skin[0] == '0' && (p->skin[1] == 0 || p->skin[1] == '0'))
 	{
-		list_disp = deleteKey(p->id);
+		list_disp = deleteKey_char(p->id);
 		p->max_pv = 10;
 		p->vitesse_dom = 100;
 		p->vitesse_dep = 0.2;
@@ -126,7 +126,7 @@ void actualise_stat(struct personnages *p)
 
 void actualise_stat_building(struct building *b)
 {
-	list_disp = deleteKey(b->id);
+	list_disp = deleteKey_build(b->id);
 	if (b->skin[1] == '1')
 	{
 		if (b->skin[2] == '2')
@@ -613,7 +613,7 @@ void actualise_stat_building(struct building *b)
 	else if (b->skin[1] == '4') // fondation
 	{
 		if (b->skin[2] == '1') // bois
-		{	
+		{
 			insert(b->x, b->y, ground_altitude[((int)b->y - start_y) * (end_x - start_x) + (int)b->x - start_x],b->id, 0, 900, 483, NULL, b,img->s->wood_pillar);
 		}
 	}
@@ -621,7 +621,7 @@ void actualise_stat_building(struct building *b)
 
 void init_stat(struct personnages *p)
 {
-	list_disp = deleteKey(p->id);
+	list_disp = deleteKey_char(p->id);
 	p->speak_timer = 0;
 	p->faim_time = 0;
 	actualise_stat(p);

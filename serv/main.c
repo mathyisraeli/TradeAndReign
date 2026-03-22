@@ -85,8 +85,8 @@ int main(int argc, char **argv)
     init_bioms();
 	init_map(map_path);
     count_pop(world_id);
-	//list = croissance_pop(list);
-
+    heap_pathfinding.data = malloc(sizeof(int)*max_x*max_y);
+    heap_pathfinding.size = 0;
 	char statut[MAXEVENTS] = {0};
 	struct personnages *chars_connected[MAXEVENTS];
 	//int afktiming[MAXEVENTS + 5] = {0};
@@ -288,6 +288,7 @@ int main(int argc, char **argv)
 			    }
             }
             death();
+            will_create_building();
             save_map_count += 1;
             if (save_map_count % 60 == 0)
             {

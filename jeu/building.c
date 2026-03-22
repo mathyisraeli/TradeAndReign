@@ -28,7 +28,6 @@ int append_building(char *line)
         new->next = parcour->next;
         parcour->next = new;
     }
-    should_i_call_my_computer_work = '1';
     return ret;
 }
 
@@ -52,12 +51,12 @@ struct building *destruction(void)
 	struct building *prev;
 	while (tmp != NULL && tmp->pv <= 0)
 	{
-        list_disp = deleteKey(tmp->id);
+        printf ("destruction\n");
+        list_disp = deleteKey_build(tmp->id);
 		list_building = list_building->next;
 		remove_building_altitude(tmp);
 		free(tmp);
 		tmp = list_building;
-        should_i_call_my_computer_work = '1';
 
 	}
 	while (tmp != NULL)
@@ -69,12 +68,12 @@ struct building *destruction(void)
 		}
 		if (tmp == NULL)
 			return list_building;
-        list_disp = deleteKey(tmp->id);
+        printf ("destruction\n");
+        list_disp = deleteKey_build(tmp->id);
 		prev->next = tmp->next;
 		remove_building_altitude(tmp);
         free(tmp);
 		tmp = prev->next;
-		should_i_call_my_computer_work = '1';
 	}
 	return list_building;
 }
@@ -281,42 +280,6 @@ void actualise_building_altitude(struct building *parcour)
         building_id[(int)(parcour->y) * max_x + (int)(parcour->x)-1] = parcour->id;
         building_id[(int)(parcour->y-1) * max_x + (int)(parcour->x)-1] = parcour->id;
         building_id[(int)(parcour->y-2) * max_x + (int)(parcour->x)-1] = parcour->id;
-    
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x)][0] = 10;
-        building_altitude[(int)(parcour->y-1) * max_x + (int)(parcour->x)][0] = 10;
-        building_altitude[(int)(parcour->y-2) * max_x + (int)(parcour->x)][0] = 10;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x-2)][0] = 11;
-        building_altitude[(int)(parcour->y-1) * max_x + (int)(parcour->x-2)][0] = 11;
-        building_altitude[(int)(parcour->y-2) * max_x + (int)(parcour->x-2)][0] = 11;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x)-1][0] = 01;
-        building_altitude[(int)(parcour->y-1) * max_x + (int)(parcour->x)-1][0] = 11;
-        building_altitude[(int)(parcour->y-2) * max_x + (int)(parcour->x)-1][0] = 11;
-
-        building_altitude[(int)(parcour->y-1) * max_x + (int)(parcour->x)][1] = 10;
-        building_altitude[(int)(parcour->y-2) * max_x + (int)(parcour->x)][1] = 10;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x-2)][1] = 11;
-        building_altitude[(int)(parcour->y-1) * max_x + (int)(parcour->x-2)][1] = 11;
-        building_altitude[(int)(parcour->y-2) * max_x + (int)(parcour->x-2)][1] = 11;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x)-1][1] = 01;
-        building_altitude[(int)(parcour->y-1) * max_x + (int)(parcour->x)-1][1] = 11;
-        building_altitude[(int)(parcour->y-2) * max_x + (int)(parcour->x)-1][1] = 11;
-
-        building_altitude[(int)(parcour->y-2) * max_x + (int)(parcour->x)][2] = 1;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x-2)][2] = 1;
-        building_altitude[(int)(parcour->y-1) * max_x + (int)(parcour->x-2)][2] = 1;
-        building_altitude[(int)(parcour->y-2) * max_x + (int)(parcour->x-2)][2] = 1;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x)-1][2] = 01;
-        building_altitude[(int)(parcour->y-1) * max_x + (int)(parcour->x)-1][2] = 1;
-        building_altitude[(int)(parcour->y-2) * max_x + (int)(parcour->x)-1][2] = 1;
-
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x-2)][3] = 1;
-        building_altitude[(int)(parcour->y-1) * max_x + (int)(parcour->x-2)][3] = 1;
-        building_altitude[(int)(parcour->y-2) * max_x + (int)(parcour->x-2)][3] = 1;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x)-1][3] = 01;
-        building_altitude[(int)(parcour->y-1) * max_x + (int)(parcour->x)-1][3] = 1;
-        building_altitude[(int)(parcour->y-2) * max_x + (int)(parcour->x)-1][3] = 1;
-
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x-1)][4] = 2;
     }
 
     else if (strcmp(parcour->skin, "125") == 0)
@@ -326,21 +289,6 @@ void actualise_building_altitude(struct building *parcour)
         building_id[(int)(parcour->y) * max_x + (int)(parcour->x+2)] = parcour->id;
         building_id[(int)(parcour->y) * max_x + (int)(parcour->x+3)] = parcour->id;
         building_id[(int)(parcour->y) * max_x + (int)(parcour->x+4)] = parcour->id;
-        
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x)][0] = 1;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x+4)][0] = 1;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x)][1] = 1;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x+4)][1] = 1;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x)][2] = 1;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x+4)][2] = 1;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x)][3] = 1;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x+4)][3] = 1;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x)][4] = 1;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x+1)][4] = 1;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x+2)][4] = 1;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x+3)][4] = 1;
-        building_altitude[(int)(parcour->y) * max_x + (int)(parcour->x+4)][4] = 1;
-        
     }
     else if (strcmp(parcour->skin, "131")  == 0)
     {

@@ -1,6 +1,7 @@
 #include "shared_var.h"
 void sortedInsert(struct to_disp* new_node);
-struct to_disp* deleteKey(int id);
+struct to_disp* deleteKey_char(int id);
+struct to_disp* deleteKey_build(int id);
 
 struct to_disp
 {

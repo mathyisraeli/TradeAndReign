@@ -58,11 +58,34 @@ void death(void)
         list.capacity /= 2;
         list.data = realloc(list.data, list.capacity * sizeof(struct personnages));
     }
+    struct building *tmp = list_building;
+	struct building *prev;
+	while (tmp != NULL && tmp->pv <= 0)
+	{
+		list_building = list_building->next;
+		remove_building_altitude(tmp);
+		free(tmp);
+		tmp = list_building;
+	}
+	while (tmp != NULL)
+	{
+		while (tmp != NULL && tmp->pv > 0)
+		{
+			prev = tmp;
+			tmp = tmp->next;
+		}
+		if (tmp == NULL)
+			return;
+		prev->next = tmp->next;
+		remove_building_altitude(tmp);
+        free(tmp);
+		tmp = prev->next;
+	}
 }
 
 void init_map(const char *map_path)
 {
-    list.data = malloc(10 *sizeof(struct personnages));
+    list.data = calloc(10, sizeof(struct personnages));
     list.capacity = 10;
     list.maxid = 0;
     FILE *acount = fopen(map_path, "r+");
@@ -85,5 +108,7 @@ void init_map(const char *map_path)
             i++;
         if (skin[0] == '0')
             append_perso(line + i + 1, skin, id);
+        if (skin[0] == '1')
+            append_building(line + i + 1, skin, id);
     }
 }

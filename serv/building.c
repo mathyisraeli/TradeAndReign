@@ -14,6 +14,31 @@ int parse_new_building(struct building *b, char *line, char *skin, int id)
     return i;
 }
 
+void will_create_building(void)
+{
+    int i = 0;
+    char skin[4];
+    while (will_create_building_char[i] != 0)
+    {
+        int j = 0;
+        while (will_create_building_char[i] != ' ')
+        {
+            skin[j] = will_create_building_char[i];
+            i++;
+            j++;
+        }
+        skin[j] = 0;
+        i++;
+        int id = atoi(&will_create_building_char[i]);
+        while (will_create_building_char[i] != ' ')
+            i++;
+        i += append_building(will_create_building_char + i + 1, skin, id);
+        if (will_create_building_char[i] == '\n')
+            i += 1;
+    }
+    will_create_building_char[0] = 0;
+}
+
 struct building *get_ptr_from_id_building(int id)
 {
     struct building *parcour = list_building;
@@ -49,6 +74,7 @@ int append_building(char *line, char *skin, int id)
 void create_building(int x, int y,char angle, char state, char skin[4], int pv)
 {
     struct building *new = malloc(sizeof(struct building));
+    new->next = NULL;
     if (list_building == NULL)
         list_building = new;
     else
@@ -342,38 +368,44 @@ void add_building_altitude(struct building *b)
         building_altitude[(int)(b->y) * max_x + (int)(b->x)][0] = 101;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x)][0] = 101;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x)][0] = 101;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x-2)][0] = 110;
+        
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-2)][0] = 110;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-2)][0] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)-1][0] = 10;
+        
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x)-1][0] = 110;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x)-1][0] = 110;
 
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x)][1] = 101;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x)][1] = 101;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x-2)][1] = 110;
+        
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-2)][1] = 110;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-2)][1] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)-1][1] = 10;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x)-1][1] = 110;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x)-1][1] = 110;
 
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x)][2] = 101;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x-2)][2] = 110;
+        
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-2)][2] = 110;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-2)][2] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)-1][2] = 10;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x)-1][2] = 110;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x)-1][2] = 110;
 
-        building_altitude[(int)(b->y) * max_x + (int)(b->x-2)][3] = 110;
+        
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-2)][3] = 110;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-2)][3] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)-1][3] = 10;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x)-1][3] = 110;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x)-1][3] = 110;
 
-        building_altitude[(int)(b->y) * max_x + (int)(b->x-1)][4] = 210;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-2)][0] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-2)][1] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-2)][2] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-2)][3] = 110;
+
+        building_altitude[(int)(b->y) * max_x + (int)(b->x)-1][0] = 10;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x)-1][1] = 10;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x)-1][2] = 10;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x)-1][3] = 10;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x)-1][4] = 210;
 
         building_id[(int)(b->y) * max_x + (int)(b->x-2)] = b->id;
         building_id[(int)(b->y-1) * max_x + (int)(b->x-2)] = b->id;
@@ -387,251 +419,261 @@ void add_building_altitude(struct building *b)
     }
     if (strcmp(b->skin, "113") == 0)
     {
-        building_altitude[(int)(b->y) * max_x + (int)(b->x-5)][0] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x-5)][1] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x-5)][2] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x-5)][3] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x-5)][4] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x)][0] = 10;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x)][1] = 10;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x)][2] = 10;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x)][3] = 10;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x)][4] = 111;
 
         building_altitude[(int)(b->y) * max_x + (int)(b->x-1)][0] = 110;
         building_altitude[(int)(b->y) * max_x + (int)(b->x-1)][1] = 110;
         building_altitude[(int)(b->y) * max_x + (int)(b->x-1)][2] = 110;
         building_altitude[(int)(b->y) * max_x + (int)(b->x-1)][3] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x-1)][4] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-1)][4] = 111;
 
         building_altitude[(int)(b->y) * max_x + (int)(b->x-2)][0] = 110;
         building_altitude[(int)(b->y) * max_x + (int)(b->x-2)][1] = 110;
         building_altitude[(int)(b->y) * max_x + (int)(b->x-2)][2] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)-2][3] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)-2][4] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-2)][3] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-2)][4] = 111;
 
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)-3][0] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)-3][1] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)-3][2] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)-3][3] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)-3][4] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-3)][0] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-3)][1] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-3)][2] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-3)][3] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-3)][4] = 111;
 
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)-4][0] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)-4][1] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)-4][2] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)-4][3] = 110;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)-4][4] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-4)][0] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-4)][1] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-4)][2] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-4)][3] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-4)][4] = 111;
 
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)][0] = 10;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)][1] = 10;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)][2] = 10;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)][3] = 10;
-        building_altitude[(int)(b->y) * max_x + (int)(b->x)][4] = 210;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-5)][0] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-5)][1] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-5)][2] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-5)][3] = 110;
+        building_altitude[(int)(b->y) * max_x + (int)(b->x-5)][4] = 111;
 
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x)][0] = 110;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x)][1] = 110;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x)][2] = 110;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x)][3] = 110;
-        building_altitude[(int)(b->y-1) * max_x + (int)(b->x)][4] = 110;
-        building_altitude[(int)(b->y-1) * max_x + (int)(b->x)][5] = 110;
+        building_altitude[(int)(b->y-1) * max_x + (int)(b->x)][4] = 111;
+        building_altitude[(int)(b->y-1) * max_x + (int)(b->x)][5] = 111;
 
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-1)][0] = 10;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-1)][1] = 10;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-1)][2] = 10;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-1)][3] = 10;
-        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-1)][4] = 10;
-        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-1)][5] = 101;
+        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-1)][4] = 111;
+        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-1)][5] = 111;
 
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-2)][0] = 10;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-2)][1] = 10;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-2)][2] = 10;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-2)][3] = 10;
-        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-2)][4] = 10;
-        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-2)][5] = 101;
+        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-2)][4] = 111;
+        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-2)][5] = 111;
+
 
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-3)][0] = 10;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-3)][1] = 10;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-3)][2] = 10;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-3)][3] = 10;
-        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-3)][4] = 10;
-        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-3)][5] = 101;
+        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-3)][4] = 111;
+        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-3)][5] = 111;
 
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-4)][0] = 10;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-4)][1] = 10;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-4)][2] = 10;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-4)][3] = 10;
-        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-4)][4] = 10;
-        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-4)][5] = 101;
+        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-4)][4] = 111;
+        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-4)][5] = 111;
 
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-5)][0] = 110;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-5)][1] = 110;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-5)][2] = 110;
         building_altitude[(int)(b->y-1) * max_x + (int)(b->x-5)][3] = 110;
-        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-5)][4] = 110;
-        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-5)][5] = 110;
+        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-5)][4] = 111;
+        building_altitude[(int)(b->y-1) * max_x + (int)(b->x-5)][5] = 111;
 
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x)][0] = 110;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x)][1] = 110;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x)][2] = 110;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x)][3] = 110;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x)][4] = 110;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x)][5] = 110;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x)][6] = 110;
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x)][4] = 111;
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x)][5] = 111;
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x)][6] = 111;
 
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-1)][0] = 10;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-1)][1] = 10;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-1)][2] = 10;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-1)][3] = 10;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-1)][4] = 10;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-1)][5] = 101;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-1)][6] = 110;
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-1)][4] = 111;
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-1)][5] = 111;
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-1)][6] = 111;
 
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-2)][0] = 10;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-2)][1] = 10;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-2)][2] = 10;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-2)][3] = 10;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-2)][4] = 10;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-2)][5] = 101;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-2)][6] = 110;
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-2)][4] = 111;
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-2)][5] = 111;
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-2)][6] = 111;
+
 
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-3)][0] = 10;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-3)][1] = 10;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-3)][2] = 10;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-3)][3] = 10;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-3)][4] = 10;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-3)][5] = 101;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-3)][6] = 110;
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-3)][4] = 111;
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-3)][5] = 111;
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-3)][6] = 111;
 
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-4)][0] = 10;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-4)][1] = 10;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-4)][2] = 10;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-4)][3] = 10;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-4)][4] = 10;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-4)][5] = 101;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-4)][6] = 110;
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-4)][4] = 111;
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-4)][5] = 111;
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-4)][6] = 111;
 
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-5)][0] = 110;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-5)][1] = 110;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-5)][2] = 110;
         building_altitude[(int)(b->y-2) * max_x + (int)(b->x-5)][3] = 110;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-5)][4] = 110;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-5)][5] = 110;
-        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-5)][6] = 110;
-        
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-5)][4] = 111;
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-5)][5] = 111;
+        building_altitude[(int)(b->y-2) * max_x + (int)(b->x-5)][6] = 111;
+
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x)][0] = 110;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x)][1] = 110;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x)][2] = 110;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x)][3] = 110;
-        building_altitude[(int)(b->y-3) * max_x + (int)(b->x)][4] = 110;
-        building_altitude[(int)(b->y-3) * max_x + (int)(b->x)][5] = 110;
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x)][4] = 111;
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x)][5] = 111;
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x)][6] = 111;
 
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-1)][0] = 10;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-1)][1] = 10;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-1)][2] = 10;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-1)][3] = 10;
-        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-1)][4] = 10;
-        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-1)][5] = 101;
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-1)][4] = 111;
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-1)][5] = 111;
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-1)][6] = 111;
 
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-2)][0] = 10;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-2)][1] = 10;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-2)][2] = 10;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-2)][3] = 10;
-        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-2)][4] = 10;
-        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-2)][5] = 101;
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-2)][4] = 111;
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-2)][5] = 111;
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-2)][6] = 111;
+
 
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-3)][0] = 10;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-3)][1] = 10;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-3)][2] = 10;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-3)][3] = 10;
-        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-3)][4] = 10;
-        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-3)][5] = 101;
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-3)][4] = 111;
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-3)][5] = 111;
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-3)][6] = 111;
 
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-4)][0] = 10;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-4)][1] = 10;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-4)][2] = 10;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-4)][3] = 10;
-        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-4)][4] = 10;
-        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-4)][5] = 101;
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-4)][4] = 111;
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-4)][5] = 111;
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-4)][6] = 111;
 
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-5)][0] = 110;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-5)][1] = 110;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-5)][2] = 110;
         building_altitude[(int)(b->y-3) * max_x + (int)(b->x-5)][3] = 110;
-        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-5)][4] = 110;
-        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-5)][5] = 110;
-        
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-5)][4] = 111;
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-5)][5] = 111;
+        building_altitude[(int)(b->y-3) * max_x + (int)(b->x-5)][6] = 111;
+
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x)][0] = 110;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x)][1] = 110;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x)][2] = 110;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x)][3] = 110;
-        building_altitude[(int)(b->y-4) * max_x + (int)(b->x)][4] = 110;
-        building_altitude[(int)(b->y-4) * max_x + (int)(b->x)][5] = 110;
+        building_altitude[(int)(b->y-4) * max_x + (int)(b->x)][4] = 111;
+        building_altitude[(int)(b->y-4) * max_x + (int)(b->x)][5] = 111;
 
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-1)][0] = 10;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-1)][1] = 10;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-1)][2] = 10;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-1)][3] = 10;
-        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-1)][4] = 10;
-        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-1)][5] = 101;
+        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-1)][4] = 111;
+        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-1)][5] = 111;
 
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-2)][0] = 10;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-2)][1] = 10;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-2)][2] = 10;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-2)][3] = 10;
-        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-2)][4] = 10;
-        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-2)][5] = 101;
+        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-2)][4] = 111;
+        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-2)][5] = 111;
 
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-3)][0] = 10;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-3)][1] = 10;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-3)][2] = 10;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-3)][3] = 10;
-        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-3)][4] = 10;
-        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-3)][5] = 101;
+        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-3)][4] = 111;
+        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-3)][5] = 111;
 
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-4)][0] = 10;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-4)][1] = 10;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-4)][2] = 10;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-4)][3] = 10;
-        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-4)][4] = 10;
-        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-4)][5] = 101;
+        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-4)][4] = 111;
+        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-4)][5] = 111;
 
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-5)][0] = 110;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-5)][1] = 110;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-5)][2] = 110;
         building_altitude[(int)(b->y-4) * max_x + (int)(b->x-5)][3] = 110;
-        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-5)][4] = 110;
-        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-5)][5] = 110;
-
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-5)][0] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-5)][1] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-5)][2] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-5)][3] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-5)][4] = 110;
-
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-1)][0] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-1)][1] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-1)][2] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-1)][3] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-1)][4] = 110;
-
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-2)][0] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-2)][1] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-2)][2] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x)-2][3] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x)-2][4] = 110;
-
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x)-3][0] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x)-3][1] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x)-3][2] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x)-3][3] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x)-3][4] = 110;
-
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x)-4][0] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x)-4][1] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x)-4][2] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x)-4][3] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x)-4][4] = 110;
+        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-5)][4] = 111;
+        building_altitude[(int)(b->y-4) * max_x + (int)(b->x-5)][5] = 111;
 
         building_altitude[(int)(b->y-5) * max_x + (int)(b->x)][0] = 110;
         building_altitude[(int)(b->y-5) * max_x + (int)(b->x)][1] = 110;
         building_altitude[(int)(b->y-5) * max_x + (int)(b->x)][2] = 110;
         building_altitude[(int)(b->y-5) * max_x + (int)(b->x)][3] = 110;
-        building_altitude[(int)(b->y-5) * max_x + (int)(b->x)][4] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x)][4] = 111;
+
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-1)][0] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-1)][1] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-1)][2] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-1)][3] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-1)][4] = 111;
+
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-2)][0] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-2)][1] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-2)][2] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-2)][3] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-2)][4] = 111;
+
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-3)][0] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-3)][1] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-3)][2] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-3)][3] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-3)][4] = 111;
+
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-4)][0] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-4)][1] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-4)][2] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-4)][3] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-4)][4] = 111;
+
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-5)][0] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-5)][1] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-5)][2] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-5)][3] = 110;
+        building_altitude[(int)(b->y-5) * max_x + (int)(b->x-5)][4] = 111;
+    
 
         building_id[(int)(b->y) * max_x + (int)(b->x)] = b->id;
         building_id[(int)(b->y-1) * max_x + (int)(b->x)] = b->id;
@@ -1721,19 +1763,19 @@ void add_wood_pillar_or_wood_house(int moix, int moiy)
                 }
                 if (all == 1)
                 {
-                    create_building(i+2, j+2, 'a', 'a', "112", 500);
                     for (int r = j; r < j +3; r++)
                     {
                         for (int c = i; c < i +3; c++)
                         {
-                            if (r != moiy || c != moix)
+                            struct building *b = get_ptr_from_id_building(building_id[r * max_x + c]);
+                            if  (b != NULL && strcmp(b->skin, "141") == 0)
                             {
-                                struct building *b = get_ptr_from_id_building(building_id[r * max_x + c]);
                                 b->pv = 0;
                                 b->a_bouger = 1;
                             }
                         }
                     }
+                    sprintf (will_create_building_char, "112 -1 500 %d %d a a\n", i+2,j+2);
                     return;
                 }
             }
@@ -1768,19 +1810,19 @@ void add_wood_pillar_or_wood_house(int moix, int moiy)
                 }
                 if (err > 0)
                     continue;
-                create_building(i+5, j+5, 'a', 'a', "113", 500);
                 for (int r = j; r < j +6; r++)
                 {
                     for (int c = i; c < i +6; c++)
                     {
-                        if ((r != moiy || c != moix) && building_id[r * max_x + c] != -1)
+                        struct building *b = get_ptr_from_id_building(building_id[r * max_x + c]);
+                        if  (b != NULL && strcmp(b->skin, "141") == 0)
                         {
-                            struct building *b = get_ptr_from_id_building(building_id[r * max_x + c]);
                             b->pv = 0;
                             b->a_bouger = 1;
                         }
                     }
                 }
+                sprintf (will_create_building_char, "113 -1 500 %d %d a a\n", i+5,j+5);
                 return;
             }
         }

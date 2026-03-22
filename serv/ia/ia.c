@@ -3,7 +3,7 @@
 
 void ia(void)
 {
-    for (int i = 0; i < list.maxid;i++)
+    for (int i = 0; i <= list.maxid;i++)
     {
         if (list.data[i].is_active == 1 && list.data[i].online == 0)
         {

@@ -87,7 +87,6 @@ int append_perso(char *line)
 	int a = parse_order(n, line);
 	init_stat(n);
 	struct linked_list *to_append = malloc(sizeof(struct linked_list));
-	should_i_call_my_computer_work = '1';
 	to_append->p = n;
 	to_append->next = NULL;
 	if (list == NULL)
@@ -140,11 +139,10 @@ struct linked_list *death(void)
 		printf ("%s just died\n", tmp->p->nom);
 		list = list->next;
 		free_linked_enemie(tmp->p->e_list);
-		list_disp = deleteKey(tmp->p->id);
+		list_disp = deleteKey_char(tmp->p->id);
 		free(tmp->p);
 		free(tmp);
 		tmp = list;
-		should_i_call_my_computer_work = '1';
 	}
 	while (tmp != NULL)
 	{
@@ -158,11 +156,10 @@ struct linked_list *death(void)
 		prev->next = tmp->next;
 		printf ("%s just died\n", tmp->p->nom);
 		free_linked_enemie(tmp->p->e_list);
-		list_disp = deleteKey(tmp->p->id);
+		list_disp = deleteKey_char(tmp->p->id);
         free(tmp->p);
         free(tmp);
 		tmp = prev->next;
-		should_i_call_my_computer_work = '1';
 	}
 	return list;
 }

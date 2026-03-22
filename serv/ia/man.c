@@ -15,7 +15,6 @@ char have_ground_in_inventory(struct personnages *p)
     if (find_index_in_inventory("sable", p->items) != -1)
         return 1;
     return 0;
-
 }
 
 unsigned int how_much_food(struct personnages *p)
@@ -70,18 +69,43 @@ void eat(struct personnages *p)
     }
 }
 
+void move_somewhere_random(struct personnages *p)
+{
+    int a = rand () % 4;
+    if (a == 0 && (int)p->x > 10)
+    {
+        p->ordrex = (int)p->x - 10;
+        p->ordrey = (int)p->y;
+    }
+    else if (a == 1 && max_x - 10  > (int)p->x)
+    {
+        p->ordrex = (int)p->x + 10;
+        p->ordrey = (int)p->y;
+    }
+    else if (a == 2 && (int)p->y > 10)
+    {
+        p->ordrex = (int)p->x;
+        p->ordrey = (int)p->y - 10;
+    }
+    else if (a == 3 && max_y - 10 > (int)p->y)
+    {
+        p->ordrex = (int)p->x;
+        p->ordrey = (int)p->y + 10;
+    }
+    p->a_bouger = 1;
+}
 
 int avverage_alt(struct personnages *p)
 {
-    int sum = 0;
+    float sum = 0;
     for (int i = 0; i < house2[0][0]; i++)
         for (int j = 0; j < house2[0][1]; j++)
             sum += altitude(i * max_x + j - p->house_id);
-    return sum / (house2[0][0] * house2[0][1]);
+    return round(sum / ((float)house2[0][0] * (float)house2[0][1]));
 }
 
 
-int findnext(struct personnages *p)
+int findnext(struct personnages *p, int av)
 {
     int px = (int)p->x;
     int py = (int)p->y;
@@ -90,7 +114,7 @@ int findnext(struct personnages *p)
     {
         for (int j = 0; j < house2[0][1]; j++)
         {
-            if (next == 1)
+            if (next == 1 && altitude(i * max_x + j - p->house_id) != av)
                 return i * max_x + j - p->house_id;
             else if (px + py * max_x == -p->house_id + i * max_x + j)
                 next = 1;
@@ -99,12 +123,21 @@ int findnext(struct personnages *p)
     return -p->house_id;
 }
 
-char check_watter_house(struct personnages *p)
+int imInHouse(struct personnages *p)
 {
-    for (int i = 0; i < house2[0][0]; i++)
+    int px = (int)p->x;
+    int py = (int)p->y;
+    for (int i = 1; i < house2[0][0]+1; i++)
+    {
         for (int j = 0; j < house2[0][1]; j++)
-            if (ground[i * max_x + j - p->house_id]->texture == ea1 || ground[i * max_x + j - p->house_id]->texture == ea2 || ground[i * max_x + j - p->house_id]->texture == ea3)
-                return 1;
+        {
+                if (px + py * max_x == -p->house_id + (i - 1) * max_x + j)
+                {
+                    return 1;
+                }
+    
+        }
+    }
     return 0;
 }
 
@@ -152,7 +185,6 @@ void put_ground(struct personnages *p)
 
 int find_extreme_altitude_house(struct personnages *p, int *lowgo, int *highgo)
 {
-    p = p;
     int lowest = altitude(-p->house_id);
     int highest = altitude(-p->house_id);
     *lowgo = -p->house_id;
@@ -260,19 +292,25 @@ int find_where_to_build(struct personnages *p)
     return -1;
 }
 
-char check_can_build(struct personnages *p, int x, int y)
+char check_can_build(struct personnages *p, int coohouse)
 {
-    p = p;
+    p = p; 
+    int housex = coohouse % max_x;
+    int housey = coohouse / max_x;
+
     for (int i = 1; i < house2[0][0]+1; i++)
     {
         for (int j = 0; j < house2[0][1]; j++)
         {
-            if (house2[i][j] == 1)
+            if (0 > housex + j || housex + j >= max_x || 0 > housey + i - 1 || housey + i - 1 >= max_y)
+                return 0;
+            if (ground[housex + (i - 1 + housey) * max_x + j]->texture == ea1 || ground[housex + (i - 1 + housey) * max_x + j]->texture == ea2 || ground[housex + (i - 1 + housey) * max_x + j]->texture == ea3)
+                return 0;
+            /*if (house2[i][j] == 1)
             {
-                int coo = x + (i - 1 + y) * max_x + j;
                 if (building_id[coo] != -1)
                     return 0;
-            }
+            }*/
         }
     }
     return 1;
@@ -400,7 +438,14 @@ void ia_man(struct personnages *p)
         p->a_bouger = 1;
     }
     if (p->speak_timer > 0)
+    {
         p->speak_timer --;
+        if (p->speak_timer == 0 && p->speak[0] != 0)
+        {
+            p->speak[0] = 0;
+            p->a_bouger = 1;
+        }
+    }    
     if (p->animation_2 > 0)
 	{
 		if (p->animation >= 3)
@@ -415,7 +460,9 @@ void ia_man(struct personnages *p)
         }
         return;
 	}
-    //printf ("%s %d %f %f %f %f\n", p->nom, how_much_food(p->i_list), p->x, p->y, p->ordrex, p->ordrey);
+    int moix = (int)p->x;
+    int moiy = (int)p->y;
+    int whereiam = moix + moiy * max_x;
     if (how_much_food(p) <= 1000)
     {
 
@@ -470,10 +517,9 @@ void ia_man(struct personnages *p)
         {
             eat(p);
         }
-
         if (p->ordrex > 0)
         {
-            if ((int)p->ordrex == (int)p->x && (int)p->ordrey == (int)p->y)
+            if ((int)p->ordrex == moix && (int)p->ordrey == moiy)
             {
                 p->x = p->ordrex;
                 p->y = p->ordrey;
@@ -483,53 +529,66 @@ void ia_man(struct personnages *p)
             }
             else if (p->chemin_is_set == 1 || findpath(p) == 1)
             {
-                int src = (int)p->y * max_x + (int)p->x;
-                int dst = p->chemin[src].prev;
-
-                if (src + 1 == dst)
+                int dst = (int)p->ordrey * max_x + (int)p->ordrex;                
+                while (p->chemin[dst].prev != whereiam && p->chemin[dst].prev != -1)
+                    dst = p->chemin[dst].prev;
+                
+                if (whereiam + 1 == dst)
                 {
                     p->moved_x += p->vitesse_dep;
                     p->angle = 'f';
                 }
-                else if (src - 1 == dst)
+                else if (whereiam - 1 == dst)
                 {
                     p->moved_x -= p->vitesse_dep;
                     p->angle = 'b';
                 }
-                else if (src - max_x == dst)
+                else if (whereiam - max_x == dst)
                 {
                     p->moved_y -= p->vitesse_dep;
                     p->angle = 'd';
                 }
-                else if (src + max_x == dst)
+                else if (whereiam + max_x == dst)
                 {
                     p->moved_y += p->vitesse_dep;
                     p->angle = 'h';
                 }
-                else if (src + 1 + max_x == dst)
+                else if (whereiam + 1 + max_x == dst)
                 {
                     p->moved_y += p->vitesse_dep*0.707;
                     p->angle = 'g';
                     p->moved_x += p->vitesse_dep*0.707;
                 }
-                else if (src + 1 - max_x == dst)
+                else if (whereiam + 1 - max_x == dst)
                 {
                     p->moved_y -= p->vitesse_dep*0.707;
                     p->angle = 'e';
                     p->moved_x += p->vitesse_dep*0.707;
                 }
-                else if (src - 1 + max_x == dst)
+                else if (whereiam - 1 + max_x == dst)
                 {
                     p->moved_y += p->vitesse_dep*0.707;
                     p->angle = 'a';
                     p->moved_x -= p->vitesse_dep*0.707;
                 }
-                else if (src -1 - max_x == dst)
+                else if (whereiam -1 - max_x == dst)
                 {
                     p->moved_x -= p->vitesse_dep*0.707;
                     p->angle = 'c';
                     p->moved_y -= p->vitesse_dep*0.707;
                 }
+                else if  (p->chemin[dst].prev == -1)
+                {
+                    /*while (p->chemin[dst2].prev != whereiam && p->chemin[dst2].prev != -1)
+                    {
+                        printf ("%d %d\n", dst2%max_x, dst2/max_x);
+                        dst2 = p->chemin[dst2].prev;
+                    }
+                    printf ("1    %s %d %d %f %f %d %d \n", p->nom, moix, moiy, p->ordrex, p->ordrey, dst, whereiam);*/
+                    p->chemin_is_set = 0;
+                }
+                else 
+                    printf ("pathfinding not normal error\n");  
             }
             else
             {
@@ -603,42 +662,62 @@ void ia_man(struct personnages *p)
                 }
                 else // i should build a house
                 {
-                    int moix = (int)p->x;
-                    int moiy = (int)p->y;
-                    int whereiam = moix + moiy * max_x;
-                    if (p->house_id == -1 || check_watter_house(p) == 1)
+                    if (p->house_id == -1)
                     {
-                        /*for (struct building *parcour = list_building; parcour != NULL; parcour = parcour->next)
-                        {
-                            if (strcmp(parcour->skin, "141") == 0 && (parcour->x - p->x)*(parcour->x - p->x) + (parcour->y - p->y) * (parcour->y - p->y) < 400)
-                            {
-                                sprintf(ordre + strlen(ordre), "0 %d 32 -%d ",p->id, parcour->x + parcour->y * max_x);
-                                break;
-                            }
-                        }*/
-                        if (moix > 0 && building_id[moix - 1 + moiy * max_x] == -1 && check_can_build(p,moix - 1, moiy))
-                            p->house_id = -(moix-1 + moiy * max_x);
-                        else if (moix < max_x - 1 && building_id[moix + 1 + moiy * max_x] == -1 && check_can_build(p,moix + 1, moiy))
-                            p->house_id = -(moix+1 + moiy * max_x);
-                        else if (moiy > 0 && building_id[moix - max_x + moiy * max_x] == -1 && check_can_build(p,moix, moiy-1))
-                            p->house_id = -(moix-max_x + moiy * max_x);
-                        else if (moiy < max_y - 1 && building_id[moix + max_x + moiy * max_x] == -1 && check_can_build(p,moix, moiy+1))
-                            p->house_id = -(moix+max_x + moiy * max_x);
+                        int a = moix - 50 + rand() % 100;
+                        int b = moiy - 50 + rand() % 100;
+                        if (check_can_build(p, a + b*max_x))
+                            p->house_id = -(a + b*max_x);
                     }
-                    else 
+                    else if (check_can_build(p, -(p->house_id)) == 0)
+                        p->house_id = -1;
+                    else
                     {
                         int highgo;
                         int lowgo;
                         find_extreme_altitude_house(p, &lowgo, &highgo);
-                        if (altitude(highgo) != altitude(lowgo))
+                        if (altitude(highgo)!= altitude(lowgo))
                         {
                             int av = avverage_alt(p);
-                            if (altitude(whereiam) > av && 10 > n_item(p->items))
+                            if (altitude(lowgo) == av && 10 == n_item(p->items))
+                            {
+                                if (imInHouse(p) || building_id[whereiam] != -1)
+                                    move_somewhere_random(p);
+                                else
+                                    put_ground(p);
+                            }
+                            else if (altitude(highgo) == av && have_ground_in_inventory(p) == 0)
+                            {
+                                if (imInHouse(p) || building_id[whereiam] != -1)
+                                    move_somewhere_random(p);
+                                else
+                                {
+                                    if (ground[whereiam]->texture == he1 || ground[whereiam]->texture == he2 || ground[whereiam]->texture == he3 || ground[whereiam]->texture == he4 || ground[whereiam]->texture == he5)
+                                    {
+                                        append_in_inventory("herbe", 1, p->items, p->items_cnt);
+                                        remove_1_pixel(whereiam);
+                                        p->animation_2 = 2;
+                                        p->animation = 0;
+                                        p->a_bouger = 1;
+                                    }
+                                    else if (ground[whereiam]->texture == sa1 || ground[whereiam]->texture == sa2 || ground[whereiam]->texture == sa3)
+                                    {
+                                        append_in_inventory("sable", 1, p->items, p->items_cnt);
+                                        remove_1_pixel(whereiam);
+                                        p->animation_2 = 2;
+                                        p->animation = 0;
+                                        p->a_bouger = 1;
+                                    }
+                                    else
+                                        move_somewhere_random(p);
+                                }
+                            }
+                            else if (imInHouse(p) == 1 && altitude(whereiam) > av && 10 > n_item(p->items))
                             {
                                 if (ground[whereiam]->texture == he1 || ground[whereiam]->texture == he2 || ground[whereiam]->texture == he3 || ground[whereiam]->texture == he4 || ground[whereiam]->texture == he5)
                                 {
                                     append_in_inventory("herbe", 1, p->items, p->items_cnt);
-                                    remove_1_pixel(moix + (moiy)*max_x);
+                                    remove_1_pixel(whereiam);
                                     p->animation_2 = 2;
                                     p->animation = 0;
                                     p->a_bouger = 1;
@@ -646,35 +725,22 @@ void ia_man(struct personnages *p)
                                 else if (ground[whereiam]->texture == sa1 || ground[whereiam]->texture == sa2 || ground[whereiam]->texture == sa3)
                                 {
                                     append_in_inventory("sable", 1, p->items, p->items_cnt);
-                                    remove_1_pixel(moix + (moiy)*max_x);
+                                    remove_1_pixel(whereiam);
                                     p->animation_2 = 2;
                                     p->animation = 0;
                                     p->a_bouger = 1;
                                 }
                                 else if (ground[whereiam]->texture == ne1 || ground[whereiam]->texture == ne2 || ground[whereiam]->texture == ne3)
                                 {    
-                                    remove_1_pixel(moix + (moiy)*max_x);
+                                    remove_1_pixel(whereiam);
                                     add_1_pixel(moix + (moiy)*max_x,ea1);
                                 }
                             }
-                            
-                            else if (av > altitude(whereiam) && have_ground_in_inventory(p))
-                            {
+                            else if (imInHouse(p) == 1 && have_ground_in_inventory(p) && av > altitude(whereiam) )
                                 put_ground(p);
-                            }
-                            else if (10 == n_item(p->items))
-                            {
-                                if (whereiam == lowgo)
-                                    put_ground(p);
-                                else
-                                {
-                                    p->ordrex = (lowgo%max_x)+0.5;
-                                    p->ordrey = (lowgo/max_x)+0.5;
-                                }
-                            }
                             else
                             {
-                                int wheretogo = findnext(p);
+                                int wheretogo = findnext(p, av);
                                 int togox = wheretogo%max_x;
                                 int togoy = wheretogo/max_x;
                                 p->ordrex = togox+0.5;
@@ -699,7 +765,7 @@ void ia_man(struct personnages *p)
                             }
                             else
                             {
-                                int a_tree = find_something_closest(p, "O1\0\0");
+                                int a_tree = find_something_closest(p, "01\0\0");
                                 if (a_tree != -1)
                                 {
                                     if ((list.data[a_tree].x - p->x)*(list.data[a_tree].x - p->x) + (list.data[a_tree].y - p->y) * (list.data[a_tree].y - p->y) < 4)
@@ -738,12 +804,12 @@ void ia_man(struct personnages *p)
                                             }
                                         }
                                     }
-                                }
-                                else
-                                {
-                                    p->ordrex = list.data[a_tree].x+1;
-                                    p->ordrey = list.data[a_tree].y;
-                                    p->is_active = 1;
+                                    else
+                                    {
+                                        p->ordrex = list.data[a_tree].x+1;
+                                        p->ordrey = list.data[a_tree].y;
+                                        p->is_active = 1;
+                                    }
                                 }
                             }
                         }
@@ -768,10 +834,4 @@ void ia_man(struct personnages *p)
         p->speak_timer = 1350;
         p->a_bouger = 1;
     }
-    else if (p->speak_timer <= 0 && p->speak[0] != 0)
-    {
-        p->speak[0] = 0;
-        p->a_bouger = 1;
-    }    
-    
 }
