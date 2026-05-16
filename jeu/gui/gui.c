@@ -5,7 +5,7 @@ void gui_event(struct personnages *moi)
 	SDL_Rect position;
 	   
     //ordre de deplacement	
-	if (moi->ordrex != -1)
+	if (moi->ordrex > 0)
 	{
         position.x = (moi->ordrex - moi->x - moi->ordrey + moi->y) * 34 + 887.5;
 		position.y = (moi->ordrex - moi->x - moi->y  + moi->ordrey) * 17 + 437.5 - ground_altitude[((int)moi->ordrey - start_y) * (end_x - start_x) + (int)moi->ordrex - start_x] + moi->altitude*38;

@@ -9,6 +9,7 @@ void make_child(int p1, int p2)
 	list.data[new].angle = 'a';
 	list.data[new].faim = 99999;
 	list.data[new].pv = 10;
+	list.data[new].ordrex = -1;
 	list.data[new].skin[0] = '0'; list.data[new].skin[1] = 0;
 	if (rand() & 1)
 		list.data[new].physique[0] = list.data[p1].physique[0];
@@ -78,6 +79,8 @@ void create_player(char *line)
 	int new = append_empty_perso();
 	list.data[new].x = rand() % max_x;
 	list.data[new].y = rand() % max_y;
+    list.data[new].ordrex = -1;
+
 	list.data[new].altitude = altitude((int)list.data[new].x + (int)list.data[new].y * max_x);
 	char sexe[20];
 	char color[20];

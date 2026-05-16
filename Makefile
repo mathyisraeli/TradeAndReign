@@ -1,5 +1,5 @@
 CC      = gcc
-CFLAGS  = -Wall -Wextra -no-pie -Werror -std=c99 -g 
+CFLAGS  = -Wall -Wextra -no-pie -Werror -std=c99 -g
 
 # ===== CLIENT (SDL) =====
 CLIENT_TARGET = tradeAndReign

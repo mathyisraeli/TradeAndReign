@@ -1,6 +1,7 @@
 #include "ground.h"
 
 static const char *texture_string[]= { "ea1", "ea2", "ea3", "te1", "te2", "te3","he1","he2","he3","he4","he5","sa1","sa2", "sa3", "bl1", "bl2", "bl3", "ne1", "ne2", "ne3", "gr1", "gr2", "gra", "bas", "cal", "sch", "gre", "mar"};
+uint8_t *ground_marked;
 
 void recursive_print_ground(struct linked_ground *p)
 {
@@ -104,11 +105,11 @@ int maximum_diff(int index)
 
 static inline void will_handle_altitude(int index)
 {
-    for (int i = 0; i < n_ground_altitude; i++)
-        if (index_check_altitude[i] == index)
-            return;
-    index_check_altitude[n_ground_altitude] = index;
-    n_ground_altitude += 1;
+    if (ground_marked[index])
+        return;
+
+    ground_marked[index] = 1;
+    index_check_altitude[n_ground_altitude++] = index;
 }
 
 void handle_altitude_right(int index)
@@ -393,6 +394,7 @@ void handle_altitude(void)
     for (int i = 0; i < n_ground_altitudee_local; i++)
     {
         int index = index_check_altitude_local[i];
+        ground_marked[index] = 0;
         //int a =  altitude(0);
         for (int i = 0; i <4 ;i++)
         {
@@ -418,6 +420,7 @@ void create_array(char *ground_string)
     while (ground_string[i] != '\n')
         i++;
     i++;
+    ground_marked = calloc(max_x * max_y, sizeof(uint8_t));
     ground = calloc(max_x*max_y,sizeof(struct linked_ground*));
     building_altitude = calloc(max_x*max_y, sizeof(uint8_t*));
     building_id = malloc(sizeof(int)*max_x*max_y);

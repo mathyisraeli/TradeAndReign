@@ -48,6 +48,7 @@ void recv_order(int socket)
 	if (recv_order_string[0	] == '0')
 		return;
 	int nb_to_res  = atoi(recv_order_string);
+//	printf ("%s\n", recv_order_string);
 	if (recv_order_string_size<nb_to_res)
 	{
 		recv_order_string = realloc(recv_order_string, nb_to_res+3);

@@ -273,7 +273,7 @@ int main(int argc, char **argv)
         if (elapsedTime >= 75)
         {
         	start = end;
-            //printf ("handle altitude\n");
+            printf ("%f\n", elapsedTime);
             handle_altitude();
             ia();
             //printf ("collision\n");

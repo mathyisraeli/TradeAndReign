@@ -47,8 +47,8 @@ void drawTextInfo(SDL_Renderer *renderer, TextInfo *textInfo)
             surface = TTF_RenderText_Blended(textInfo->font, textInfo->text, textInfo->textColor);
         SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-        SDL_FreeSurface(surface);
         SDL_Rect dstRect = {textInfo->x, textInfo->y, surface->w, surface->h};
+        SDL_FreeSurface(surface);
         SDL_RenderCopy(renderer, texture, NULL, &dstRect);
         SDL_DestroyTexture(texture);
     }

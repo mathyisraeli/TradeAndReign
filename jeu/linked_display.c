@@ -12,7 +12,7 @@ void sortedInsert(struct to_disp* new_node)
         /* Locate the node before the
  point of insertion */
         current = list_disp;
-        while (current->next != NULL && ((int)new_node->y > (int)current->next->y || (new_node->x > current->next->x && (int)new_node->y == (int)current->next->y) || ((int)current->x == (int)new_node->x && (int)current->y == (int)new_node->y && current->altitude < new_node->altitude))) {
+        while (current->next != NULL && ((int)new_node->y > (int)current->next->y || (new_node->x > current->next->x && (int)new_node->y == (int)current->next->y) || ((int)current->next->x == (int)new_node->x && (int)current->next->y == (int)new_node->y && current->next->altitude < new_node->altitude))) {
             current = current->next;
         }
         new_node->next = current->next;

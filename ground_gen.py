@@ -5,8 +5,8 @@ import numpy as np
 import string
 
 maxalt = 3800
-biomsize = 20
-nb_bioms =  10
+biomsize = 25 #plz do not change
+nb_bioms =  12
 bioms =     [[nan for i in range(nb_bioms)] for i in range(nb_bioms)]
 
 def generate_random_name():
@@ -33,17 +33,17 @@ for y in range(nb_bioms):
         if y == 0 and x == 0:
             bioms[y][x] = random.randint(0, maxalt)
         elif x == 0:
-            mxx = min(maxalt, bioms[y -1][x] + 20*biomsize)
-            mnn = max(0, bioms[y- 1][x] - 20 *biomsize)
+            mxx = min(maxalt, bioms[y -1][x] + 650)
+            mnn = max(0, bioms[y- 1][x] - 650)
             bioms[y][x] = random.randint(mnn, mxx)
         elif y == 0:
-            mxx = min(maxalt, bioms[y][x-1] + 20 *biomsize)
-            mnn = max(0, bioms[y][x-1] - 20 *biomsize)
+            mxx = min(maxalt, bioms[y][x-1] + 650)
+            mnn = max(0, bioms[y][x-1] - 650)
             bioms[y][x] = random.randint(mnn, mxx)
         else:
             av = (bioms[y][x-1] + bioms[y-1][x])//2
-            mnn = max(0, av - 20 *biomsize)
-            mxx = min(maxalt, av + 20 *biomsize)
+            mnn = max(0, av - 650)
+            mxx = min(maxalt, av + 650)
             bioms[y][x] = random.randint(mnn, mxx)
 
 pd =  ["sa1", "sa2" ,"sa3","he1", "he2", "he3", "he4", "he5"]
