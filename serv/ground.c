@@ -123,13 +123,13 @@ void handle_altitude_right(int index)
         }        
         else if (diff1 > 0 && maximum_diff(index) < diff1)
         {
-            if (rand() % 100 < 90 - ((diff1 - 2) * 80) / 48)
-                will_handle_altitude(index);
-            else
-            {
+            //if (rand() % 100 < 90 - ((diff1 - 2) * 80) / 48)
+            //    will_handle_altitude(index);
+            //else
+            //{
                 add_1_pixel(index+1, ground[index]->texture);
                 remove_1_pixel(index);
-            }
+            //}
         }
     }
 }
@@ -145,13 +145,13 @@ void handle_altitude_left(int index)
         }
         else if (diff2 > 0 && maximum_diff(index) < diff2)
         {
-            if (rand() % 100 < 90 - ((diff2 - 2) * 80) / 48)
-                will_handle_altitude(index);
-            else
-            {
+            //if (rand() % 100 < 90 - ((diff2 - 2) * 80) / 48)
+            //    will_handle_altitude(index);
+            //else
+            //{
                 add_1_pixel(index-1, ground[index]->texture);
                 remove_1_pixel(index);
-            }
+            //}
         }
     }
 }
@@ -168,13 +168,13 @@ void handle_altitude_down(int index)
         }
         else if (diff3 > 0 && maximum_diff(index) < diff3)
         {
-            if (rand() % 100 < 90 - ((diff3 - 2) * 80) / 48)
-                will_handle_altitude(index);
-            else
-            {
+            //if (rand() % 100 < 90 - ((diff3 - 2) * 80) / 48)
+            //    will_handle_altitude(index);
+            //else
+            //{
                 add_1_pixel(index+max_x, ground[index]->texture);
                 remove_1_pixel(index);
-            }
+            //}
         }
     }
 }
@@ -190,13 +190,13 @@ void handle_altitude_up(int index)
         }
         else if (diff4 > 0 && maximum_diff(index) < diff4)
         {
-            if (rand() % 100 < 90 - ((diff4 - 2) * 80) / 48)
-                will_handle_altitude(index);
-            else
-            {
+           // if (rand() % 100 < 90 - ((diff4 - 2) * 80) / 48)
+           //     will_handle_altitude(index);
+           // else
+            //{
                 add_1_pixel(index-max_x, ground[index]->texture);
                 remove_1_pixel(index);
-            }
+            //}
         }
     }
 }

@@ -44,25 +44,28 @@ void rec_ground_string(int socket)
 void recv_order(int socket)
 {
 	char skin[4]; int id;
-	recv(socket, recv_order_string, 10, 0);
-	if (recv_order_string[0	] == '0')
+	int res = 0;
+	while  (res < 10)
+		res += recv(socket, recv_order_string + res, 10- res, 0);
+	if (recv_order_string[0] == '0')
 		return;
+	res = 0;
 	int nb_to_res  = atoi(recv_order_string);
-//	printf ("%s\n", recv_order_string);
 	if (recv_order_string_size<nb_to_res)
 	{
 		recv_order_string = realloc(recv_order_string, nb_to_res+3);
-		recv_order_string_size = nb_to_res;
+		recv_order_string_size = nb_to_res + 3;
 	}
-	int res = 0;
+		while (res < nb_to_res)
+		{
+			int w = recv(socket, recv_order_string+res, nb_to_res - res, 0);
+			res += w;
+		}
+		res = 0;
+
 	while (res < nb_to_res)
 	{
-		res += recv(socket, recv_order_string+res, nb_to_res - res, 0);
-	}
-	res = 0;
-	while (res < nb_to_res)
-	{
-		//printf ("[[[%s]]]\n\n\n", recv_order_string);
+		//printf ("(((%.300s)))\n",recv_order_string + res);
 		sscanf(recv_order_string + res	, "%s %d", skin, &id);
 		if (skin[0] == '1')
 		{

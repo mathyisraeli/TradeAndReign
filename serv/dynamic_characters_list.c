@@ -28,6 +28,8 @@ int append_empty_perso(void)
         list.capacity *= 2;
         list.data = realloc(list.data, list.capacity * sizeof(struct personnages));
     }
+    if (id > list.maxid)
+        list.maxid = id;
     list.data[id].online = '0';
     list.data[id].e_list = NULL;
     list.data[id].is_active = 1;

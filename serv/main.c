@@ -58,6 +58,7 @@ static int make_socket_non_blocking (int sfd)
 
 int main(int argc, char **argv)
 {
+    setvbuf(stdout, NULL, _IONBF, 0);
     setbuf(stdout, NULL);
 	if (argc != 3)
 	{
@@ -136,17 +137,18 @@ int main(int argc, char **argv)
         n = epoll_wait (efd, events, MAXEVENTS, 0);
         for (i = 0; i < n; i++)
         {
+            int fd = events[i].data.fd;
             if ((events[i].events & EPOLLERR) ||
                     (events[i].events & EPOLLHUP) ||
                     (!(events[i].events & EPOLLIN)))
             {
-                close (events[i].data.fd);
-				statut[i] = 0;
-                chars_connected[i]->online = '0';
-                chars_connected[i] = NULL;
+                close (fd);
+				statut[fd] = 0;
+                chars_connected[fd]->online = '0';
+                chars_connected[fd] = NULL;
                 continue;
             }
-            else if (sfd == events[i].data.fd)
+            else if (sfd == fd)
             {
                 /* We have a notification on the listening socket, which
                  * means one or more incoming connections. */
@@ -233,22 +235,23 @@ int main(int argc, char **argv)
                     else
                     {
                         buf[count] = 0;
-                        if (statut[i] == 0)
+                        if (statut[fd] == 0)
                         {
-                            struct personnages *p = have_char(buf);
+                            struct personnages *p = have_char(  buf);
+                            //printf ("%d %p %d\n", open_acount(buf), p, p->online );
 							if (open_acount(buf) == 1 && p != NULL && p->online != '1') // good acount and password
 							{
-								statut[i] = 1;
-								s = write (events[i].data.fd, "o", 1);
-								chars_connected[i] = p;
-                                s = write(events[i].data.fd, size_background, 20);
-                                send_ground(chars_connected[i], events[i].data.fd);
-                                send_all_chars(events[i].data.fd);
+								statut[fd] = 1;
+								s = write (fd, "o", 1);
+								chars_connected[fd] = p;
+                                s = write(fd, size_background, 20);
+                                send_ground(chars_connected[fd], fd);
+                                send_all_chars(fd);
                                 p->online = '1';
 							}
 							else
                             {
-								s = write (events[i].data.fd, "n", 1);
+								s = write (fd, "n", 1);
                             }
                         }
                         else
@@ -257,34 +260,34 @@ int main(int argc, char **argv)
 				}
                 if (done)
                 {
-                    if (statut[i] == 1)
+                    if (statut[fd] == 1)
                     {
-                        chars_connected[i]->online = '0';
-                        chars_connected[i] = NULL;
+                        chars_connected[fd]->online = '0';
+                        chars_connected[fd] = NULL;
                     }
-					statut[i] = 0;
-                    close (events[i].data.fd);
+					statut[fd] = 0;
+                    close (fd);
                 }
             }
         }
         gettimeofday(&end, NULL);
         double elapsedTime = (end.tv_sec - start.tv_sec) * 1000.0;      // sec to ms
         elapsedTime += (end.tv_usec - start.tv_usec) / 1000.0;
-        if (elapsedTime >= 75)
+        if (elapsedTime >=50)
         {
         	start = end;
-            printf ("%f\n", elapsedTime);
-            handle_altitude();
+            if (save_map_count % 5 == 0)
+                handle_altitude();
             ia();
-            //printf ("collision\n");
+            printf ("%f\n", elapsedTime);
             collision();
-            int size_order = generate_order();
+            int size_order = generate_order() + 10;
             for (int i = 0; i < MAXEVENTS ;i++)
             {
                 if (statut[i] == 1)
 			    {
-               	    send(events[i].data.fd, order_send, size_order+10, MSG_NOSIGNAL);
-                    send_ground(chars_connected[i], events[i].data.fd);
+                    send_all(i, size_order, (uint8_t *)order_send);
+                    send_ground(chars_connected[i], i);
 			    }
             }
             death();

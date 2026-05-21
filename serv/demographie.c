@@ -181,7 +181,7 @@ int count_pop(int world_id)
         int id;
 
         // Lire le numéro au début de la ligne
-        if (sscanf(line, "%d", &id) == 1 && id == world_id && !found) {
+        if (sscanf(line, "%d", &id) == 1 && id == world_id) {
             // Ligne trouvée → on la lit (affiche ici en exemple)
             create_player(line);
             found += 1;

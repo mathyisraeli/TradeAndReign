@@ -237,7 +237,6 @@ char *log_menu(int socket)
                 TTF_CloseFont(littleFont);
                 TTF_CloseFont(bigFont);
                 TTF_Quit();
-                exit(0);
             }
             else if (event.type == SDL_MOUSEBUTTONDOWN) 
             {

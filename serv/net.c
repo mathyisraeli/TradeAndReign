@@ -116,10 +116,37 @@ void send_ground(struct personnages *p, int socket)
     }
     uint16_t size = htons(offset-2);
     memcpy(send_ground_buffer, &size, sizeof(size));
+    send_all(socket, offset, send_ground_buffer);
     //printf ("%d\n", offset);
-    send(socket, send_ground_buffer, offset, MSG_NOSIGNAL);
 }
 
+void send_all(int socket, int size, uint8_t *to_send)
+{
+    int sent = 0;
+    while (sent < size)
+    {
+        int r = send(socket, to_send+sent, size-sent, MSG_NOSIGNAL);
+        if (r < 0)
+        {
+            if (errno == EAGAIN || errno == EWOULDBLOCK)
+            {
+                struct pollfd pfd;
+                pfd.fd = socket;
+                pfd.events = POLLOUT;
+
+                poll(&pfd, 1, -1);
+
+                continue;
+            }
+            else
+                break;
+        }
+        else if (r == 0)
+            break;
+        else
+            sent += r;
+    }
+}
 
 
 void parse_order(char *line)
