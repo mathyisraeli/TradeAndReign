@@ -13,7 +13,6 @@ extern int max_y;
 extern int max_x_biom;
 extern int max_y_biom;
 extern uint8_t send_ground_buffer[7500];
-extern int index_check_altitude[99999];
 extern char size_background[20];
 extern int n_ground_altitude;
 extern char *order_send;

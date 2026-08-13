@@ -63,7 +63,18 @@ void craft_menu(void)
     for (int i = 0; i < 10; i++)
         if (main_menu->menuCraft->selector->selectedOptionArray[i] == 1 && strncmp(main_menu->menuCraft->selector->options[i], "wooden-board", 12) == 0)
             wooden_board += 1;
-    if (wooden_board == 9)
+    printf ("%d\n", wooden_board);
+    if (wooden_board == 1)
+    {
+        printf ("uoi\n");
+        initTextInfo(&main_menu->menuCraft->result_craft, "wooden-stick 4", littleFont, 600, 100, 0, (SDL_Color){255, 0, 255, 255}, 0, 0, 0);
+        drawTextInfo(renderer, &main_menu->menuCraft->result_craft);
+        if (lettres->keystates[SDL_SCANCODE_O])
+        {
+            sprintf (ordre + strlen(ordre), "0 %d 16 1 wooden-board 0 %d 16 +4 wooden-stick", moi->id, moi->id);
+        }
+    }
+    else if (wooden_board == 9)
     {
         initTextInfo(&main_menu->menuCraft->result_craft, "wooden-pillar", littleFont, 600, 100, 0, (SDL_Color){255, 255, 255, 255}, 0, 0, 0);
         drawTextInfo(renderer, &main_menu->menuCraft->result_craft); 

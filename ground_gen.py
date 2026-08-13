@@ -6,7 +6,7 @@ import string
 
 maxalt = 3800
 biomsize = 25 #plz do not change
-nb_bioms =  12
+nb_bioms =  20
 bioms =     [[nan for i in range(nb_bioms)] for i in range(nb_bioms)]
 
 def generate_random_name():

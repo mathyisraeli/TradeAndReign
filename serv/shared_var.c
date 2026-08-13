@@ -11,7 +11,6 @@ uint8_t **building_altitude;
 int *building_id;
 
 uint8_t send_ground_buffer[7500];
-int index_check_altitude[99999];
 char size_background[20];
 
 int n_ground_altitude;
