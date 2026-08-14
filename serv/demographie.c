@@ -201,12 +201,10 @@ int count_pop(int world_id)
 	int j = list.maxid;
 	while (cnt > found)
 	{
-		while (list.data[i].is_active != 1)
+		while (list.data[i].is_active != 1 || list.data[i].skin[0] != '0' || list.data[i].skin[1] != 0)
 			i += 1;
-		while (list.data[j].is_active != 1)
+		while (list.data[j].is_active != 1 || list.data[j].skin[0] != '0' || list.data[j].skin[1] != 0)
 			j  -= 1;
-		i += 1;
-		j -= 1;
 		make_child(i,j);
 		found += 1;
 	}
