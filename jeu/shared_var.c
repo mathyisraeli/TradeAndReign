@@ -8,7 +8,6 @@ int recv_order_string_size = 10;
 int max_x;
 int max_y;
 struct img *img;
-struct s_gui *s_gui;
 SDL_Renderer *renderer;
 SDL_Window *window;
 struct lettres *lettres;

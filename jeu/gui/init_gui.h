@@ -14,4 +14,3 @@
 
 void init_main_menu(void);
 void init_speak_bubble(void);
-void init_life_gauge(void);

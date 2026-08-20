@@ -24,5 +24,7 @@
 #include "file.h"
 #include "collision.h"
 #include "ia/ia.h"
+#include "visibility.h"
+#include "parsing.h"
 
 #undef _POSIX_C_SOURCE 

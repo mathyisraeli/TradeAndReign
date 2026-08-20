@@ -85,6 +85,7 @@ int main(int argc, char **argv)
     free(ground_str);
     init_bioms();
 	init_map(map_path);
+    init_visible_entities();
     count_pop(world_id);
     heap_pathfinding.data = malloc(sizeof(int)*max_x*max_y);
     heap_pathfinding.size = 0;
@@ -246,8 +247,12 @@ int main(int argc, char **argv)
 								chars_connected[fd] = p;
                                 s = write(fd, size_background, 20);
                                 send_ground(chars_connected[fd], fd);
-                                send_all_chars(fd);
                                 p->online = '1';
+                                int player_id = p - list.data;
+                                reset_visible_entities_for_player(player_id);
+                                update_visible_entities_for_player(player_id);
+                                add_self_to_visible_entities(player_id);
+                                send_order_to_player(fd, player_id);
 							}
 							else
                             {
@@ -281,15 +286,17 @@ int main(int argc, char **argv)
             ia();
             printf ("%f\n", elapsedTime);
             collision();
-            int size_order = generate_order() + 10;
+            update_visible_entities();
             for (int i = 0; i < MAXEVENTS ;i++)
             {
                 if (statut[i] == 1)
 			    {
-                    send_all(i, size_order, (uint8_t *)order_send);
+                    int player_id = chars_connected[i] - list.data;
+                    send_order_to_player(i, player_id);
                     send_ground(chars_connected[i], i);
 			    }
             }
+            reset_a_bouger();
             death();
             will_create_building();
             save_map_count += 1;

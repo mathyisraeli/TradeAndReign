@@ -98,6 +98,11 @@ static void init_condition_menu(struct cond_menu *menu_cond)
     initTextBox(&menu_cond->bgEventTextBox, 150, 100, 1100, 300, (SDL_Color){165, 132, 86, 255}, (SDL_Color){165, 132, 86, 255}, (SDL_Color){165, 132, 86, 255}, littleFont, false);
 }
 
+void init_sound_menu(struct menu_son *menuSound)
+{
+    initPictureButton(&menuSound->on, 1700, 800, 80, 80, img->g->sound_button, img->g->pressed_sound_button);
+}
+
 void init_main_menu(void) 
 {
     main_menu = calloc(1, sizeof(struct menu));
@@ -107,6 +112,7 @@ void init_main_menu(void)
     main_menu->menuTrad = malloc(sizeof(struct menu_trade));
     main_menu->menuCraft = malloc(sizeof(struct menu_craft));
     main_menu->menuTech = malloc(sizeof(struct menu_technologie));
+    main_menu->menuSound = malloc(sizeof(struct menu_son));
 
     // Initialize main menu options
     const char *main_menu_options[] = {
@@ -126,6 +132,7 @@ void init_main_menu(void)
     init_inventory_menu(main_menu->menuInv);
     init_trade_menu(main_menu->menuTrad);
     init_craft_menu(main_menu->menuCraft);
+    init_sound_menu(main_menu->menuSound);
     init_tech_menu();
 
     // Initialize condition menu
@@ -136,7 +143,6 @@ void init_main_menu(void)
     my_stats_display = malloc(sizeof(struct main_char_stats));
     initGauge(&my_stats_display->my_health, 50, 800, 200, 30, (SDL_Color) {0, 255, 0, 255}, (SDL_Color) {255, 0, 0, 255});
 }
-
 
 void init_speak_bubble(void)
 {

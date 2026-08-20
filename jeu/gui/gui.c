@@ -55,11 +55,28 @@ void display_elipse_and_personal_datas()
 
     
     //SDL_RenderCopy(renderer, img->g->menuButton, NULL, &position);
-    if (lettres->Mouse_Lclick == 1 && lettres->Mouse_pos_x > 50 && lettres->Mouse_pos_x < 85 && lettres->Mouse_pos_y > 50 && lettres->Mouse_pos_y < 85)
-        main_menu->on.isPressed = !main_menu->on.isPressed;
+    if (lettres->Mouse_Lclick == 1)
+    {
+        if (lettres->Mouse_pos_x > 50 && lettres->Mouse_pos_x < 85 && lettres->Mouse_pos_y > 50 && lettres->Mouse_pos_y < 85)
+            main_menu->on.isPressed = !main_menu->on.isPressed;
+        else if (lettres->Mouse_pos_x >= main_menu->menuSound->on.x && lettres->Mouse_pos_x <= main_menu->menuSound->on.x + main_menu->menuSound->on.width && lettres->Mouse_pos_y >= main_menu->menuSound->on.y && lettres->Mouse_pos_y  <= main_menu->menuSound->on.y + main_menu->menuSound->on.height)
+        {
+            if(main_menu->menuSound->on.isPressed)
+            {
+                Mix_PlayMusic(sons->menu, 1);
+                main_menu->menuSound->on.isPressed = false;
+            }
+            else
+            {
+                stopMusic();
+                main_menu->menuSound->on.isPressed = true;
+            }
+        }
+    }
     drawPictureButton( &main_menu->on);
     drawPictureButton(&menu_cond->accept_trade);
     drawPictureButton(&menu_cond->manage_formation);
+    drawPictureButton(&main_menu->menuSound->on);
     drawGauge(&my_stats_display->my_health, moi->pv, moi->max_pv);
     drawTextInfo(renderer, &energy);
     drawTextInfo(renderer, &altitude);

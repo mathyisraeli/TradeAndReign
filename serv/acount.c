@@ -40,33 +40,16 @@ int open_acount(char *test)
     FILE *acount = fopen("acount.txt", "r");
     char line[220];
     size_t len = 220; 
-    char *s = test;
-    int count  = 0;
-    while (*s != ' ')
-    {
-        count++;
-        s = s + 1;
-    } 
-    s = s + 1;
-    char *tmp = calloc(count + 1, sizeof(char));
-    strncat(tmp, test,count);
-    deschifrage(s, tmp);
-    free(tmp);
     while (fgets(line, len, acount))
     {
         int i = 0;
-        uint8_t nb_space = 0;
         while (line[i] == test[i])
         {
             i += 1;
-            if (line[i] == ' ')
+            if (line[i] == 0 || test[i] == 0)
             {
-                nb_space += 1;
-                if (nb_space == 2)
-                {
-                    fclose(acount);
-                    return 1;
-                }
+                fclose(acount);
+                return 1;
             }
         }
     }

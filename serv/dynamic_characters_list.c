@@ -1,4 +1,13 @@
 #include "dynamic_characters_list.h"
+#include "parsing.h"
+
+int find_smalest_valid_id_perso(int from)
+{
+    for (int j = from; j <= list.capacity;j++)
+        if (list.data[j].is_active == 0)
+            return j;
+    return -1;
+}
 
 int append_perso(char *line, char *skin ,int id)
 {

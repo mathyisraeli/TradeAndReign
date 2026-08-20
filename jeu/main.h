@@ -13,7 +13,6 @@
 #include <fcntl.h>
 #include "init_sprite.h"
 #include "gui/init_gui.h"
-#include "tools/chiffrement.h"
 #include "sound/init_sound.h"
 #include "shared_var.h"
 #include "tools/arg_parse.h"

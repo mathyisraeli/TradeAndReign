@@ -16,7 +16,6 @@ extern uint8_t ground_buffer[7500];
 extern char *recv_order_string;
 extern int recv_order_string_size;
 extern struct img *img;
-extern struct s_gui *s_gui;
 extern SDL_Renderer *renderer;
 extern SDL_Window *window;
 extern struct textInput  *text;

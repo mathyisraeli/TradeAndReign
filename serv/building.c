@@ -1,18 +1,4 @@
-#include "building.h"
-
-int parse_new_building(struct building *b, char *line, char *skin, int id)
-{
-    int i;
-    sscanf(line, "%d %d %d %c %c %n",&b->pv, &b->x, &b->y, &b->angle,&b->state,&i);
-    if(id == -1)
-        b->id = find_smalest_valid_id_building(0);
-    else
-        b->id = id;
-    strcpy(b->skin ,skin);
-    while (line[i] != '\n' && line[i] != 0)
-        i++;
-    return i;
-}
+#include "parsing.h"
 
 void will_create_building(void)
 {

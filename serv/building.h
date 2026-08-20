@@ -20,7 +20,6 @@ struct building
 };
 
 int append_building(char *line, char *skin, int id);
-int parse_new_building(struct building *b, char *line, char *skin, int id);
 void remove_building_altitude(struct building *b);
 void add_building_altitude(struct building *b);
 struct building *get_ptr_from_id_building(int id);

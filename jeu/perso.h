@@ -70,7 +70,6 @@ char exist_in_linked(struct linked_list *list, struct personnages *to_test);
 struct linked_list *copy_linked(struct linked_list *list);
 struct linked_list *append_in_linked(struct linked_list *list,struct personnages *p);
 int append_perso(char *line);
-void disp_perso_list(struct personnages *moi);
 //struct personnages *find_perso(struct linked_list *list ,char *name);
 //void buble_sort_perso(struct linked_list *list, struct personnages *moi);
 void free_linked(struct linked_list *list, char free_content);

@@ -14,3 +14,4 @@ int append_perso(char *line, char *skin ,int id);
 void death(void);
 void init_map(const char *map_path);
 int append_empty_perso(void);
+int find_smalest_valid_id_perso(int from);

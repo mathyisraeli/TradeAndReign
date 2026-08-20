@@ -66,7 +66,6 @@ void handleErrorsAndCleanup(int errorCode)
 bool sendLoginDataToServer(char *login, char *password, int socket, int size, int flags)
 {
     char *to_send = calloc(size, flags);
-    chiffrage(password, login);
     sprintf (to_send, "%s %s", login, password);
     return communicateWithServer(socket, to_send, size, flags);
 }
@@ -294,7 +293,6 @@ char *log_menu(int socket)
                 if (event.key.keysym.sym == SDLK_RETURN) 
                 {
                     char *to_send = calloc(101,1);
-                    chiffrage(passwordTextBox.text, loginTextBox.text);
                     sprintf (to_send, "%s %s", loginTextBox.text, passwordTextBox.text);
                     done = communicateWithServer(socket, to_send, 101, 0);
                     if (!done)

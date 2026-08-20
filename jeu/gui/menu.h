@@ -13,6 +13,7 @@ struct menu
     struct menu_trade* menuTrad;
     struct menu_craft* menuCraft;
     struct menu_technologie *menuTech;
+    struct menu_son *menuSound;
 };
 
 struct cond_menu
@@ -51,6 +52,11 @@ struct cond_menu
     pictureButton accept_trade;
     pictureButton manage_formation;
 };
+
+ struct menu_son
+ {
+     pictureButton on;
+ };
 
 struct menu_inventaire
 {

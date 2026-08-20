@@ -21,6 +21,7 @@
 #include "formation_menu/formation_menu.h"
 #include "craft_menu/craft_menu.h"
 #include "technology_menu/menu_technologie.h"
+#include <stdbool.h>
 
 
 struct speak
@@ -37,8 +38,6 @@ struct main_char_stats
 
 void menu();
 void speakPerso(struct personnages *moi, char* ordre);
-void printSpeakBubble(struct personnages *perso, TextInfo* textInfo, TextBox* textBox, char* on);
 void gui_event(struct personnages *moi);
-void *cast(void *p);
 void display_elipse_and_personal_datas();
 void display_selected(struct linked_list *selected);

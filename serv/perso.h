@@ -54,11 +54,5 @@ struct personnages
     struct path* chemin;            // NOT NETWORK  -   NOT IN FILE
 };
 
-int parse_new(struct personnages *p, char *line, char *skin);
-void parse_order(char *line);
-struct personnages *get_ptr_from_id(int id);
-int get_id(char *line, int *i);
-void append_enemi(char *name);
 struct personnages *find_perso_by_name(char *name);
 void save_map(int);
-int find_smalest_valid_id_perso(int from);

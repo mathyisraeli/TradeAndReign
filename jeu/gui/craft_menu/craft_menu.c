@@ -2,43 +2,6 @@
 
 void craft_menu(void)
 {
-    int moix;
-    int moiy;
-    switch (moi->angle)
-    {
-        case 'a':
-            moix = (int)moi->x - 1;
-            moiy = (int)moi->y - 1;
-            break;
-        case 'b':
-            moix = (int)moi->x;
-            moiy = (int)moi->y - 1;
-            break;
-        case 'c':
-            moix = (int)moi->x + 1;
-            moiy = (int)moi->y - 1;
-            break;        
-        case 'd':
-            moix = (int)moi->x + 1;
-            moiy = (int)moi->y;
-            break;
-        case 'e':
-            moix = (int)moi->x + 1;
-            moiy = (int)moi->y + 1;
-            break;
-        case 'f':
-            moix = (int)moi->x;
-            moiy = (int)moi->y + 1;
-            break;
-        case 'g':
-            moix = (int)moi->x - 1;
-            moiy = (int)moi->y + 1;
-            break;
-        case 'h':
-            moix = (int)moi->x - 1;
-            moiy = (int)moi->y;
-            break;
-    }
     for (int i = 0; 10 > i; i++)
     {
         if (moi->items_cnt[i] <= 0 || (moi->items[i][0] == '.' && moi->items[i][1] == '\0'))
@@ -63,10 +26,8 @@ void craft_menu(void)
     for (int i = 0; i < 10; i++)
         if (main_menu->menuCraft->selector->selectedOptionArray[i] == 1 && strncmp(main_menu->menuCraft->selector->options[i], "wooden-board", 12) == 0)
             wooden_board += 1;
-    printf ("%d\n", wooden_board);
     if (wooden_board == 1)
     {
-        printf ("uoi\n");
         initTextInfo(&main_menu->menuCraft->result_craft, "wooden-stick 4", littleFont, 600, 100, 0, (SDL_Color){255, 0, 255, 255}, 0, 0, 0);
         drawTextInfo(renderer, &main_menu->menuCraft->result_craft);
         if (lettres->keystates[SDL_SCANCODE_O])
@@ -80,9 +41,7 @@ void craft_menu(void)
         drawTextInfo(renderer, &main_menu->menuCraft->result_craft); 
         if (lettres->keystates[SDL_SCANCODE_O])
         {
-            sprintf (ordre + strlen(ordre), "0 %d 16 9 wooden-board ", moi->id);
-            //Tester au maximum les 9 carrés possibles qui peuvent contenir (x, y)
-            printf ("todo %s %d %d\n", "add_wood_pillar_or_wood_house(", moix,moiy);
+            sprintf (ordre + strlen(ordre), "0 %d 18 0 ", moi->id);
         }
     }   
 }
