@@ -2,34 +2,9 @@
 #include "shared_var.h"
 
 enum Texture {
-  ea1,
-  ea2,
-  ea3,
-  te1,
-  te2,
-  te3,
-  he1,
-  he2,
-  he3,
-  he4,
-  he5,
-  sa1,
-  sa2,
-  sa3,
-  bl1,
-  bl2,
-  bl3,
-  ne1,
-  ne2,
-  ne3,
-  gr1,
-  gr2,
-  gra,
-  bas,
-  cal,
-  sch,
-  gre,
-  mar,
+    lim, lii, lis, qua, qui, qug,qus,quz,qzc,qzg,qzs,bas,bai, bac, bal, 
+    gra, gri, grc, grt, grd, grs, san, sai, sag, sha, shv, shs, shg, sht, shl, shc, shi, mar, 
+    mai, gys, gyp, wat, soi, coa, sal, snd, dus, sno, gLi, gqa, gqz, gba, ggr,gsa,gsh,gma,ggy
 };   
 
 struct linked_ground{

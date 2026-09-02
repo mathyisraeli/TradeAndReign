@@ -7,7 +7,7 @@ void deplacement(struct personnages *moi)
 	{
 		sprintf (ordre + strlen(ordre), "O %d 00 -1 ", moi->id);
 	}
-	if (moi->animation > 4)
+	if (moi->animation > 6)
 		sprintf (ordre + strlen(ordre), "0 %d 22 0 0 %d 21 0 ", moi->id, moi->id);
 	else if (moi->animation_2 > 0)
 		sprintf(ordre + strlen(ordre), "0 %d 21 %d ",moi->id, moi->animation +1 );
@@ -158,13 +158,14 @@ void deplacement(struct personnages *moi)
 			if (10 > n_item(moi->items) && ground_altitude[((int)moi->y - start_y) * (end_x - start_x) + (int)moi->x - start_x] > 0 && find_building_by_id(building_id[(int)moi->x + ((int)moi->y)*max_x]) == NULL)
 			{
 				SDL_Texture *t = ground_texture[((int)moi->y - start_y) * (end_x - start_x) + (int)moi->x - start_x];
-				if (t == img->t->he1 || t == img->t->he2 || t == img->t->he3 || t == img->t->he4 || t == img->t->he5)
-					sprintf (ordre + strlen(ordre), "0 %d 16 +1 herbe 0 %d 08 %d 0 %d 22 2 0 %d 21 0 ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x, moi->id, moi->id);
-				else if (t == img->t->sa1 || t == img->t->sa2 || t == img->t->sa3)
-					sprintf (ordre + strlen(ordre), "0 %d 16 +1 sable 0 %d 08 %d 0 %d 22 2 0 %d 21 0 ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x, moi->id, moi->id);
-				else if (t == img->t->ne1 || t == img->t->ne2 || t == img->t->ne3)
-					sprintf (ordre + strlen(ordre), "0 %d 08 %d 0 %d 13 %d ea1 ", moi->id, (int)moi->x + ((int)moi->y)*max_x, moi->id, (int)moi->x + ((int)moi->y)*max_x);
-				else if (t == img->t->granit && (strcmp(moi->items[12], "wood pickaxe") == 0 || strcmp(moi->items[12], "stone pickaxe") == 0 || strcmp(moi->items[12], "bronze pickaxe") == 0 || strcmp(moi->items[12], "iron pickaxe") == 0 || strcmp(moi->items[12], "steel pickaxe") == 0))
+				if (t == img->t->soi)
+					sprintf (ordre + strlen(ordre), "0 %d 16 +1 soil 0 %d 08 %d 0 %d 22 2 0 %d 21 0 ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x, moi->id, moi->id);		
+				else if (t == img->t->snd)
+					sprintf (ordre + strlen(ordre), "0 %d 16 +1 sand 0 %d 08 %d 0 %d 22 2 0 %d 21 0 ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x, moi->id, moi->id);
+				else if (t == img->t->sno)
+					sprintf (ordre + strlen(ordre), "0 %d 08 %d 0 %d 13 %d wat ", moi->id, (int)moi->x + ((int)moi->y)*max_x, moi->id, (int)moi->x + ((int)moi->y)*max_x);
+				/*
+					else if (t == img->t->granit && (strcmp(moi->items[12], "wood pickaxe") == 0 || strcmp(moi->items[12], "stone pickaxe") == 0 || strcmp(moi->items[12], "bronze pickaxe") == 0 || strcmp(moi->items[12], "iron pickaxe") == 0 || strcmp(moi->items[12], "steel pickaxe") == 0))
 					sprintf (ordre + strlen(ordre), "0 %d 16 +1 granit 0 %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
 				else if (t == img->t->basalt && (strcmp(moi->items[12], "wood pickaxe") == 0 || strcmp(moi->items[12], "stone pickaxe") == 0 || strcmp(moi->items[12], "bronze pickaxe") == 0 || strcmp(moi->items[12], "iron pickaxe") == 0 || strcmp(moi->items[12], "steel pickaxe") == 0))
 					sprintf (ordre + strlen(ordre), "0 %d 16 +1 basalt 0 %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
@@ -175,8 +176,7 @@ void deplacement(struct personnages *moi)
 				else if (t == img->t->marbre && (strcmp(moi->items[12], "wood pickaxe") == 0 || strcmp(moi->items[12], "stone pickaxe") == 0 || strcmp(moi->items[12], "bronze pickaxe") == 0 || strcmp(moi->items[12], "iron pickaxe") == 0 || strcmp(moi->items[12], "steel pickaxe") == 0))
 					sprintf (ordre + strlen(ordre), "0 %d 16 +1 marbre 0 %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
 				else if (t == img->t->schiste && (strcmp(moi->items[12], "wood pickaxe") == 0 || strcmp(moi->items[12], "stone pickaxe") == 0 || strcmp(moi->items[12], "bronze pickaxe") == 0 || strcmp(moi->items[12], "iron pickaxe") == 0 || strcmp(moi->items[12], "steel pickaxe") == 0))
-					sprintf (ordre + strlen(ordre), "0 %d 16 +1 schiste 0 %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);
-
+					sprintf (ordre + strlen(ordre), "0 %d 16 +1 schiste 0 %d 08 %d ", moi->id, moi->id, (int)moi->x + ((int)moi->y)*max_x);*/
 
 			}
 				//counter_use_item = 0;

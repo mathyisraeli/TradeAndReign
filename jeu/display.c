@@ -86,7 +86,7 @@ void display_ground(void)
                 /* --- Objets / personnages --- */
                 while (parcour && (int)parcour->x == x && (int)parcour->y == y)
                 {
-                    int watter =  38*(ground_texture[ii]==img->t->ea1 || ground_texture[ii]==img->t->ea2 || ground_texture[ii]==img->t->ea3);
+                    int watter =  38*(ground_texture[ii]==img->t->wat);
                     if (parcour->p && parcour->p->inside == -1)
                     {
                         SDL_QueryTexture(parcour->img, NULL, NULL,&position.w, &position.h);

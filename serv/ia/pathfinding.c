@@ -86,10 +86,7 @@ void init_grid(struct personnages *p)
         grid[i].f = 1e9f;
         grid[i].prev = -1;
 
-        grid[i].walkable =
-            ground[i]->texture != ea2 &&
-            ground[i]->texture != ea3 &&
-            ground[i]->texture != ea1;
+        grid[i].walkable = ground[i]->texture != wat;
 
         if (building_id[i] != -1)
             grid[i].walkable = 0;

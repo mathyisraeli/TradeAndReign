@@ -14,11 +14,11 @@ void ia_ship(struct building *ship)
             if (ship->angle == 'h')
             {
                 if (ship->y < max_y - 5 && 
-                (ground[(ship->y + 5)*max_x + ship->x]->texture == ea1 || ground[(ship->y + 5)*max_x + ship->x]->texture == ea2 || ground[(ship->y + 5)*max_x + ship->x]->texture == ea3) &&
-                (ground[(ship->y + 4)*max_x + ship->x + 1]->texture == ea1 || ground[(ship->y + 4)*max_x + ship->x + 1]->texture == ea2 || ground[(ship->y + 4)*max_x + ship->x + 1]->texture == ea3) &&
-                (ground[(ship->y + 3)*max_x + ship->x + 2]->texture == ea1 || ground[(ship->y + 3)*max_x + ship->x + 2]->texture == ea2 || ground[(ship->y + 3)*max_x + ship->x + 2]->texture == ea3) &&
-                (ground[(ship->y + 4)*max_x + ship->x - 1]->texture == ea1 || ground[(ship->y + 4)*max_x + ship->x - 1]->texture == ea2 || ground[(ship->y + 4)*max_x + ship->x - 1]->texture == ea3) &&
-                (ground[(ship->y + 3)*max_x + ship->x - 2]->texture == ea1 || ground[(ship->y + 3)*max_x + ship->x - 2]->texture == ea2 || ground[(ship->y + 3)*max_x + ship->x - 2]->texture == ea3) &&
+                ground[(ship->y + 5)*max_x + ship->x]->texture == wat &&
+                ground[(ship->y + 4)*max_x + ship->x + 1]->texture == wat &&
+                ground[(ship->y + 3)*max_x + ship->x + 2]->texture == wat &&
+                ground[(ship->y + 4)*max_x + ship->x - 1]->texture == wat &&
+                ground[(ship->y + 3)*max_x + ship->x - 2]->texture == wat &&
                 building_id[(ship->y + 5)*max_x + ship->x] == -1 && building_id[(ship->y + 4)*max_x + ship->x - 1] == -1 && building_id[(ship->y + 3)*max_x + ship->x - 2] == -1 && building_id[(ship->y + 4)*max_x + ship->x + 1] == -1 && building_id[(ship->y + 3)*max_x + ship->x + 2] == -1)
                 { 
                     for (int i = 0; i < list.maxid;i++)
@@ -45,11 +45,11 @@ void ia_ship(struct building *ship)
             else if (ship->angle == 'd')
             {
                 if (ship->y > 4 && 
-                (ground[(ship->y - 5)*max_x + ship->x]->texture == ea1 || ground[(ship->y - 5)*max_x + ship->x]->texture == ea2 || ground[(ship->y - 5)*max_x + ship->x]->texture == ea3) &&
-                (ground[(ship->y - 4)*max_x + ship->x + 1]->texture == ea1 || ground[(ship->y - 4)*max_x + ship->x + 1]->texture == ea2 || ground[(ship->y - 4)*max_x + ship->x + 1]->texture == ea3) &&
-                (ground[(ship->y - 3)*max_x + ship->x + 2]->texture == ea1 || ground[(ship->y - 3)*max_x + ship->x + 2]->texture == ea2 || ground[(ship->y - 3)*max_x + ship->x + 2]->texture == ea3) &&
-                (ground[(ship->y - 4)*max_x + ship->x - 1]->texture == ea1 || ground[(ship->y - 4)*max_x + ship->x - 1]->texture == ea2 || ground[(ship->y - 4)*max_x + ship->x - 1]->texture == ea3) &&
-                (ground[(ship->y - 3)*max_x + ship->x - 2]->texture == ea1 || ground[(ship->y - 3)*max_x + ship->x - 2]->texture == ea2 || ground[(ship->y - 3)*max_x + ship->x - 2]->texture == ea3) &&
+                ground[(ship->y - 5)*max_x + ship->x]->texture == wat  &&
+                ground[(ship->y - 4)*max_x + ship->x + 1]->texture == wat &&
+                ground[(ship->y - 3)*max_x + ship->x + 2]->texture == wat &&
+                ground[(ship->y - 4)*max_x + ship->x - 1]->texture == wat &&
+                ground[(ship->y - 3)*max_x + ship->x - 2]->texture == wat &&
                 building_id[(ship->y - 5)*max_x + ship->x] == -1 && building_id[(ship->y - 4)*max_x + ship->x - 1] == -1 && building_id[(ship->y - 3)*max_x + ship->x - 2] == -1 && building_id[(ship->y - 4)*max_x + ship->x + 1] == -1 && building_id[(ship->y - 3)*max_x + ship->x + 2] == -1)
                 { 
                     for (int i = 0; i < list.maxid;i++)
@@ -76,11 +76,11 @@ void ia_ship(struct building *ship)
             else if (ship->angle == 'b')
             {
                 if (ship->x > 4 && 
-                (ground[(ship->y)*max_x + ship->x - 5]->texture == ea1 || ground[(ship->y)*max_x + ship->x - 5]->texture == ea2 || ground[(ship->y)*max_x + ship->x - 5]->texture == ea3) &&
-                (ground[(ship->y + 1)*max_x + ship->x - 4]->texture == ea1 || ground[(ship->y + 1)*max_x + ship->x - 4]->texture == ea2 || ground[(ship->y + 1)*max_x + ship->x - 4]->texture == ea3) &&
-                (ground[(ship->y + 2)*max_x + ship->x - 3]->texture == ea1 || ground[(ship->y + 2)*max_x + ship->x - 3]->texture == ea2 || ground[(ship->y + 2)*max_x + ship->x - 3]->texture == ea3) &&
-                (ground[(ship->y - 1)*max_x + ship->x - 4]->texture == ea1 || ground[(ship->y - 1)*max_x + ship->x - 4]->texture == ea2 || ground[(ship->y - 1)*max_x + ship->x - 4]->texture == ea3) &&
-                (ground[(ship->y - 2)*max_x + ship->x - 3]->texture == ea1 || ground[(ship->y - 2)*max_x + ship->x - 3]->texture == ea2 || ground[(ship->y - 2)*max_x + ship->x - 3]->texture == ea3) &&
+                ground[(ship->y)*max_x + ship->x - 5]->texture == wat &&
+                ground[(ship->y + 1)*max_x + ship->x - 4]->texture == wat &&
+                ground[(ship->y + 2)*max_x + ship->x - 3]->texture == wat &&
+                ground[(ship->y - 1)*max_x + ship->x - 4]->texture == wat &&
+                ground[(ship->y - 2)*max_x + ship->x - 3]->texture == wat &&
                 building_id[(ship->y )*max_x + ship->x - 5] == -1 && building_id[(ship->y + 1)*max_x + ship->x - 4] == -1 && building_id[(ship->y + 2)*max_x + ship->x - 3] == -1 && building_id[(ship->y - 1)*max_x + ship->x - 4] == -1 && building_id[(ship->y - 2)*max_x + ship->x - 3] == -1)
                 { 
                     for (int i = 0; i < list.maxid;i++)
@@ -106,11 +106,11 @@ void ia_ship(struct building *ship)
             else
             {
                 if (ship->x < max_x-5 &&
-                (ground[(ship->y)*max_x + ship->x + 5]->texture == ea1 || ground[(ship->y)*max_x + ship->x + 5]->texture == ea2 || ground[(ship->y)*max_x + ship->x + 5]->texture == ea3) &&
-                (ground[(ship->y + 1)*max_x + ship->x + 4]->texture == ea1 || ground[(ship->y + 1)*max_x + ship->x + 4]->texture == ea2 || ground[(ship->y + 1)*max_x + ship->x + 4]->texture == ea3) &&
-                (ground[(ship->y + 2)*max_x + ship->x + 3]->texture == ea1 || ground[(ship->y + 2)*max_x + ship->x + 3]->texture == ea2 || ground[(ship->y + 2)*max_x + ship->x + 3]->texture == ea3) &&
-                (ground[(ship->y - 1)*max_x + ship->x + 4]->texture == ea1 || ground[(ship->y - 1)*max_x + ship->x + 4]->texture == ea2 || ground[(ship->y - 1)*max_x + ship->x + 4]->texture == ea3) &&
-                (ground[(ship->y - 2)*max_x + ship->x + 3]->texture == ea1 || ground[(ship->y - 2)*max_x + ship->x + 3]->texture == ea2 || ground[(ship->y - 2)*max_x + ship->x + 3]->texture == ea3) &&
+                ground[(ship->y)*max_x + ship->x + 5]->texture == wat &&
+                ground[(ship->y + 1)*max_x + ship->x + 4]->texture == wat &&
+                ground[(ship->y + 2)*max_x + ship->x + 3]->texture == wat &&
+                ground[(ship->y - 1)*max_x + ship->x + 4]->texture == wat &&
+                ground[(ship->y - 2)*max_x + ship->x + 3]->texture == wat &&
                 building_id[(ship->y )*max_x + ship->x + 5] == -1 && building_id[(ship->y + 1)*max_x + ship->x + 4] == -1 && building_id[(ship->y + 2)*max_x + ship->x + 3] == -1 && building_id[(ship->y - 1)*max_x + ship->x + 4] == -1 && building_id[(ship->y - 2)*max_x + ship->x + 3] == -1) 
                 {    
                     for (int i = 0; i < list.maxid;i++)

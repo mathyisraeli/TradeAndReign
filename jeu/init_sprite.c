@@ -93,19 +93,19 @@ struct skin *init_skin()
     char filepath[100];
     char sexe[2][6] = {"man", "woman"};
     char couleur[10][10] = {"ivory", "marble", "sand", "gold", "leather", "oak", "bronze", "coffee", "chocolate", "ebony"};
-    char animation2[3][10] = {"walk", "punch", "gather"};
+    char animation2[4][12] = {"walk", "punch", "gather", "GroundBreak"};
 
     for (int i = 0; i < 2   ; i++) // sexe
     {
         for (int j = 0; j < 10; j++) // couleur de peau
         {
-            for (int k = 0; k < 3; k++) // animation2
+            for (int k = 0; k < 4; k++) // animation2
             {
-                for (int l = 0; l < 6; l++) // animation
+                for (int l = 0; l < 8; l++) // animation
                 {
                     for (int m = 0; m < 8; m++) // angle
                     {
-                        sprintf (filepath, "img/%s/%s/%s-%d-%d.bmp", sexe[i], couleur[j], animation2[k],m, l+1);
+                        sprintf (filepath, "img/%s/%s/%s/%d_%d.bmp", sexe[i], couleur[j], animation2[k],m, l);
                         initTextureObject(&(to_return->Man[i][j][k][l][m]), filepath);
                     }
                 }
@@ -113,73 +113,99 @@ struct skin *init_skin()
         }
     }
 
-    for (int k = 0; k < 3; k++) // animation2
+    char clothes_man[1][10] = {"breeches"};
+
+    for (int j = 0; j < 1; j++) // habit
     {
-        for (int l = 0; l < 6; l++) // animation
+        for (int k = 0; k < 4; k++) // animation2
         {
-            for (int m = 0; m < 8; m++) // angle
+            for (int l = 0; l < 8; l++) // animation
             {
-                sprintf (filepath, "img/man/breeches-lin/%s-%d-%d.bmp", animation2[k],m, l+1);
-                //printf ("%s\n", filepath); //debug
-                initTextureObject(&(to_return->breechesLin[k][l][m]), filepath);
+                for (int m = 0; m < 8; m++) // angle
+                {
+                    sprintf (filepath, "img/man/%s/%s/%d_%d.bmp", clothes_man[j], animation2[k],m, l);
+                    initTextureObject(&(to_return->clothes[0][j][k][l][m]), filepath);
+                }
             }
         }
     }
-    for (int k = 0; k < 3; k++) // animation2
+
+    char clothes_woman[1][10] = {"shift"};
+
+    for (int j = 0; j < 1; j++) // habit
     {
-        for (int l = 0; l < 6; l++) // animation
+        for (int k = 0; k < 4; k++) // animation2
         {
-            for (int m = 0; m < 8; m++) // angle
+            for (int l = 0; l < 8; l++) // animation
             {
-                sprintf (filepath, "img/woman/shift-lin/%s-%d-%d.bmp", animation2[k],m, l+1);
-                initTextureObject(&(to_return->shiftLin[k][l][m]), filepath);
+                for (int m = 0; m < 8; m++) // angle
+                {
+                    sprintf (filepath, "img/woman/%s/%s/%d_%d.bmp", clothes_woman[j], animation2[k],m, l);
+                    initTextureObject(&(to_return->clothes[1][j][k][l][m]), filepath);
+                }
             }
         }
     }
+
     return to_return;
 }
 
 struct textures *init_textures()
 {
     struct textures *to_return = malloc(sizeof(struct textures));
-
-    initTextureObject(&(to_return->he1), "img/textures/he1.bmp");
-    initTextureObject(&(to_return->he2), "img/textures/he2.bmp");
-    initTextureObject(&(to_return->he3), "img/textures/he3.bmp");
-    initTextureObject(&(to_return->he4), "img/textures/he4.bmp");
-    initTextureObject(&(to_return->he5), "img/textures/he5.bmp");
-
-    initTextureObject(&(to_return->sa1), "img/textures/sa1.bmp");
-    initTextureObject(&(to_return->sa2), "img/textures/sa2.bmp");
-    initTextureObject(&(to_return->sa3), "img/textures/sa3.bmp");
-
-    initTextureObject(&(to_return->ea1), "img/textures/ea1.bmp");
-    initTextureObject(&(to_return->ea2), "img/textures/ea2.bmp");
-    initTextureObject(&(to_return->ea3), "img/textures/ea3.bmp");
-
-    initTextureObject(&(to_return->te1), "img/textures/te1.bmp");
-    initTextureObject(&(to_return->te2), "img/textures/te2.bmp");
-    initTextureObject(&(to_return->te3), "img/textures/te3.bmp");
-
-    initTextureObject(&(to_return->ne1), "img/textures/ne1.bmp");
-    initTextureObject(&(to_return->ne2), "img/textures/ne2.bmp");
-    initTextureObject(&(to_return->ne3), "img/textures/ne3.bmp");
-
-    initTextureObject(&(to_return->gr1), "img/textures/gr1.bmp");
-    initTextureObject(&(to_return->gr2), "img/textures/gr2.bmp");
-
-    initTextureObject(&(to_return->bl1), "img/textures/bl1.bmp");
-    initTextureObject(&(to_return->bl2), "img/textures/bl2.bmp");
-    initTextureObject(&(to_return->bl3), "img/textures/bl3.bmp");
+    initTextureObject(&(to_return->lim), "img/textures/lim.bmp");
+    initTextureObject(&(to_return->lii), "img/textures/lii.bmp");
+    initTextureObject(&(to_return->lis), "img/textures/lis.bmp");
+    initTextureObject(&(to_return->qua), "img/textures/qua.bmp");
+    initTextureObject(&(to_return->qui), "img/textures/qui.bmp");
+    initTextureObject(&(to_return->qug), "img/textures/qug.bmp");
+    initTextureObject(&(to_return->qus), "img/textures/qus.bmp");
+    initTextureObject(&(to_return->quz), "img/textures/quz.bmp");
+    initTextureObject(&(to_return->qzc), "img/textures/qzc.bmp");
+    initTextureObject(&(to_return->qzg), "img/textures/qzg.bmp");
+    initTextureObject(&(to_return->qzs), "img/textures/qzs.bmp");
+    initTextureObject(&(to_return->bas), "img/textures/bas.bmp");
+    initTextureObject(&(to_return->bai), "img/textures/bai.bmp");
+    initTextureObject(&(to_return->bac), "img/textures/bac.bmp");
+    initTextureObject(&(to_return->bal), "img/textures/bal.bmp");
+    initTextureObject(&(to_return->gra), "img/textures/gra.bmp");
+    initTextureObject(&(to_return->gri), "img/textures/gri.bmp");
+    initTextureObject(&(to_return->grc), "img/textures/grc.bmp");
+    initTextureObject(&(to_return->grt), "img/textures/grt.bmp");
+    initTextureObject(&(to_return->grd), "img/textures/grd.bmp");
+    initTextureObject(&(to_return->grs), "img/textures/grs.bmp");
+    initTextureObject(&(to_return->san), "img/textures/san.bmp");
+    initTextureObject(&(to_return->sai), "img/textures/sai.bmp");
+    initTextureObject(&(to_return->sag), "img/textures/sag.bmp");
+    initTextureObject(&(to_return->sha), "img/textures/sha.bmp");
+    initTextureObject(&(to_return->shv), "img/textures/shv.bmp");
+    initTextureObject(&(to_return->shs), "img/textures/shs.bmp");
+    initTextureObject(&(to_return->shg), "img/textures/shg.bmp");
+    initTextureObject(&(to_return->sht), "img/textures/sht.bmp");
+    initTextureObject(&(to_return->shl), "img/textures/shl.bmp");
+    initTextureObject(&(to_return->shc), "img/textures/shc.bmp");
+    initTextureObject(&(to_return->shi), "img/textures/shi.bmp");
+    initTextureObject(&(to_return->mar), "img/textures/mar.bmp");
+    initTextureObject(&(to_return->mai), "img/textures/mai.bmp");
+    initTextureObject(&(to_return->gys), "img/textures/gys.bmp");
+    initTextureObject(&(to_return->gyp), "img/textures/gyp.bmp");
+    initTextureObject(&(to_return->wat), "img/textures/wat1.bmp");
+    initTextureObject(&(to_return->soi), "img/textures/soi1.bmp");
+    initTextureObject(&(to_return->coa), "img/textures/coa.bmp");
+    initTextureObject(&(to_return->sal), "img/textures/sal.bmp");
+    initTextureObject(&(to_return->snd), "img/textures/snd1.bmp");
+    initTextureObject(&(to_return->dus), "img/textures/dus.bmp");
+    initTextureObject(&(to_return->sno), "img/textures/sno1.bmp");
+    initTextureObject(&(to_return->gli), "img/textures/gli.bmp");
+    initTextureObject(&(to_return->gqa), "img/textures/gqa.bmp");
+    initTextureObject(&(to_return->gqz), "img/textures/gqz.bmp");
+    initTextureObject(&(to_return->gba), "img/textures/gba.bmp");
+    initTextureObject(&(to_return->ggr), "img/textures/ggr.bmp");
+    initTextureObject(&(to_return->gsa), "img/textures/gsa.bmp");
+    initTextureObject(&(to_return->gsh), "img/textures/gsh.bmp");
+    initTextureObject(&(to_return->gma), "img/textures/gma.bmp");
+    initTextureObject(&(to_return->ggy), "img/textures/ggy.bmp");
     initTextureObject(&(to_return->w1), "img/textures/wall.bmp");
-
-    initTextureObject(&(to_return->granit), "img/textures/granit.bmp");
-    initTextureObject(&(to_return->basalt), "img/textures/basalt.bmp");
-    initTextureObject(&(to_return->calcaire), "img/textures/calcaire.bmp");
-    initTextureObject(&(to_return->gres), "img/textures/gres.bmp");
-    initTextureObject(&(to_return->marbre), "img/textures/marbre.bmp");
-    initTextureObject(&(to_return->schiste), "img/textures/schiste.bmp");
-    
     initTextureObject(&(to_return->fond), "img/textures/fond.bmp");
 
     return to_return;

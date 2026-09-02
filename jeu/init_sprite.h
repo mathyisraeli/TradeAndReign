@@ -12,45 +12,71 @@ struct img
 
 struct textures
 {
-    SDL_Texture *he1;
-    SDL_Texture *he2;
-    SDL_Texture *he3;
-    SDL_Texture *he4;
-    SDL_Texture *he5;
-    SDL_Texture *bl1;
-    SDL_Texture *bl2;
-    SDL_Texture *bl3;
-    SDL_Texture *ea1;
-    SDL_Texture *ea2;
-    SDL_Texture *ea3;
-    SDL_Texture *gr1;
-    SDL_Texture *gr2;
-    SDL_Texture *ne1;
-    SDL_Texture *ne2;
-    SDL_Texture *ne3;
-    SDL_Texture *sa1;
-    SDL_Texture *sa2;
-    SDL_Texture *sa3;
-    SDL_Texture *te1;
-    SDL_Texture *te2;
-    SDL_Texture *te3;
+    SDL_Texture *lim;
+    SDL_Texture *lii;
+    SDL_Texture *lis;
+    SDL_Texture *qua;
+    SDL_Texture *qui;
+    SDL_Texture *qug;
+    SDL_Texture *qus;
+    SDL_Texture *quz;
+    SDL_Texture *qzc;
+    SDL_Texture *qzg;
+    SDL_Texture *qzs;
+    SDL_Texture *bas;
+    SDL_Texture *bai;
+    SDL_Texture *bac; 
+    SDL_Texture *bal; 
+    SDL_Texture *gra;
+    SDL_Texture *gri;
+    SDL_Texture *grc;
+    SDL_Texture *grt;
+    SDL_Texture *grd;
+    SDL_Texture *grs;
+    SDL_Texture *san;
+    SDL_Texture *sai;
+    SDL_Texture *sag;
+    SDL_Texture *sha;
+    SDL_Texture *shv;
+    SDL_Texture *shs;
+    SDL_Texture *shg;
+    SDL_Texture *sht;
+    SDL_Texture *shl;
+    SDL_Texture *shc;
+    SDL_Texture *shi;
+    SDL_Texture *mar; 
+    SDL_Texture *mai;
+    SDL_Texture *gys;
+    SDL_Texture *gyp;
+    SDL_Texture *wat;
+    SDL_Texture *soi;
+    SDL_Texture *coa;
+    SDL_Texture *sal;
+    SDL_Texture *snd;
+    SDL_Texture *dus;
+    SDL_Texture *sno;
+    SDL_Texture *gli;
+    SDL_Texture *gqa;
+    SDL_Texture *gqz;
+    SDL_Texture *gba;
+    SDL_Texture *ggr;
+    SDL_Texture *gsa;
+    SDL_Texture *gsh;
+    SDL_Texture *gma;
+    SDL_Texture *ggy;
     SDL_Texture *w1;
-    SDL_Texture *granit;
-    SDL_Texture *basalt;
-    SDL_Texture *calcaire;
-    SDL_Texture *gres;
-    SDL_Texture *marbre;
-    SDL_Texture *schiste;
+
     SDL_Texture *fond;
 };
 
 struct skin
 {
     // Homme qui marche
-    SDL_Texture *Man[2][10][30][6][8]; //sexe /  couleur de peau / animation2 / animation / angle
+    SDL_Texture *Man[2][10][30][8][8]; //sexe /  couleur de peau / animation2 / animation / angle
 
-    SDL_Texture *breechesLin[30][6][8];
-    SDL_Texture *shiftLin[30][6][8];
+    
+    SDL_Texture *clothes[2][20][30][8][8]; //sexe /habit / animation 2 / animation / angle
+
 
     SDL_Texture *ship1_50cm_wood;
     SDL_Texture *ship1_100cm_wood;

@@ -11,9 +11,9 @@ char watter_around(int coo)
         t3 = ground[coo+max_x]->texture;
     if (coo- max_x > 0)
         t4 = ground[coo-max_x]->texture;
-    if (ground[coo]->texture == ea1 || ground[coo]->texture ==  ea2 || ground[coo]->texture == ea3)
+    if (ground[coo]->texture == wat)
         return 2;
-    if (t1 == ea1 || t1 ==  ea2 || t1 == ea3 || t2 == ea1 || t2 == ea2 || t2 == ea3 || t3 == ea1 || t3 ==  ea2 || t3 == ea3 || t4 == ea1 || t4 ==  ea2 || t4 == ea3)
+    if (t1 == wat || t2 == wat || t3 == wat || t4 == wat)
         return 1;
     return 0;
 }

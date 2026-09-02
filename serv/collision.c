@@ -145,8 +145,8 @@ float allowed_to_move(struct personnages *perso, float x, float y, float mvx, fl
     {
         if (building_id[dst] == -1)
         {
-            if (ground[dst]->texture == ea1 || ground[dst]->texture == ea2 || ground[dst]->texture == ea3)
-                return -1;
+            //if (ground[dst]->texture == wat)
+             //   return -1;
             if (perso->altitude < (float)altitude(dst)/38- 1)
                 return -1;
             //if (perso->altitude > (float)altitude(dst)/38)

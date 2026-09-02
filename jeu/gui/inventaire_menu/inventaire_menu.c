@@ -71,7 +71,19 @@ void menu_inventaire(void)
                 {
                     if (strcmp(moi->items[16], ".") != 0)
                         sprintf(ordre+strlen(ordre), "0 %d 16 +1 %s ", moi->id, moi->items[16]);
-                    sprintf(ordre+strlen(ordre), "0 %d 29 leather_pants 0 %d 16 1 leather_pants ", moi->id, moi->id);
+                    sprintf(ordre+strlen(ordre), "0 %d 28 leather_pants 0 %d 16 1 leather_pants ", moi->id, moi->id);
+                }
+                else if (strcmp(moi->items[main_menu->menuInv->selector->selectedOption], "breeches")==0)
+                {
+                    if (strcmp(moi->items[16], ".") != 0)
+                        sprintf(ordre+strlen(ordre), "0 %d 16 +1 %s ", moi->id, moi->items[16]);
+                    sprintf(ordre+strlen(ordre), "0 %d 28 breeches 0 %d 16 1 breeches ", moi->id, moi->id);
+                }
+                else if (strcmp(moi->items[main_menu->menuInv->selector->selectedOption], "shift")==0)
+                {
+                    if (strcmp(moi->items[16], ".") != 0)
+                        sprintf(ordre+strlen(ordre), "0 %d 16 +1 %s ", moi->id, moi->items[16]);
+                    sprintf(ordre+strlen(ordre), "0 %d 28 shift 0 %d 16 1 shift ", moi->id, moi->id);
                 }
                 else if (strcmp(moi->items[main_menu->menuInv->selector->selectedOption], "leather_boots") == 0)
                 {

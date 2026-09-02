@@ -167,17 +167,17 @@ char go_to_top(struct personnages *p, int top)
 
 void put_ground(struct personnages *p)
 {
-    if (find_index_in_inventory( "herbe", p->items) != -1)
+    if (find_index_in_inventory( "soil", p->items) != -1)
     {
-        remove_from_inventory("herbe", 1, p->items, p->items_cnt);
-        add_1_pixel((int)p->x + (int)p->y*max_x, he1);
+        remove_from_inventory("soil", 1, p->items, p->items_cnt);
+        add_1_pixel((int)p->x + (int)p->y*max_x, soi);
         p->a_bouger += 1;
         return;
     }
-    if (find_index_in_inventory("sable", p->items) != -1)
+    if (find_index_in_inventory("sand", p->items) != -1)
     {
-        remove_from_inventory("sable", 1, p->items, p->items_cnt);
-        add_1_pixel((int)p->x + (int)p->y*max_x, sa1);
+        remove_from_inventory("sand", 1, p->items, p->items_cnt);
+        add_1_pixel((int)p->x + (int)p->y*max_x, snd);
         p->a_bouger += 1;
         return ;
     }
@@ -304,7 +304,7 @@ char check_can_build(struct personnages *p, int coohouse)
         {
             if (0 > housex + j || housex + j >= max_x || 0 > housey + i - 1 || housey + i - 1 >= max_y)
                 return 0;
-            if (ground[housex + (i - 1 + housey) * max_x + j]->texture == ea1 || ground[housex + (i - 1 + housey) * max_x + j]->texture == ea2 || ground[housex + (i - 1 + housey) * max_x + j]->texture == ea3)
+            if (ground[housex + (i - 1 + housey) * max_x + j]->texture == wat)
                 return 0;
             /*if (house2[i][j] == 1)
             {
@@ -448,7 +448,7 @@ void ia_man(struct personnages *p)
     }    
     if (p->animation_2 > 0)
 	{
-		if (p->animation >= 3)
+		if (p->animation >= 7)
         {
 			p->animation_2 = 0;
             p->animation = 0;
@@ -692,7 +692,7 @@ void ia_man(struct personnages *p)
                                     move_somewhere_random(p);
                                 else
                                 {
-                                    if (ground[whereiam]->texture == he1 || ground[whereiam]->texture == he2 || ground[whereiam]->texture == he3 || ground[whereiam]->texture == he4 || ground[whereiam]->texture == he5)
+                                    if (ground[whereiam]->texture == soi)
                                     {
                                         append_in_inventory("herbe", 1, p->items, p->items_cnt);
                                         remove_1_pixel(whereiam);
@@ -700,7 +700,7 @@ void ia_man(struct personnages *p)
                                         p->animation = 0;
                                         p->a_bouger = 1;
                                     }
-                                    else if (ground[whereiam]->texture == sa1 || ground[whereiam]->texture == sa2 || ground[whereiam]->texture == sa3)
+                                    else if (ground[whereiam]->texture == snd)
                                     {
                                         append_in_inventory("sable", 1, p->items, p->items_cnt);
                                         remove_1_pixel(whereiam);
@@ -714,7 +714,7 @@ void ia_man(struct personnages *p)
                             }
                             else if (imInHouse(p) == 1 && altitude(whereiam) > av && 10 > n_item(p->items))
                             {
-                                if (ground[whereiam]->texture == he1 || ground[whereiam]->texture == he2 || ground[whereiam]->texture == he3 || ground[whereiam]->texture == he4 || ground[whereiam]->texture == he5)
+                                if (ground[whereiam]->texture == soi)
                                 {
                                     append_in_inventory("herbe", 1, p->items, p->items_cnt);
                                     remove_1_pixel(whereiam);
@@ -722,7 +722,7 @@ void ia_man(struct personnages *p)
                                     p->animation = 0;
                                     p->a_bouger = 1;
                                 }
-                                else if (ground[whereiam]->texture == sa1 || ground[whereiam]->texture == sa2 || ground[whereiam]->texture == sa3)
+                                else if (ground[whereiam]->texture == snd )
                                 {
                                     append_in_inventory("sable", 1, p->items, p->items_cnt);
                                     remove_1_pixel(whereiam);
@@ -730,10 +730,10 @@ void ia_man(struct personnages *p)
                                     p->animation = 0;
                                     p->a_bouger = 1;
                                 }
-                                else if (ground[whereiam]->texture == ne1 || ground[whereiam]->texture == ne2 || ground[whereiam]->texture == ne3)
+                                else if (ground[whereiam]->texture == sno )
                                 {    
                                     remove_1_pixel(whereiam);
-                                    add_1_pixel(moix + (moiy)*max_x,ea1);
+                                    add_1_pixel(moix + (moiy)*max_x,wat);
                                 }
                             }
                             else if (imInHouse(p) == 1 && have_ground_in_inventory(p) && av > altitude(whereiam) )

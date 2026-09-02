@@ -98,11 +98,11 @@ void actualise_stat(struct personnages *p)
 		new->p = p;
 		new->floor = 1;
 		new->img = 0;
-		new->img = img->s->Man[p->physique[0]-'0'][p->physique[2]-'0'][p->animation_2][p->animation][p->angle - 'a'];
+		new->img = img->s->Man[p->physique[0]-'0'][p->physique[1]-'0'][p->animation_2][p->animation][p->angle - 'a'];
 		new->offset_x = 900	;
 		new->offset_y = 450;
 		sortedInsert(new);
-		if (strcmp(p->items[16], ".") == 0) // if no pant
+		if (strcmp(p->items[16], "breeches") == 0) // if no pant
 		{
 			struct to_disp *nnew = malloc(sizeof(struct to_disp));
 			nnew->x = p->x;
@@ -113,10 +113,23 @@ void actualise_stat(struct personnages *p)
 			nnew->next = new->next;
 			nnew->p = p;
 			nnew->floor = 1;
-			if (p->physique[0] == '0')
-				nnew->img = img->s->breechesLin[p->animation_2][p->animation][p->angle - 'a'];
-			else
-				nnew->img = img->s->shiftLin[p->animation_2][p->animation][p->angle - 'a'];
+			nnew->img = img->s->clothes[0][0][p->animation_2][p->animation][p->angle - 'a'];
+			nnew->offset_x = 900;
+			nnew->offset_y = 450;
+			new->next = nnew;
+		}
+		if (strcmp(p->items[16], "shift") == 0) // if no pant
+		{
+			struct to_disp *nnew = malloc(sizeof(struct to_disp));
+			nnew->x = p->x;
+			nnew->altitude = p->altitude;
+			nnew->y = p->y;
+			nnew->b = NULL;
+			nnew->id = p->id;
+			nnew->next = new->next;
+			nnew->p = p;
+			nnew->floor = 1;
+			nnew->img = img->s->clothes[1][0][p->animation_2][p->animation][p->angle - 'a'];
 			nnew->offset_x = 900;
 			nnew->offset_y = 450;
 			new->next = nnew;
