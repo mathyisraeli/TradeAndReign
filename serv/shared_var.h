@@ -20,3 +20,5 @@ extern size_t size_order_send;
 extern char will_create_building_char[999];
 extern int rdm_directions[4];
 extern struct heap heap_pathfinding;
+extern char ground_path[64];
+extern char map_path[64];

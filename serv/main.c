@@ -56,6 +56,26 @@ static int make_socket_non_blocking (int sfd)
 
 #define MAXEVENTS 64
 
+// Returns the highest n such that "<base_path without .txt>_n.txt" exists on
+// disk (checked sequentially from 1, since save numbers are only ever
+// appended by save_map()/save_ground() and never skipped or deleted), or 0
+// if no saved version exists yet.
+static int find_latest_version(const char *base_path)
+{
+    char path[96];
+    int n = 0;
+    while (1)
+    {
+        sprintf(path, "%.*s_%d.txt", (int)(strlen(base_path) - 4), base_path, n + 1);
+        FILE *f = fopen(path, "r");
+        if (f == NULL)
+            break;
+        fclose(f);
+        n++;
+    }
+    return n;
+}
+
 int main(int argc, char **argv)
 {
     setvbuf(stdout, NULL, _IONBF, 0);
@@ -73,18 +93,32 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    char ground_path[64];
-    char map_path[64];
     snprintf(ground_path, sizeof(ground_path), "world/g%d.txt", world_id);
     snprintf(map_path, sizeof(map_path), "world/m%d.txt", world_id);
 
+    int save_version = find_latest_version(ground_path);
+    char load_ground_path[96];
+    char load_map_path[96];
+    if (save_version > 0)
+    {
+        sprintf(load_ground_path, "%.*s_%d.txt", (int)(strlen(ground_path) - 4), ground_path, save_version);
+        sprintf(load_map_path, "%.*s_%d.txt", (int)(strlen(map_path) - 4), map_path, save_version);
+        printf("loading world %d, latest save version %d\n", world_id, save_version);
+    }
+    else
+    {
+        strcpy(load_ground_path, ground_path);
+        strcpy(load_map_path, map_path);
+        printf("loading world %d, no saved version found, using base files\n", world_id);
+    }
+
     unsigned int save_map_count = 0;
 	char *ground_str;
-	load_file_as_string(ground_path, &ground_str);
+	load_file_as_string(load_ground_path, &ground_str);
 	create_array(ground_str);
     free(ground_str);
     init_bioms();
-	init_map(map_path);
+	init_map(load_map_path);
     init_visible_entities();
     count_pop(world_id);
     heap_pathfinding.data = malloc(sizeof(int)*max_x*max_y);
@@ -302,11 +336,12 @@ int main(int argc, char **argv)
             save_map_count += 1;
             if (save_map_count % 60 == 0)
             {
-                melt_snow(save_map_count%max_x);
-                if (save_map_count % 12000 == 0)
+                melt_snow();
+                if (save_map_count % 18000 == 0) // 18000 ticks * 50ms = 15 min
                 {
-                    //save_map(save_map_count/12000);
-                    //save_ground(save_map_count/12000);
+                    save_version += 1;
+                    save_map(save_version);
+                    save_ground(save_version);
                 }
             }
             

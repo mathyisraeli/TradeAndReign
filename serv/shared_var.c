@@ -20,3 +20,6 @@ size_t size_order_send;
 int rdm_directions[4] = {1,2,3,4};
 
 struct heap heap_pathfinding;
+
+char ground_path[64];
+char map_path[64];

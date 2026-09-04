@@ -8,7 +8,7 @@ size_t load_file_as_string(char *path, char **ret)
 	fseek(f, 0, SEEK_END);
 	size_t size_string = ftell(f);
 	fseek(f, 0, SEEK_SET);  
-	*ret = calloc(size_string,1);
+	*ret = calloc(size_string + 1, 1); // +1 so the buffer is always NUL-terminated, even when the file has no trailing newline
 	fread(*ret, size_string, 1, f);
 	fclose(f);
 	return size_string;

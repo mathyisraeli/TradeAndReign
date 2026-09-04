@@ -206,6 +206,8 @@ int count_pop(int world_id)
 		while (list.data[j].is_active != 1 || list.data[j].skin[0] != '0' || list.data[j].skin[1] != 0)
 			j  -= 1;
 		make_child(i,j);
+		i += 1;
+		j -= 1;
 		found += 1;
 	}
 

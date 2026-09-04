@@ -6,6 +6,10 @@ static const char *texture_string[]= { "lim", "lii", "lis", "qua", "qui", "qug",
 uint8_t *ground_marked;
 int *index_check_altitude;
 int *index_check_altitude_local;
+int *mountain_indices;
+int *water_indices;
+int *snow_indices;
+
 
 void recursive_print_ground(struct linked_ground *p)
 {
@@ -14,11 +18,21 @@ void recursive_print_ground(struct linked_ground *p)
     printf ("%s%d", texture_string[p->texture],p->altitude);
 }
 
-void recursive_sprint_ground(char *line, struct linked_ground *p)
+void fprint_ground(FILE *fichier, struct linked_ground *p)
 {
-    if (p->next != NULL)
-        recursive_sprint_ground(line, p->next);
-    sprintf (line + strlen(line), "%s%d", texture_string[p->texture],p->altitude);
+    int depth = 0;
+    for (struct linked_ground *q = p; q != NULL; q = q->next)
+        depth++;
+    struct linked_ground **stack = malloc(depth * sizeof(struct linked_ground *));
+    int i = 0;
+    for (struct linked_ground *q = p; q != NULL; q = q->next)
+        stack[i++] = q;
+    while (i > 0)
+    {
+        i--;
+        fprintf (fichier, "%s%d", texture_string[stack[i]->texture], stack[i]->altitude);
+    }
+    free(stack);
 }
 
 void ground_to_string(void)
@@ -74,13 +88,13 @@ int maximum_diff(int index)
         case wat:
             return 1;
         case snd:
-            return 4;
+            return 5;
         case dus:
             return 4;
         case soi:
-            return 25;
+            return 26;
         case sno:
-            return 20;
+            return 24;
         default:
             return 50;
     }
@@ -211,6 +225,25 @@ void remove_1_pixel(int index)
     }
 }
 
+void add_1_pixel_at_bottom(int index, enum Texture texture)
+{
+    if (ground[index] == NULL)
+        return;
+    struct linked_ground *parcour =  ground[index];
+    while (parcour->next != NULL)
+        parcour = parcour->next;
+    if (parcour->texture == texture)
+        parcour->altitude += 1;
+    else
+    {
+        struct linked_ground *to_add = malloc(sizeof(struct linked_ground));
+        to_add->next = NULL;
+        to_add->altitude = 1;
+        to_add->texture = texture;
+        parcour->next = to_add;
+    }  
+}
+
 void add_1_pixel(int index, enum Texture texture)
 {
     //if (index == 0)
@@ -295,13 +328,16 @@ void create_array(char *ground_string)
     ground_marked = calloc(max_x * max_y, sizeof(uint8_t));
     index_check_altitude = calloc(max_x * max_y, sizeof(int));
     index_check_altitude_local = calloc(max_x * max_y, sizeof(int));
+    mountain_indices = malloc(max_x * max_y * sizeof(int));
+    water_indices = malloc(max_x * max_y * sizeof(int));
+    snow_indices = malloc(max_x * max_y * sizeof(int));
     ground = calloc(max_x*max_y,sizeof(struct linked_ground*));
     building_altitude = calloc(max_x*max_y, sizeof(uint8_t*));
     building_id = malloc(sizeof(int)*max_x*max_y);
     int j = 0;
     while (j < max_x*max_y)
     {
-        while (ground_string[i] != ' ' && ground_string[i] != '\n')
+        while (ground_string[i] != ' ' && ground_string[i] != '\n' && ground_string[i] != 0)
         {
             struct linked_ground *to_add = malloc(sizeof(struct linked_ground));
             to_add->next = NULL;
@@ -329,14 +365,81 @@ void create_array(char *ground_string)
     sprintf (size_background, "%d %d", max_x, max_y);
 }
 
-void melt_snow(int n)
+#define SNOW_ELEVATION_THRESHOLD 3200 /* raw altitude units, ~84.2 m */
+float bottom_weights[] = {8.0, 1/100000000, 1/1000000, 12.0, 1/10000000, 1/100000000,1/100000000,5.0,1/100000000,1/1000000,1/1000000,22.0,1/100000, 1/10000000, 1/1000000, 
+    20.0, 1/1000000, 1/10000000, 1/100000000, 1/1000000, 1/10000000, 6.0, 1/1000000, 1/100000000, 7.0, 1/100000000, 1/100000, 1/100000000, 1/10000000, 1/100000000, 1/10000000, 1/1000000, 10.0, 
+    100000000, 1/10000, 3.0, 0, 0.3, 2.0, 2.0, 0.5, 0.2, 0, 0, 0, 0, 0, 0,0,0,0,0};
+float top_weights[] = {1.5, 1/100000000, 1/1000000, 0.1, 1/10000000, 1/100000000,1/100000000,0.3,1/100000000,1/1000000,1/1000000,0.8,1/100000, 1/10000000, 1/1000000, 
+    0.6, 1/1000000, 1/10000000, 1/100000000, 1/1000000, 1/10000000, 1.0, 1/1000000, 1/100000000, 0.4, 1/100000000, 1/100000, 1/100000000, 1/10000000, 1/100000000, 1/10000000, 1/1000000, 0.05, 
+    1/100000000, 1/10000, 0.2, 0, 5.02, 0.03, 2.0, 5.0, 3.0, 0, 0, 0, 0, 0, 0,0,0,0,0};
+
+enum Texture weighted_random_index(const float weights[], int size)
 {
+    float total = 0.0f;
+    for (int i = 0; i < size; i++)
+        total += weights[i];
+    float random = ((float)rand() / (float)RAND_MAX) * total;
+    for (int i = 0; i < size; i++)
+    {
+        if (random < weights[i])
+            return i;
+        random -= weights[i];
+    }
+    return size - 1;
+}
+
+
+/* No mountain tile can receive the new snow, so the melt -> evaporate ->
+ * snow cycle has nowhere to close: cancel it entirely for this call and
+ * deposit a bottom/intermediate/top layer (ground_gen.py-style) on every
+ * tile that isn't currently covered by water instead. */
+static void deposit_sediment_layers(void)
+{
+    int total = max_x * max_y;
+    for (int i = 0; i < total; i++)
+    {
+        if (ground[i]->texture == wat)
+            continue;
+        add_1_pixel_at_bottom(i, weighted_random_index(bottom_weights, sizeof(bottom_weights) / sizeof(bottom_weights[0])));
+        add_1_pixel(i, weighted_random_index(top_weights, sizeof(top_weights) / sizeof(top_weights[0])));
+    }
+}
+
+void melt_snow()
+{
+    int mountain_count = 0;
+    int water_count = 0;
+    int snow_count = 0;
+
     for (int i = 0; i < max_x*max_y; i++)
     {
-        if (i % 100 == n && (ground[i]->texture == sno))
+        if (ground[i]->texture == wat)
+            water_indices[water_count++] = i;
+        else if (altitude(i) > SNOW_ELEVATION_THRESHOLD)
+            mountain_indices[mountain_count++] = i;
+        else if (ground[i]->texture == sno)
+            snow_indices[snow_count++] = i;
+    }
+
+    if (mountain_count < 200)
+    {
+        deposit_sediment_layers();
+    }
+    int total = min(water_count, mountain_count);
+    for (int i = 0; i < total; i++)
+    {
+        if ((rand() & 127) == 0)
         {
-            remove_1_pixel(i);
-            add_1_pixel(i, wat);
+            remove_1_pixel(water_indices[i]);
+            add_1_pixel(mountain_indices[i], sno);
+        }
+    }
+    for (int i = 0; i < snow_count; i++)
+    {
+        if ((rand() & 127) == 0)
+        {
+            remove_1_pixel(snow_indices[i]);
+            add_1_pixel(snow_indices[i], wat);
         }
     }
 }
@@ -344,27 +447,22 @@ void melt_snow(int n)
 void save_ground(int n)
 {
     printf ("save ground in\n");
-    char line[99999];
-    char filename[20];
-    sprintf (filename, "ground-%d.txt", n);
+    char filename[96];
+    sprintf (filename, "%.*s_%d.txt", (int)(strlen(ground_path) - 4), ground_path, n);
     FILE *fichier = fopen(filename, "w"); // "w" pour écrire (écrase si existe déjà)
     if (fichier == NULL) {
         perror("Erreur lors de la sauvegarde du sol");
         return;
     }
-    sprintf (line, "%d %d\n", max_x, max_y);
-    fputs(line, fichier);
+    fprintf (fichier, "%d %d\n", max_x, max_y);
 
     for (int i = 0; i < max_y; i++)
     {
-        line[0] = 0;
         for (int j = 0; j < max_x; j++)
         {
-            recursive_sprint_ground(line, ground[i*max_x+j]);  
-            strcat(line, " ");
+            fprint_ground(fichier, ground[i*max_x+j]);
+            fputc(j == max_x - 1 ? '\n' : ' ', fichier);
         }
-        line[strlen(line)-1] = '\n';
-        fputs(line, fichier);
     }
     fclose(fichier);
     printf ("save ground aout\n");

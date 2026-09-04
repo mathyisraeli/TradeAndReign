@@ -7,7 +7,7 @@ import string
 maxalt = 4000
 effective_maxalt = -1
 effective_minalt = 4001
-size = 250 #should be multiple of 25
+size = 400 #should be multiple of 25
 mapalt = []
 maptext = []
 
@@ -146,25 +146,40 @@ def altitude(liste):
 
 
 #generate altitude
-for y in range(size):
-    newx = []
-    for x in range(size):
+potential_step = [y for y in range(1, size) if (size - 1) % y == 0]
+step = potential_step[len(potential_step)//2]
+mapalt = [[0] * size for _ in range(size)]
+for y in range(0, size, step):
+    for x in range(0, size, step):
         if y == 0 and x == 0:
-            newx.append(random.randint(0, maxalt))
-        elif x == 0:
-            mxx = min(maxalt, mapalt[y -1][x] + 61)
-            mnn = max(0, mapalt[y- 1][x] - 61)
-            newx.append(random.randint(mnn, mxx))
+            mapalt[y][x] = random.randint(0, maxalt)
         elif y == 0:
-            mxx = min(maxalt, newx[x-1] + 61)
-            mnn = max(0, newx[x-1] - 61)
-            newx.append(random.randint(mnn, mxx))
+            minn = max(11, mapalt[y][x-step]-27*step)
+            maxx = min(maxalt, mapalt[y][x-step]+27*step)
+            mapalt[y][x] = random.randint(minn, maxx)
+        elif x == 0:
+            minn = max(11, mapalt[y-step][x]-27*step)
+            maxx = min(maxalt, mapalt[y-step][x]+27*step)
+            mapalt[y][x] = random.randint(minn, maxx)
         else:
-            av = (newx[x-1] + mapalt[y-1][x])//2
-            mnn = max(0, av - 61)
-            mxx = min(maxalt, av + 61)
-            newx.append(random.randint(mnn, mxx))
-    mapalt.append(newx)
+            avy = int((mapalt[y-step][x] + mapalt[y][x-step]) / 2)
+            minn = max(avy - 27*step, 11)
+            maxx = min(maxalt, avy + 27*step)
+            mapalt[y][x] = random.randint(minn, maxx)
+for y in range(0, size, step):
+    for x in range(0, size-step, step):
+        slope = (mapalt[y][x+step] - mapalt[y][x]) / step
+        for sl in range(step):
+            mapalt[y][x+sl] = int(mapalt[y][x] + sl*slope)
+for x in range(size):
+    for y in range(0, size-step, step):
+        slope = (mapalt[y+step][x] - mapalt[y][x]) / step
+        for sl in range(step):
+            mapalt[y+sl][x] = int(mapalt[y][x] + sl*slope)
+for y in range(size):
+    for x in range(size):
+        mapalt[y][x] += random.randint(-10,10)
+
 
 #generate base material
 for y in range(size):
@@ -182,7 +197,7 @@ for y in range(size):
         newx.append([pro, int(mapalt[y][x]*0.44), pro2, int(mapalt[y][x]*0.44), fai, int(mapalt[y][x]*0.1), sur, int(mapalt[y][x]*0.02)])
     maptext.append(newx)
 
-print (effective_maxalt/38, effective_minalt/38)
+print (effective_maxalt/38, effective_minalt/38, step)
 
 for y in range(size):
     for x in range(size):
@@ -254,7 +269,7 @@ for y in range(0, size):
     for x in range(0, size):
         tex = maptext[y][x][-2]
         alt = altitude(maptext[y][x])
-        if tex == "soi" and random.randint(1,25) == 1:
+        if tex == "soi" and random.randint(1,5) == 1:
             characters.append("01 " + str(len(characters)+1 )   + " 50 0 100 -1 -1 0 0 a 000000 . . . -1 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . . . . . . . " + str(x+0.5)  + " " + str(y+0.5) + " " + str(alt/38) + " -1 -1 [] []\n")
         elif tex != "wat" and random.randint(1, 250) == 1:
             characters.append("0 " + str(len(characters)+1 )   + " 10 0 99999 -1 -1 0 0 a " + str(random.randint(0,1)) + str(random.randint(0,2)) + str(random.randint(0, 9)) + "000 . " + generate_random_name() +" . -1 10 fruit 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 . . . . . . . " + str(x+0.5) + " " + str(y+0.5) + " " + str(alt/38) + " -1 -1 [] []\n")

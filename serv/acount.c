@@ -46,7 +46,8 @@ int open_acount(char *test)
         while (line[i] == test[i])
         {
             i += 1;
-            if (line[i] == 0 || test[i] == 0)
+            if (line[i] == 0 ||
+                 test[i] == 0)
             {
                 fclose(acount);
                 return 1;
